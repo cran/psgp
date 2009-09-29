@@ -1,0 +1,10 @@
+useDynLib(psgp)
+
+import(intamap)
+
+#export(estimateParameters, spatialPredict)
+
+S3method(estimateParameters, psgp)
+S3method(spatialPredict, psgp)
+S3method(plot, psgp)
+S3method(summary, psgp)

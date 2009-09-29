@@ -1,0 +1,229 @@
+
+R version 2.9.2 (2009-08-24)
+Copyright (C) 2009 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(psgp) # requires intamap
+Loading required package: intamap
+Loading required package: sp
+Loading required package: gstat
+Loading required package: rgdal
+Geospatial Data Abstraction Library extensions to R successfully loaded
+Loaded GDAL runtime: GDAL 1.4.0.0, released 2007/01/02
+Path to GDAL shared files: /usr/local/share/gdal
+Loaded PROJ.4 runtime: Rel. 4.4.9, 29 Oct 2004
+Path to PROJ.4 shared files: (autodetected)
+Loading required package: akima
+Loading required package: automap
+Loading required package: mvtnorm
+Loading required package: MASS
+Loading required package: evd
+Loading required package: lattice
+
+Attaching package: 'lattice'
+
+
+	The following object(s) are masked from package:evd :
+
+	 qq 
+
+> 
+> data(meuse)
+> observations = data.frame(x = meuse$x,y = meuse$y,value = log(meuse$zinc))
+> coordinates(observations) = ~x+y
+> set.seed(13531)
+> predictionLocations = spsample(observations, 50, "regular")
+> 
+> krigingObject = createIntamapObject(
++ 	observations = observations,
++ 	predictionLocations = predictionLocations,
++   formulaString = as.formula(value~1),
++ 	params =  list(doAnisotropy = TRUE, thresh = quantile(observations$value,0.9)),
++   outputWhat = list(mean=TRUE, variance=TRUE, excprob = 5.9, cumdistr = 5.9, 
++ 		quantile = .1)
++ )
+> class(krigingObject) = c("psgp")
+> 
+> checkSetup(krigingObject)
+Checking object ... OK
+> krigingObject = preProcess(krigingObject)
+> krigingObject = estimateParameters(krigingObject)
+===Starting Parameters===========================
+Covariance function : Sum
++ Component: 1
+  Covariance function : Isotropic Exponential
+  Range (P0) : 31915.6069 (Log transformed)
+  Variance (P1) : 0.5211 (Log transformed)
++ Component: 2
+  Covariance function : White noise
+  Variance (P0) : 0.2606 (Log transformed)
++ Component: 3
+  Covariance function : Constant
+  Amplitude (P0) : 0.1699 (Log transformed)
+==========================
+GRADCHECK
+X = [10.3709 -0.6518 -1.3449 -1.7725]
+
+     Delta, Analytic, Diff
+--------------------------
+#0  16.7461, 16.7461, 0.0000
+#1  -17.1400, -17.1400, 0.0000
+#2  -29.3389, -29.3389, 0.0000
+#3  2.1464, 2.1464, 0.0000
+==========================
+Cycle 1  Error 171.0011  Scale 1.0000
+Cycle 2  Error 171.0011  Scale 4.0000
+Cycle 3  Error 171.0011  Scale 16.0000
+Cycle 4  Error 160.1635  Scale 64.0000
+Cycle 5  Error 150.3823  Scale 32.0000
+Cycle 6  Error 115.7491  Scale 16.0000
+Cycle 7  Error 115.7491  Scale 8.0000
+Cycle 8  Error 105.0813  Scale 32.0000
+Cycle 9  Error 99.2072  Scale 16.0000
+Cycle 10  Error 99.2072  Scale 8.0000
+Cycle 11  Error 99.1033  Scale 32.0000
+Cycle 12  Error 98.9868  Scale 32.0000
+Cycle 13  Error 98.9868  Scale 16.0000
+Cycle 14  Error 98.6217  Scale 64.0000
+Cycle 15  Error 98.4495  Scale 32.0000
+Cycle 16  Error 98.2678  Scale 16.0000
+Cycle 17  Error 97.9036  Scale 8.0000
+Cycle 18  Error 97.9036  Scale 4.0000
+Cycle 19  Error 97.8829  Scale 16.0000
+Cycle 20  Error 97.8829  Scale 8.0000
+Cycle 21  Error 97.8829  Scale 32.0000
+Cycle 22  Error 97.8662  Scale 128.0000
+Cycle 23  Error 97.8517  Scale 64.0000
+Cycle 24  Error 97.8267  Scale 32.0000
+Cycle 25  Error 97.7828  Scale 16.0000
+Cycle 26  Error 97.7828  Scale 8.0000
+Cycle 27  Error 97.7665  Scale 32.0000
+Cycle 28  Error 97.7222  Scale 16.0000
+Cycle 29  Error 97.7222  Scale 8.0000
+Cycle 30  Error 97.7102  Scale 32.0000
+Cycle 31  Error 97.6735  Scale 16.0000
+Cycle 32  Error 97.6295  Scale 8.0000
+Cycle 33  Error 97.6295  Scale 4.0000
+Cycle 34  Error 97.5995  Scale 16.0000
+Cycle 35  Error 97.5570  Scale 8.0000
+Cycle 36  Error 97.5110  Scale 4.0000
+Cycle 37  Error 97.5110  Scale 2.0000
+Cycle 38  Error 97.5110  Scale 8.0000
+Cycle 39  Error 97.5110  Scale 32.0000
+Cycle 40  Error 97.5043  Scale 128.0000
+Cycle 41  Error 97.5014  Scale 64.0000
+Cycle 42  Error 97.4969  Scale 32.0000
+Cycle 43  Error 97.4892  Scale 16.0000
+Cycle 44  Error 97.4892  Scale 8.0000
+Cycle 45  Error 97.4892  Scale 32.0000
+Cycle 46  Error 97.4863  Scale 128.0000
+Cycle 47  Error 97.4841  Scale 64.0000
+Cycle 48  Error 97.4801  Scale 32.0000
+Cycle 49  Error 97.4728  Scale 16.0000
+Cycle 50  Error 97.4728  Scale 8.0000
+Warning: Maximum number of iterations has been exceeded
+==========================
+GRADCHECK
+X = [8.3501 1.7568 -3.5765 -3.1118]
+
+     Delta, Analytic, Diff
+--------------------------
+#0  -0.2274, -0.2274, 0.0000
+#1  0.1943, 0.1943, 0.0000
+#2  0.0735, 0.0735, 0.0000
+#3  0.3389, 0.3389, 0.0000
+==========================
+===Finishing Parameters===========================
+Covariance function : Sum
++ Component: 1
+  Covariance function : Isotropic Exponential
+  Range (P0) : 4230.6786 (Log transformed)
+  Variance (P1) : 5.7938 (Log transformed)
++ Component: 2
+  Covariance function : White noise
+  Variance (P0) : 0.0280 (Log transformed)
++ Component: 3
+  Covariance function : Constant
+  Amplitude (P0) : 0.0445 (Log transformed)
+> krigingObject = spatialPredict(krigingObject)
+No noise models specified
+Defaulting to GAUSSIAN:0.0003
+Computing posterior...
+Adding observations: 0/155Adding observations: 1/155Adding observations: 2/155Adding observations: 3/155Adding observations: 4/155Adding observations: 5/155Adding observations: 6/155Adding observations: 7/155Adding observations: 8/155Adding observations: 9/155Adding observations: 10/155Adding observations: 11/155Adding observations: 12/155Adding observations: 13/155Adding observations: 14/155Adding observations: 15/155Adding observations: 16/155Adding observations: 17/155Adding observations: 18/155Adding observations: 19/155Adding observations: 20/155Adding observations: 21/155Adding observations: 22/155Adding observations: 23/155Adding observations: 24/155Adding observations: 25/155Adding observations: 26/155Adding observations: 27/155Adding observations: 28/155Adding observations: 29/155Adding observations: 30/155Adding observations: 31/155Adding observations: 32/155Adding observations: 33/155Adding observations: 34/155Adding observations: 35/155Adding observations: 36/155Adding observations: 37/155Adding observations: 38/155Adding observations: 39/155Adding observations: 40/155Adding observations: 41/155Adding observations: 42/155Adding observations: 43/155Adding observations: 44/155Adding observations: 45/155Adding observations: 46/155Adding observations: 47/155Adding observations: 48/155Adding observations: 49/155Adding observations: 50/155Adding observations: 51/155Adding observations: 52/155Adding observations: 53/155Adding observations: 54/155Adding observations: 55/155Adding observations: 56/155Adding observations: 57/155Adding observations: 58/155Adding observations: 59/155Adding observations: 60/155Adding observations: 61/155Adding observations: 62/155Adding observations: 63/155Adding observations: 64/155Adding observations: 65/155Adding observations: 66/155Adding observations: 67/155Adding observations: 68/155Adding observations: 69/155Adding observations: 70/155Adding observations: 71/155Adding observations: 72/155Adding observations: 73/155Adding observations: 74/155Adding observations: 75/155Adding observations: 76/155Adding observations: 77/155Adding observations: 78/155Adding observations: 79/155Adding observations: 80/155Adding observations: 81/155Adding observations: 82/155Adding observations: 83/155Adding observations: 84/155Adding observations: 85/155Adding observations: 86/155Adding observations: 87/155Adding observations: 88/155Adding observations: 89/155Adding observations: 90/155Adding observations: 91/155Adding observations: 92/155Adding observations: 93/155Adding observations: 94/155Adding observations: 95/155Adding observations: 96/155Adding observations: 97/155Adding observations: 98/155Adding observations: 99/155Adding observations: 100/155Adding observations: 101/155Adding observations: 102/155Adding observations: 103/155Adding observations: 104/155Adding observations: 105/155Adding observations: 106/155Adding observations: 107/155Adding observations: 108/155Adding observations: 109/155Adding observations: 110/155Adding observations: 111/155Adding observations: 112/155Adding observations: 113/155Adding observations: 114/155Adding observations: 115/155Adding observations: 116/155Adding observations: 117/155Adding observations: 118/155Adding observations: 119/155Adding observations: 120/155Adding observations: 121/155Adding observations: 122/155Adding observations: 123/155Adding observations: 124/155Adding observations: 125/155Adding observations: 126/155Adding observations: 127/155Adding observations: 128/155Adding observations: 129/155Adding observations: 130/155Adding observations: 131/155Adding observations: 132/155Adding observations: 133/155Adding observations: 134/155Adding observations: 135/155Adding observations: 136/155Adding observations: 137/155Adding observations: 138/155Adding observations: 139/155Adding observations: 140/155Adding observations: 141/155Adding observations: 142/155Adding observations: 143/155Adding observations: 144/155Adding observations: 145/155Adding observations: 146/155Adding observations: 147/155Adding observations: 148/155Adding observations: 149/155Adding observations: 150/155Adding observations: 151/155Adding observations: 152/155Adding observations: 153/155Adding observations: 154/155Adding observations: 0/155Adding observations: 1/155Adding observations: 2/155Adding observations: 3/155Adding observations: 4/155Adding observations: 5/155Adding observations: 6/155Adding observations: 7/155Adding observations: 8/155Adding observations: 9/155Adding observations: 10/155Adding observations: 11/155Adding observations: 12/155Adding observations: 13/155Adding observations: 14/155Adding observations: 15/155Adding observations: 16/155Adding observations: 17/155Adding observations: 18/155Adding observations: 19/155Adding observations: 20/155Adding observations: 21/155Adding observations: 22/155Adding observations: 23/155Adding observations: 24/155Adding observations: 25/155Adding observations: 26/155Adding observations: 27/155Adding observations: 28/155Adding observations: 29/155Adding observations: 30/155Adding observations: 31/155Adding observations: 32/155Adding observations: 33/155Adding observations: 34/155Adding observations: 35/155Adding observations: 36/155Adding observations: 37/155Adding observations: 38/155Adding observations: 39/155Adding observations: 40/155Adding observations: 41/155Adding observations: 42/155Adding observations: 43/155Adding observations: 44/155Adding observations: 45/155Adding observations: 46/155Adding observations: 47/155Adding observations: 48/155Adding observations: 49/155Adding observations: 50/155Adding observations: 51/155Adding observations: 52/155Adding observations: 53/155Adding observations: 54/155Adding observations: 55/155Adding observations: 56/155Adding observations: 57/155Adding observations: 58/155Adding observations: 59/155Adding observations: 60/155Adding observations: 61/155Adding observations: 62/155Adding observations: 63/155Adding observations: 64/155Adding observations: 65/155Adding observations: 66/155Adding observations: 67/155Adding observations: 68/155Adding observations: 69/155Adding observations: 70/155Adding observations: 71/155Adding observations: 72/155Adding observations: 73/155Adding observations: 74/155Adding observations: 75/155Adding observations: 76/155Adding observations: 77/155Adding observations: 78/155Adding observations: 79/155Adding observations: 80/155Adding observations: 81/155Adding observations: 82/155Adding observations: 83/155Adding observations: 84/155Adding observations: 85/155Adding observations: 86/155Adding observations: 87/155Adding observations: 88/155Adding observations: 89/155Adding observations: 90/155Adding observations: 91/155Adding observations: 92/155Adding observations: 93/155Adding observations: 94/155Adding observations: 95/155Adding observations: 96/155Adding observations: 97/155Adding observations: 98/155Adding observations: 99/155Adding observations: 100/155Adding observations: 101/155Adding observations: 102/155Adding observations: 103/155Adding observations: 104/155Adding observations: 105/155Adding observations: 106/155Adding observations: 107/155Adding observations: 108/155Adding observations: 109/155Adding observations: 110/155Adding observations: 111/155Adding observations: 112/155Adding observations: 113/155Adding observations: 114/155Adding observations: 115/155Adding observations: 116/155Adding observations: 117/155Adding observations: 118/155Adding observations: 119/155Adding observations: 120/155Adding observations: 121/155Adding observations: 122/155Adding observations: 123/155Adding observations: 124/155Adding observations: 125/155Adding observations: 126/155Adding observations: 127/155Adding observations: 128/155Adding observations: 129/155Adding observations: 130/155Adding observations: 131/155Adding observations: 132/155Adding observations: 133/155Adding observations: 134/155Adding observations: 135/155Adding observations: 136/155Adding observations: 137/155Adding observations: 138/155Adding observations: 139/155Adding observations: 140/155Adding observations: 141/155Adding observations: 142/155Adding observations: 143/155Adding observations: 144/155Adding observations: 145/155Adding observations: 146/155Adding observations: 147/155Adding observations: 148/155Adding observations: 149/155Adding observations: 150/155Adding observations: 151/155Adding observations: 152/155Adding observations: 153/155Adding observations: 154/155Predicting...
+  Predicting chunk [0:47/48]
+Covariance function : Sum
++ Component: 1
+  Covariance function : Isotropic Exponential
+  Range (P0) : 4230.6786 (Log transformed)
+  Variance (P1) : 5.7938 (Log transformed)
++ Component: 2
+  Covariance function : White noise
+  Variance (P0) : 0.0280 (Log transformed)
++ Component: 3
+  Covariance function : Constant
+  Amplitude (P0) : 0.0445 (Log transformed)
+> krigingObject = postProcess(krigingObject)
+> 
+> # Send predictions back to Java. Not sure how to deal with this spatial object though...?
+> summary(krigingObject$outputTable)
+       x                y               mean          variance      
+ Min.   :179019   Min.   :330013   Min.   :4.771   Min.   :0.07746  
+ 1st Qu.:179485   1st Qu.:330829   1st Qu.:5.243   1st Qu.:0.12015  
+ Median :180183   Median :331644   Median :5.776   Median :0.30006  
+ Mean   :180183   Mean   :331644   Mean   :6.195   Mean   :0.49497  
+ 3rd Qu.:180882   3rd Qu.:332459   3rd Qu.:7.323   3rd Qu.:0.69777  
+ Max.   :181348   Max.   :333275   Max.   :7.977   Max.   :1.98648  
+   excprob5.9        cumdistr5.9         quantile0.1   
+ Min.   :0.000587   Min.   :1.312e-05   Min.   :3.890  
+ 1st Qu.:0.104064   1st Qu.:2.674e-02   1st Qu.:4.622  
+ Median :0.418146   Median :5.819e-01   Median :5.127  
+ Mean   :0.508302   Mean   :4.917e-01   Mean   :5.386  
+ 3rd Qu.:0.973258   3rd Qu.:8.959e-01   3rd Qu.:6.390  
+ Max.   :0.999987   Max.   :9.994e-01   Max.   :7.079  
+> summary(krigingObject$observations)
+Object of class SpatialPointsDataFrame
+Coordinates:
+     min    max
+x 178605 181390
+y 329714 333611
+Is projected: NA 
+proj4string : [NA]
+Number of points: 155
+Data attributes:
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  4.727   5.288   5.787   5.886   6.514   7.517 
+> summary(autoKrige(value~1,krigingObject$observations,predictionLocations)$krige_output)
+[using ordinary kriging]
+Object of class SpatialPointsDataFrame
+Coordinates:
+        min      max
+x1 179018.6 181348.1
+x2 330013.4 333274.7
+Is projected: NA 
+proj4string : [NA]
+Number of points: 48
+Data attributes:
+   var1.pred        var1.var        var1.stdev    
+ Min.   :4.929   Min.   :0.1153   Min.   :0.3395  
+ 1st Qu.:5.518   1st Qu.:0.1615   1st Qu.:0.4018  
+ Median :6.047   Median :0.3582   Median :0.5963  
+ Mean   :5.978   Mean   :0.3827   Mean   :0.5909  
+ 3rd Qu.:6.337   3rd Qu.:0.6026   3rd Qu.:0.7762  
+ Max.   :7.472   Max.   :0.6752   Max.   :0.8217  
+> autofitVariogram(value~1,krigingObject$observations)$var_model
+  model      psill    range
+1   Nug 0.04847876   0.0000
+2   Sph 0.58754476 889.8912
+> 
