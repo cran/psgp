@@ -48,17 +48,23 @@ public:
 	CovarianceFunction(string name);
 	virtual ~CovarianceFunction();
 	
+	virtual void computeSymmetric(double& c, const vec& X) const;
 	virtual void computeSymmetric(mat& C, const mat& X) const;
+	
 	virtual void computeSymmetricGrad(vec& V, const mat& X) const;
+	
+	virtual void computeCovariance(vec& C, const mat& X, const vec& x) const;
 	virtual void computeCovariance(mat& C, const mat& X1, const mat& X2) const;
+	
 	virtual void computeDiagonal(mat& C, const mat& X) const;
 	virtual void computeDiagonal(vec& C, const mat& X) const;	
+	
 	virtual double computeElement(const vec& A, const vec& B) const = 0;
 	virtual double computeDiagonalElement(const vec& A) const = 0;
 	
 	virtual void getParameterPartialDerivative(mat& PD, const int parameterNumber, const mat& X) const = 0;
 	
-	virtual void setParameter(const int parameterNumber, const double value) = 0;
+	virtual void   setParameter(const int parameterNumber, const double value) = 0;
 	virtual double getParameter(const int parameterNumber) const = 0;
 	
 	virtual string getParameterName(const int parameterNumber) const = 0;

@@ -45,7 +45,8 @@ double GaussianSampLikelihoodMathML::updateCoefficients(double& K1, double& K2, 
 	for(int iCyc=0; iCyc < SamplingLikelihood::numberCycles; iCyc++)
 	{
 		vec sx = mq + (itpp::randn(SamplingLikelihood::numberSamples) * sq);
-		vec transH = SamplingLikelihood::modelFunction(sx);
+		// vec transH = SamplingLikelihood::modelFunction(sx);
+		vec transH = apply_function(transform, sx);
 		
 		vec importanceWeights = (itpp::pow((sx - ModelMean) / sigX, 2.0) - itpp::pow((sx - mq) / sq, 2.0)) / 2.0;
 

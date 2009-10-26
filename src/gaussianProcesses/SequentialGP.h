@@ -44,9 +44,10 @@ using namespace std;
 using namespace itpp;
 
 
-
-enum ScoringMethod {Geometric, MeanComponent, FullKL};
-enum LikelihoodCalculation {FullEvid, Approximate, UpperBound};
+#ifndef PSGP_H_
+  enum ScoringMethod {Geometric, MeanComponent, FullKL};
+  enum LikelihoodCalculation {FullEvid, Approximate, UpperBound};
+#endif 
 
 class SequentialGP : public ForwardModel, public Optimisable
 {

@@ -36,9 +36,9 @@ class GaussianSampLikelihood : public SamplingLikelihood
 {
 public:
 	GaussianSampLikelihood(double Mean, double Variance);
+	GaussianSampLikelihood(double Mean, double Variance, double (*transform)(double));
 	virtual ~GaussianSampLikelihood();
 
-	virtual double modelFunction(const double x) const = 0;
 	double updateCoefficients(double& K1, double& K2, double Observation, double ModelMean, double ModelVariance) const;
 	void displayParameters() const;
 

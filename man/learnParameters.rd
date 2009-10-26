@@ -1,75 +1,64 @@
 \name{learnParameters}
 \alias{learnParameters}
-\alias{estimateParameters.psgp}
 \title{Projected Sequential Gaussian Process}
-\description{\code{learnParameters} performs maximum likelihood parameter estimation in the PSGP framework.
+\description{
+  \code{learnParameters} performs maximum likelihood parameter estimation in the PSGP framework.
+}
+\synopsis{ 
+  learnParameters(object) 
 }
 \usage{
-learnParameters(object)
-\method{estimateParameters}{psgp}(object, ...)
+  learnParameters(object)
 }
 \arguments{
-  \item{object}{ a list object of Intamap type. Most arguments necessary for interpolation
-  are passed through this object. See the introduction to the 
-  \code{\link[intamap:intamap-package]{intamap-package}} for further 
-  description of the necessary content of this variable}
-  \item{...}{other parameters possible to pass to \code{\link[intamap:estimateParameters]{estimateParameters}}
-      not relevant for \code{estimateParameters.psgp} }
+  \item{object}{ a list object of intamap type. Most arguments necessary for
+    interpolation are passed through this object. 
+    See \code{\link[intamap:intamap-package]{intamap-package}} for further description of the necessary 
+    content of this variable.
+  }
 }
- 
+
+\section{Warning}{It is advised to use the intamap wrapper \code{\link{estimateParameters}} rather than calling this method directly.}
 
 \details{
-The function \code{learnParameters} is a function for estimating variogram parameters with 
-Projected Spatial Gaussian Process (PSGP) methods (Csato and Opper, 2002; Ingram et al., 2008)
-through a maximum likelihood estimation. 
+  The Projected Spatial Gaussian Process (PSGP) framework provides  
+  an approximation to the full Gaussian process in which the observations 
+  are projected sequentially onto an optimal subset of 'active' observations. Spatial 
+  interpolation is done using a mixture of covariance kernels (exponential and Matern 
+  5/2).
 
-Instead of calling this function directly, a user is advised to call the generic S3-class 
-wrapper function \code{\link[intamap:estimateParameters]{estimateParameters}} of the
-\code{\link[intamap:intamap-package]{intamap-package}} with an \code{object} of class \code{psgp}.
-
-Predictions can be done with 
-\code{\link{makePrediction}} or \code{\link[intamap:spatialPredict]{spatialPredict}} with
-an \code{object} of type \code{psgp}.
-These methods are able to also take the measurement characteristics into account,
-in this function implemented as the element \code{obsChar} in \code{object}.
-
-Most of the method is implemented in C++, relying on the external library IT++
-(\url{http://itpp.sourceforge.net}), which is a C++ library composed of
-classes and functions for linear algebra (matrices and vectors). 
-
+  The function \code{learnParameters} is an internal function for estimating the
+  parameters of the covariance function given the data, using a maximum likelihood
+  approach. A valid intamap \code{object} must be passed in.
+  
+  PSGP is able to also take the measurement characteristics (i.e. errors) into
+  account using possibly many error models. For each error model, assumed Gaussian, the 
+  error variance can be specified. The vector 
+  \code{object$observations$oevar} contains all variances for the error models (one 
+  value per error model). 
+  % Similarly, if specified, the vector  
+  %\code{object$observations$oebias} must contains the bias values for each model. 
+  Which error model is used for a given observation is determined by the 
+  \code{object$observations$oeid} vector of indices, which specifies the index of the 
+  model to be used for each observation.
 }
 
 
 \references{ 
-
-\url{http://www.intamap.org/}
-
+    Csato and Opper, 2002; Ingram et al., 2008
+    
+    \url{http://www.intamap.org/}
 }
-\author{Ben Ingram}
+\author{Ben Ingram, Remi Barillec}
 \seealso{
-\code{\link[intamap:estimateParameters]{estimateParameters}},\code{\link{makePrediction}}
+  \code{\link{makePrediction}},
+  \code{\link{learnParameters}},
+  \code{\link[intamap:estimateParameters]{estimateParameters}},
+  \code{\link[intamap:createIntamapObject]{createIntamapObject}}
 }
 \examples{
-# This example skips some steps that might be necessary for more complicated
-# tasks, such as estimateParameters and pre- and postProcessing of the data
-data(meuse)
-coordinates(meuse) = ~x+y
-meuse$value = log(meuse$zinc)
-data(meuse.grid)
-gridded(meuse.grid) = ~x+y
-proj4string(meuse) = CRS("+init=epsg:28992")
-proj4string(meuse.grid) = CRS("+init=epsg:28992")
-
-# set up intamap object:
-obj = createIntamapObject(
-	observations = meuse,
-	predictionLocations = meuse.grid,
-	targetCRS = "+init=epsg:3035",
-	class = "psgp"
-)
-
-# do interpolation step:
-obj = conformProjections(obj)
-obj = estimateParameters(obj)  # obj updated with variogram
+  # see example in estimateParameters
 }
 \keyword{spatial}
+
+

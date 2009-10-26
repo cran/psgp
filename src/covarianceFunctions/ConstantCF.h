@@ -51,6 +51,7 @@ public:
 	
 private:
 	double amplitude;
+
 };
 
 #endif /*CONSTANTCF_H_*/

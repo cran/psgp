@@ -1,9 +1,10 @@
 /***************************************************************************
  *   AstonGeostats, algorithms for low-rank geostatistical models          *
  *                                                                         *
- *   Copyright (C) Ben Ingram, 2008                                        *
+ *   Copyright (C) Ben Ingram, Remi Barillec, 2008-09                      *
  *                                                                         *
  *   Ben Ingram, IngramBR@Aston.ac.uk                                      *
+ *   Remi Barillec, r.barillec@aston.ac.uk
  *   Neural Computing Research Group,                                      *
  *   Aston University,                                                     *
  *   Aston Street, Aston Triangle,                                         *
@@ -26,64 +27,42 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef SEQUENTIALGP_H_
-#define SEQUENTIALGP_H_
+#ifndef EXPONENTIAL2CF_H_
+#define EXPONENTIAL2CF_H_
 
+#include "CovarianceFunction.h"
+
+#include <cmath>
+#include <cassert>
 #include <itpp/itbase.h>
 
-#include "ForwardModel.h"
-#include "optimisation/Optimisable.h"
-#include "covarianceFunctions/CovarianceFunction.h"
-#include "likelihoodModels/LikelihoodType.h"
-#include "likelihoodModels/GaussianSampLikelihood.h"
+using namespace itpp;
 
-#include <cassert>
-
-class SequentialGP : public ForwardModel, public Optimisable
+class Exponential2CF : public CovarianceFunction
 {
 public:
-	SequentialGP(int Inputs, int Outputs, mat& Xdata, vec& ydata, CovarianceFunction& cf);
-	virtual ~SequentialGP();
-
-	void computePosterior(const LikelihoodType& noiseModel);
-	void computePosterior(const ivec& LikelihoodModel, const Vec<LikelihoodType *> noiseModels);
-	void makePredictions(vec& Mean, vec& Variance, const mat& Xpred) const;
-
-	vec getParametersVector() const;
-	void setParametersVector(const vec p);
-
-	double objective() const;
-	vec gradient() const;
-
-	void estimateParameters();
-
-	void displayCovarianceParameters() const;
-
+	Exponential2CF(double l_x, double l_y, double l_xy, double var);
+	Exponential2CF(vec parameters);
+	
+	virtual ~Exponential2CF();
+	
+	inline double computeElement(const vec& A, const vec& B) const;
+	inline double computeDiagonalElement(const vec& A) const;
+	void getParameterPartialDerivative(mat& PD, const int parameterNumber, const mat& X) const;
+	
+	void setParameter(int parameterNumber, const double value);
+	double getParameter(int parameterNumber) const;
+	
+	string getParameterName(int parameterNumber) const;
+	
 private:
-
-	void addOne(const vec& X, const double Observation, const LikelihoodType& noiseModel);
-
-	void sparseUpdate(mat& KX, mat& eHat, const double qtp1, const double rtp1);
-	void fullUpdate(const mat& X, const mat& KX, mat& eHat, const double gamma, const double qtp1, const double rtp1, const double sig0);
-
-	mat computeCholesky(const mat& iM) const;
-	mat computeInverseFromCholesky(const mat& C) const;
-
-
-	mat KB; // covariance between BV
-	mat Q; // inverse covariance between BV
-	mat Alpha; // alphas for calculating mean
-	mat C; // for calculating variance
-	mat ActiveSet; // Active set
-
-	CovarianceFunction& covFunc;
-	mat& Locations;
-	vec& Observations;
-
-	int sizeActiveSet;
-	int maxActiveSet;
-	double epsilonTolerance;
-
+	inline double calcExponential(const vec& V) const;
+	inline double calcExponentialDiag() const;
+	
+	double variance;
+	mat L;    // Inverse of Cholesky decomposition of the length-scale matrix
+	
+	IdentityTransform id;
 };
 
-#endif /*SEQUENTIALGP_H_*/
+#endif /*EXPONENTIALCF_H_*/

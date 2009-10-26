@@ -38,7 +38,7 @@ inline double GaussianCF::computeDiagonalElement(const vec& A) const
 
 inline double GaussianCF::calcGaussian(const vec& V) const
 {
-	return variance * exp( -0.5 * sum(itpp::pow(V , 2.0) / pow(range, 2.0)));
+    return variance * exp( -0.5 * sum(sqr(V)) / sqr(range) );
 }
 
 inline double GaussianCF::calcGaussianDiag() const

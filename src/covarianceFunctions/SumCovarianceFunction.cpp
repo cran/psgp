@@ -130,16 +130,24 @@ void SumCovarianceFunction::setTransform(int parameterNumber, Transform* newTran
 
 void SumCovarianceFunction::setParameters(const vec p)
 {
-	int pos = 0;
+	int parFrom = 0;
+	int parTo = 0;
 	for(std::vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
 	{
-		for(int j = 0; j < (covFunctions[i]->getNumberParameters()) ; j++)
+	    // RB: Extract parameters for covariance function j
+	    parFrom = parTo;
+	    parTo += covFunctions[i]->getNumberParameters();
+	    covFunctions[i]->setParameters( p(parFrom, parTo-1) ); 
+	        
+	    /*
+	    for(int j = 0; j < (covFunctions[i]->getNumberParameters()) ; j++)
 		{
 			Transform* t = covFunctions[i]->getTransform(j);
 			double d = t->backwardTransform(p(pos));
 			covFunctions[i]->setParameter(j, d);
 			pos = pos + 1;
 		}
+	    */
 	}
 }
 

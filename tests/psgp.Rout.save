@@ -60,138 +60,111 @@ Attaching package: 'lattice'
 Checking object ... OK
 > krigingObject = preProcess(krigingObject)
 > krigingObject = estimateParameters(krigingObject)
+-- Estimating parameters
+
 ===Starting Parameters===========================
 Covariance function : Sum
 + Component: 1
   Covariance function : Isotropic Exponential
-  Range (P0) : 31915.6069 (Log transformed)
-  Variance (P1) : 0.5211 (Log transformed)
+  Range (P0) : 727.9440 (Log transformed)
+  Variance (P1) : 0.7525 (Log transformed)
 + Component: 2
-  Covariance function : White noise
-  Variance (P0) : 0.2606 (Log transformed)
+  Covariance function : Matern 5/2 covariance function
+  Length scale (P0) : 727.9440 (Log transformed)
+  Variance (P1) : 0.7525 (Log transformed)
 + Component: 3
   Covariance function : Constant
   Amplitude (P0) : 0.1699 (Log transformed)
-==========================
-GRADCHECK
-X = [10.3709 -0.6518 -1.3449 -1.7725]
++ Component: 4
+  Covariance function : White noise
+  Variance (P0) : 0.0059 (Log transformed)
+No noise model specified
+Defaulting to GAUSSIAN with variance 0.0001
+Processing observation: 1/155 (full update)Processing observation: 2/155 (full update)Processing observation: 3/155 (full update)Processing observation: 4/155 (full update)Processing observation: 5/155 (full update)Processing observation: 6/155 (full update)Processing observation: 7/155 (full update)Processing observation: 8/155 (full update)Processing observation: 9/155 (full update)Processing observation: 10/155 (full update)Processing observation: 11/155 (full update)Processing observation: 12/155 (full update)Processing observation: 13/155 (full update)Processing observation: 14/155 (full update)Processing observation: 15/155 (full update)Processing observation: 16/155 (full update)Processing observation: 17/155 (full update)Processing observation: 18/155 (full update)Processing observation: 19/155 (full update)Processing observation: 20/155 (full update)Processing observation: 21/155 (full update)Processing observation: 22/155 (full update)Processing observation: 23/155 (full update)Processing observation: 24/155 (full update)Processing observation: 25/155 (full update)Processing observation: 26/155 (full update)Processing observation: 27/155 (full update)Processing observation: 28/155 (full update)Processing observation: 29/155 (full update)Processing observation: 30/155 (full update)Processing observation: 31/155 (full update)Processing observation: 32/155 (full update)Processing observation: 33/155 (full update)Processing observation: 34/155 (full update)Processing observation: 35/155 (full update)Processing observation: 36/155 (full update)Processing observation: 37/155 (full update)Processing observation: 38/155 (full update)Processing observation: 39/155 (full update)Processing observation: 40/155 (full update)Processing observation: 41/155 (full update)Processing observation: 42/155 (full update)Processing observation: 43/155 (full update)Processing observation: 44/155 (full update)Processing observation: 45/155 (full update)Processing observation: 46/155 (full update)Processing observation: 47/155 (full update)Processing observation: 48/155 (full update)Processing observation: 49/155 (full update)Processing observation: 50/155 (full update)Processing observation: 51/155 (full update)Processing observation: 52/155 (full update)Processing observation: 53/155 (full update)Processing observation: 54/155 (full update)Processing observation: 55/155 (full update)Processing observation: 56/155 (full update)Processing observation: 57/155 (full update)Processing observation: 58/155 (full update)Processing observation: 59/155 (full update)Processing observation: 60/155 (full update)Processing observation: 61/155 (full update)Processing observation: 62/155 (full update)Processing observation: 63/155 (full update)Processing observation: 64/155 (full update)Processing observation: 65/155 (full update)Processing observation: 66/155 (full update)Processing observation: 67/155 (full update)Processing observation: 68/155 (full update)Processing observation: 69/155 (full update)Processing observation: 70/155 (full update)Processing observation: 71/155 (full update)Processing observation: 72/155 (full update)Processing observation: 73/155 (full update)Processing observation: 74/155 (full update)Processing observation: 75/155 (full update)Processing observation: 76/155 (full update)Processing observation: 77/155 (full update)Processing observation: 78/155 (full update)Processing observation: 79/155 (full update)Processing observation: 80/155 (full update)Processing observation: 81/155 (full update)Processing observation: 82/155 (full update)Processing observation: 83/155 (full update)Processing observation: 84/155 (full update)Processing observation: 85/155 (full update)Processing observation: 86/155 (full update)Processing observation: 87/155 (full update)Processing observation: 88/155 (full update)Processing observation: 89/155 (full update)Processing observation: 90/155 (full update)Processing observation: 91/155 (full update)Processing observation: 92/155 (full update)Processing observation: 93/155 (full update)Processing observation: 94/155 (full update)Processing observation: 95/155 (full update)Processing observation: 96/155 (full update)Processing observation: 97/155 (full update)Processing observation: 98/155 (full update)Processing observation: 99/155 (full update)Processing observation: 100/155 (full update)Processing observation: 101/155 (full update)Processing observation: 102/155 (full update)Processing observation: 103/155 (full update)Processing observation: 104/155 (full update)Processing observation: 105/155 (full update)Processing observation: 106/155 (full update)Processing observation: 107/155 (full update)Processing observation: 108/155 (full update)Processing observation: 109/155 (full update)Processing observation: 110/155 (full update)Processing observation: 111/155 (full update)Processing observation: 112/155 (full update)Processing observation: 113/155 (full update)Processing observation: 114/155 (full update)Processing observation: 115/155 (full update)Processing observation: 116/155 (full update)Processing observation: 117/155 (full update)Processing observation: 118/155 (full update)Processing observation: 119/155 (full update)Processing observation: 120/155 (full update)Processing observation: 121/155 (full update)Processing observation: 122/155 (full update)Processing observation: 123/155 (full update)Processing observation: 124/155 (full update)Processing observation: 125/155 (full update)Processing observation: 126/155 (full update)Processing observation: 127/155 (full update)Processing observation: 128/155 (full update)Processing observation: 129/155 (full update)Processing observation: 130/155 (full update)Processing observation: 131/155 (full update)Processing observation: 132/155 (full update)Processing observation: 133/155 (full update)Processing observation: 134/155 (full update)Processing observation: 135/155 (full update)Processing observation: 136/155 (full update)Processing observation: 137/155 (full update)Processing observation: 138/155 (full update)Processing observation: 139/155 (full update)Processing observation: 140/155 (full update)Processing observation: 141/155 (full update)Processing observation: 142/155 (full update)Processing observation: 143/155 (full update)Processing observation: 144/155 (full update)Processing observation: 145/155 (full update)Processing observation: 146/155 (full update)Processing observation: 147/155 (full update)Processing observation: 148/155 (full update)Processing observation: 149/155 (full update)Processing observation: 150/155 (full update)Processing observation: 151/155 (full update)Processing observation: 152/155 (full update)Processing observation: 153/155 (full update)Processing observation: 154/155 (full update)Processing observation: 155/155 (full update)
+Processing observation: 1/155Processing observation: 2/155Processing observation: 3/155Processing observation: 4/155Processing observation: 5/155Processing observation: 6/155Processing observation: 7/155Processing observation: 8/155Processing observation: 9/155Processing observation: 10/155Processing observation: 11/155Processing observation: 12/155Processing observation: 13/155Processing observation: 14/155Processing observation: 15/155Processing observation: 16/155Processing observation: 17/155Processing observation: 18/155Processing observation: 19/155Processing observation: 20/155Processing observation: 21/155Processing observation: 22/155Processing observation: 23/155Processing observation: 24/155Processing observation: 25/155Processing observation: 26/155Processing observation: 27/155Processing observation: 28/155Processing observation: 29/155Processing observation: 30/155Processing observation: 31/155Processing observation: 32/155Processing observation: 33/155Processing observation: 34/155Processing observation: 35/155Processing observation: 36/155Processing observation: 37/155Processing observation: 38/155Processing observation: 39/155Processing observation: 40/155Processing observation: 41/155Processing observation: 42/155Processing observation: 43/155Processing observation: 44/155Processing observation: 45/155Processing observation: 46/155Processing observation: 47/155Processing observation: 48/155Processing observation: 49/155Processing observation: 50/155Processing observation: 51/155Processing observation: 52/155Processing observation: 53/155Processing observation: 54/155Processing observation: 55/155Processing observation: 56/155Processing observation: 57/155Processing observation: 58/155Processing observation: 59/155Processing observation: 60/155Processing observation: 61/155Processing observation: 62/155Processing observation: 63/155Processing observation: 64/155Processing observation: 65/155Processing observation: 66/155Processing observation: 67/155Processing observation: 68/155Processing observation: 69/155Processing observation: 70/155Processing observation: 71/155Processing observation: 72/155Processing observation: 73/155Processing observation: 74/155Processing observation: 75/155Processing observation: 76/155Processing observation: 77/155Processing observation: 78/155Processing observation: 79/155Processing observation: 80/155Processing observation: 81/155Processing observation: 82/155Processing observation: 83/155Processing observation: 84/155Processing observation: 85/155Processing observation: 86/155Processing observation: 87/155Processing observation: 88/155Processing observation: 89/155Processing observation: 90/155Processing observation: 91/155Processing observation: 92/155Processing observation: 93/155Processing observation: 94/155Processing observation: 95/155Processing observation: 96/155Processing observation: 97/155Processing observation: 98/155Processing observation: 99/155Processing observation: 100/155Processing observation: 101/155Processing observation: 102/155Processing observation: 103/155Processing observation: 104/155Processing observation: 105/155Processing observation: 106/155Processing observation: 107/155Processing observation: 108/155Processing observation: 109/155Processing observation: 110/155Processing observation: 111/155Processing observation: 112/155Processing observation: 113/155Processing observation: 114/155Processing observation: 115/155Processing observation: 116/155Processing observation: 117/155Processing observation: 118/155Processing observation: 119/155Processing observation: 120/155Processing observation: 121/155Processing observation: 122/155Processing observation: 123/155Processing observation: 124/155Processing observation: 125/155Processing observation: 126/155Processing observation: 127/155Processing observation: 128/155Processing observation: 129/155Processing observation: 130/155Processing observation: 131/155Processing observation: 132/155Processing observation: 133/155Processing observation: 134/155Processing observation: 135/155Processing observation: 136/155Processing observation: 137/155Processing observation: 138/155Processing observation: 139/155Processing observation: 140/155Processing observation: 141/155Processing observation: 142/155Processing observation: 143/155Processing observation: 144/155Processing observation: 145/155Processing observation: 146/155Processing observation: 147/155Processing observation: 148/155Processing observation: 149/155Processing observation: 150/155Processing observation: 151/155Processing observation: 152/155Processing observation: 153/155Processing observation: 154/155Processing observation: 155/155
 
-     Delta, Analytic, Diff
---------------------------
-#0  16.7461, 16.7461, 0.0000
-#1  -17.1400, -17.1400, 0.0000
-#2  -29.3389, -29.3389, 0.0000
-#3  2.1464, 2.1464, 0.0000
-==========================
-Cycle 1  Error 171.0011  Scale 1.0000
-Cycle 2  Error 171.0011  Scale 4.0000
-Cycle 3  Error 171.0011  Scale 16.0000
-Cycle 4  Error 160.1635  Scale 64.0000
-Cycle 5  Error 150.3823  Scale 32.0000
-Cycle 6  Error 115.7491  Scale 16.0000
-Cycle 7  Error 115.7491  Scale 8.0000
-Cycle 8  Error 105.0813  Scale 32.0000
-Cycle 9  Error 99.2072  Scale 16.0000
-Cycle 10  Error 99.2072  Scale 8.0000
-Cycle 11  Error 99.1033  Scale 32.0000
-Cycle 12  Error 98.9868  Scale 32.0000
-Cycle 13  Error 98.9868  Scale 16.0000
-Cycle 14  Error 98.6217  Scale 64.0000
-Cycle 15  Error 98.4495  Scale 32.0000
-Cycle 16  Error 98.2678  Scale 16.0000
-Cycle 17  Error 97.9036  Scale 8.0000
-Cycle 18  Error 97.9036  Scale 4.0000
-Cycle 19  Error 97.8829  Scale 16.0000
-Cycle 20  Error 97.8829  Scale 8.0000
-Cycle 21  Error 97.8829  Scale 32.0000
-Cycle 22  Error 97.8662  Scale 128.0000
-Cycle 23  Error 97.8517  Scale 64.0000
-Cycle 24  Error 97.8267  Scale 32.0000
-Cycle 25  Error 97.7828  Scale 16.0000
-Cycle 26  Error 97.7828  Scale 8.0000
-Cycle 27  Error 97.7665  Scale 32.0000
-Cycle 28  Error 97.7222  Scale 16.0000
-Cycle 29  Error 97.7222  Scale 8.0000
-Cycle 30  Error 97.7102  Scale 32.0000
-Cycle 31  Error 97.6735  Scale 16.0000
-Cycle 32  Error 97.6295  Scale 8.0000
-Cycle 33  Error 97.6295  Scale 4.0000
-Cycle 34  Error 97.5995  Scale 16.0000
-Cycle 35  Error 97.5570  Scale 8.0000
-Cycle 36  Error 97.5110  Scale 4.0000
-Cycle 37  Error 97.5110  Scale 2.0000
-Cycle 38  Error 97.5110  Scale 8.0000
-Cycle 39  Error 97.5110  Scale 32.0000
-Cycle 40  Error 97.5043  Scale 128.0000
-Cycle 41  Error 97.5014  Scale 64.0000
-Cycle 42  Error 97.4969  Scale 32.0000
-Cycle 43  Error 97.4892  Scale 16.0000
-Cycle 44  Error 97.4892  Scale 8.0000
-Cycle 45  Error 97.4892  Scale 32.0000
-Cycle 46  Error 97.4863  Scale 128.0000
-Cycle 47  Error 97.4841  Scale 64.0000
-Cycle 48  Error 97.4801  Scale 32.0000
-Cycle 49  Error 97.4728  Scale 16.0000
-Cycle 50  Error 97.4728  Scale 8.0000
+Finding optimal parameters
+Cycle 1  Error 101.5578  Scale 1.0000
+Cycle 2  Error 99.6683  Scale 0.5000
+Cycle 3  Error 99.4167  Scale 0.2500
+Cycle 4  Error 98.4186  Scale 0.1250
+Cycle 5  Error 98.3572  Scale 0.0625
 Warning: Maximum number of iterations has been exceeded
-==========================
-GRADCHECK
-X = [8.3501 1.7568 -3.5765 -3.1118]
+Update posterior for new parameters
+Cycle 1  Error 98.3285  Scale 1.0000
+Cycle 2  Error 97.8919  Scale 0.5000
+Cycle 3  Error 97.8858  Scale 0.2500
+Cycle 4  Error 97.4940  Scale 0.1250
+Cycle 5  Error 97.4761  Scale 0.0625
+Warning: Maximum number of iterations has been exceeded
+Update posterior for new parameters
+Cycle 1  Error 97.4727  Scale 1.0000
+Cycle 2  Error 97.3343  Scale 0.5000
+Cycle 3  Error 97.3272  Scale 0.2500
+Cycle 4  Error 97.3107  Scale 0.1250
+Cycle 5  Error 97.3105  Scale 0.0625
+Warning: Maximum number of iterations has been exceeded
+Update posterior for new parameters
 
-     Delta, Analytic, Diff
---------------------------
-#0  -0.2274, -0.2274, 0.0000
-#1  0.1943, 0.1943, 0.0000
-#2  0.0735, 0.0735, 0.0000
-#3  0.3389, 0.3389, 0.0000
-==========================
-===Finishing Parameters===========================
+===Final Parameters===========================
 Covariance function : Sum
 + Component: 1
   Covariance function : Isotropic Exponential
-  Range (P0) : 4230.6786 (Log transformed)
-  Variance (P1) : 5.7938 (Log transformed)
+  Range (P0) : 844.4929 (Log transformed)
+  Variance (P1) : 1.1116 (Log transformed)
 + Component: 2
-  Covariance function : White noise
-  Variance (P0) : 0.0280 (Log transformed)
+  Covariance function : Matern 5/2 covariance function
+  Length scale (P0) : 1752.4855 (Log transformed)
+  Variance (P1) : 0.7933 (Log transformed)
 + Component: 3
   Covariance function : Constant
-  Amplitude (P0) : 0.0445 (Log transformed)
+  Amplitude (P0) : 0.0221 (Log transformed)
++ Component: 4
+  Covariance function : White noise
+  Variance (P0) : 0.0302 (Log transformed)
 > krigingObject = spatialPredict(krigingObject)
-No noise models specified
-Defaulting to GAUSSIAN:0.0003
+-- Making predictions
+No noise model specified
+Defaulting to GAUSSIAN with variance = 0.0003
 Computing posterior...
-Adding observations: 0/155Adding observations: 1/155Adding observations: 2/155Adding observations: 3/155Adding observations: 4/155Adding observations: 5/155Adding observations: 6/155Adding observations: 7/155Adding observations: 8/155Adding observations: 9/155Adding observations: 10/155Adding observations: 11/155Adding observations: 12/155Adding observations: 13/155Adding observations: 14/155Adding observations: 15/155Adding observations: 16/155Adding observations: 17/155Adding observations: 18/155Adding observations: 19/155Adding observations: 20/155Adding observations: 21/155Adding observations: 22/155Adding observations: 23/155Adding observations: 24/155Adding observations: 25/155Adding observations: 26/155Adding observations: 27/155Adding observations: 28/155Adding observations: 29/155Adding observations: 30/155Adding observations: 31/155Adding observations: 32/155Adding observations: 33/155Adding observations: 34/155Adding observations: 35/155Adding observations: 36/155Adding observations: 37/155Adding observations: 38/155Adding observations: 39/155Adding observations: 40/155Adding observations: 41/155Adding observations: 42/155Adding observations: 43/155Adding observations: 44/155Adding observations: 45/155Adding observations: 46/155Adding observations: 47/155Adding observations: 48/155Adding observations: 49/155Adding observations: 50/155Adding observations: 51/155Adding observations: 52/155Adding observations: 53/155Adding observations: 54/155Adding observations: 55/155Adding observations: 56/155Adding observations: 57/155Adding observations: 58/155Adding observations: 59/155Adding observations: 60/155Adding observations: 61/155Adding observations: 62/155Adding observations: 63/155Adding observations: 64/155Adding observations: 65/155Adding observations: 66/155Adding observations: 67/155Adding observations: 68/155Adding observations: 69/155Adding observations: 70/155Adding observations: 71/155Adding observations: 72/155Adding observations: 73/155Adding observations: 74/155Adding observations: 75/155Adding observations: 76/155Adding observations: 77/155Adding observations: 78/155Adding observations: 79/155Adding observations: 80/155Adding observations: 81/155Adding observations: 82/155Adding observations: 83/155Adding observations: 84/155Adding observations: 85/155Adding observations: 86/155Adding observations: 87/155Adding observations: 88/155Adding observations: 89/155Adding observations: 90/155Adding observations: 91/155Adding observations: 92/155Adding observations: 93/155Adding observations: 94/155Adding observations: 95/155Adding observations: 96/155Adding observations: 97/155Adding observations: 98/155Adding observations: 99/155Adding observations: 100/155Adding observations: 101/155Adding observations: 102/155Adding observations: 103/155Adding observations: 104/155Adding observations: 105/155Adding observations: 106/155Adding observations: 107/155Adding observations: 108/155Adding observations: 109/155Adding observations: 110/155Adding observations: 111/155Adding observations: 112/155Adding observations: 113/155Adding observations: 114/155Adding observations: 115/155Adding observations: 116/155Adding observations: 117/155Adding observations: 118/155Adding observations: 119/155Adding observations: 120/155Adding observations: 121/155Adding observations: 122/155Adding observations: 123/155Adding observations: 124/155Adding observations: 125/155Adding observations: 126/155Adding observations: 127/155Adding observations: 128/155Adding observations: 129/155Adding observations: 130/155Adding observations: 131/155Adding observations: 132/155Adding observations: 133/155Adding observations: 134/155Adding observations: 135/155Adding observations: 136/155Adding observations: 137/155Adding observations: 138/155Adding observations: 139/155Adding observations: 140/155Adding observations: 141/155Adding observations: 142/155Adding observations: 143/155Adding observations: 144/155Adding observations: 145/155Adding observations: 146/155Adding observations: 147/155Adding observations: 148/155Adding observations: 149/155Adding observations: 150/155Adding observations: 151/155Adding observations: 152/155Adding observations: 153/155Adding observations: 154/155Adding observations: 0/155Adding observations: 1/155Adding observations: 2/155Adding observations: 3/155Adding observations: 4/155Adding observations: 5/155Adding observations: 6/155Adding observations: 7/155Adding observations: 8/155Adding observations: 9/155Adding observations: 10/155Adding observations: 11/155Adding observations: 12/155Adding observations: 13/155Adding observations: 14/155Adding observations: 15/155Adding observations: 16/155Adding observations: 17/155Adding observations: 18/155Adding observations: 19/155Adding observations: 20/155Adding observations: 21/155Adding observations: 22/155Adding observations: 23/155Adding observations: 24/155Adding observations: 25/155Adding observations: 26/155Adding observations: 27/155Adding observations: 28/155Adding observations: 29/155Adding observations: 30/155Adding observations: 31/155Adding observations: 32/155Adding observations: 33/155Adding observations: 34/155Adding observations: 35/155Adding observations: 36/155Adding observations: 37/155Adding observations: 38/155Adding observations: 39/155Adding observations: 40/155Adding observations: 41/155Adding observations: 42/155Adding observations: 43/155Adding observations: 44/155Adding observations: 45/155Adding observations: 46/155Adding observations: 47/155Adding observations: 48/155Adding observations: 49/155Adding observations: 50/155Adding observations: 51/155Adding observations: 52/155Adding observations: 53/155Adding observations: 54/155Adding observations: 55/155Adding observations: 56/155Adding observations: 57/155Adding observations: 58/155Adding observations: 59/155Adding observations: 60/155Adding observations: 61/155Adding observations: 62/155Adding observations: 63/155Adding observations: 64/155Adding observations: 65/155Adding observations: 66/155Adding observations: 67/155Adding observations: 68/155Adding observations: 69/155Adding observations: 70/155Adding observations: 71/155Adding observations: 72/155Adding observations: 73/155Adding observations: 74/155Adding observations: 75/155Adding observations: 76/155Adding observations: 77/155Adding observations: 78/155Adding observations: 79/155Adding observations: 80/155Adding observations: 81/155Adding observations: 82/155Adding observations: 83/155Adding observations: 84/155Adding observations: 85/155Adding observations: 86/155Adding observations: 87/155Adding observations: 88/155Adding observations: 89/155Adding observations: 90/155Adding observations: 91/155Adding observations: 92/155Adding observations: 93/155Adding observations: 94/155Adding observations: 95/155Adding observations: 96/155Adding observations: 97/155Adding observations: 98/155Adding observations: 99/155Adding observations: 100/155Adding observations: 101/155Adding observations: 102/155Adding observations: 103/155Adding observations: 104/155Adding observations: 105/155Adding observations: 106/155Adding observations: 107/155Adding observations: 108/155Adding observations: 109/155Adding observations: 110/155Adding observations: 111/155Adding observations: 112/155Adding observations: 113/155Adding observations: 114/155Adding observations: 115/155Adding observations: 116/155Adding observations: 117/155Adding observations: 118/155Adding observations: 119/155Adding observations: 120/155Adding observations: 121/155Adding observations: 122/155Adding observations: 123/155Adding observations: 124/155Adding observations: 125/155Adding observations: 126/155Adding observations: 127/155Adding observations: 128/155Adding observations: 129/155Adding observations: 130/155Adding observations: 131/155Adding observations: 132/155Adding observations: 133/155Adding observations: 134/155Adding observations: 135/155Adding observations: 136/155Adding observations: 137/155Adding observations: 138/155Adding observations: 139/155Adding observations: 140/155Adding observations: 141/155Adding observations: 142/155Adding observations: 143/155Adding observations: 144/155Adding observations: 145/155Adding observations: 146/155Adding observations: 147/155Adding observations: 148/155Adding observations: 149/155Adding observations: 150/155Adding observations: 151/155Adding observations: 152/155Adding observations: 153/155Adding observations: 154/155Predicting...
+Processing observation: 1/155 (full update)Processing observation: 2/155 (full update)Processing observation: 3/155 (full update)Processing observation: 4/155 (full update)Processing observation: 5/155 (full update)Processing observation: 6/155 (full update)Processing observation: 7/155 (full update)Processing observation: 8/155 (full update)Processing observation: 9/155 (full update)Processing observation: 10/155 (full update)Processing observation: 11/155 (full update)Processing observation: 12/155 (full update)Processing observation: 13/155 (full update)Processing observation: 14/155 (full update)Processing observation: 15/155 (full update)Processing observation: 16/155 (full update)Processing observation: 17/155 (full update)Processing observation: 18/155 (full update)Processing observation: 19/155 (full update)Processing observation: 20/155 (full update)Processing observation: 21/155 (full update)Processing observation: 22/155 (full update)Processing observation: 23/155 (full update)Processing observation: 24/155 (full update)Processing observation: 25/155 (full update)Processing observation: 26/155 (full update)Processing observation: 27/155 (full update)Processing observation: 28/155 (full update)Processing observation: 29/155 (full update)Processing observation: 30/155 (full update)Processing observation: 31/155 (full update)Processing observation: 32/155 (full update)Processing observation: 33/155 (full update)Processing observation: 34/155 (full update)Processing observation: 35/155 (full update)Processing observation: 36/155 (full update)Processing observation: 37/155 (full update)Processing observation: 38/155 (full update)Processing observation: 39/155 (full update)Processing observation: 40/155 (full update)Processing observation: 41/155 (full update)Processing observation: 42/155 (full update)Processing observation: 43/155 (full update)Processing observation: 44/155 (full update)Processing observation: 45/155 (full update)Processing observation: 46/155 (full update)Processing observation: 47/155 (full update)Processing observation: 48/155 (full update)Processing observation: 49/155 (full update)Processing observation: 50/155 (full update)Processing observation: 51/155 (full update)Processing observation: 52/155 (full update)Processing observation: 53/155 (full update)Processing observation: 54/155 (full update)Processing observation: 55/155 (full update)Processing observation: 56/155 (full update)Processing observation: 57/155 (full update)Processing observation: 58/155 (full update)Processing observation: 59/155 (full update)Processing observation: 60/155 (full update)Processing observation: 61/155 (full update)Processing observation: 62/155 (full update)Processing observation: 63/155 (full update)Processing observation: 64/155 (full update)Processing observation: 65/155 (full update)Processing observation: 66/155 (full update)Processing observation: 67/155 (full update)Processing observation: 68/155 (full update)Processing observation: 69/155 (full update)Processing observation: 70/155 (full update)Processing observation: 71/155 (full update)Processing observation: 72/155 (full update)Processing observation: 73/155 (full update)Processing observation: 74/155 (full update)Processing observation: 75/155 (full update)Processing observation: 76/155 (full update)Processing observation: 77/155 (full update)Processing observation: 78/155 (full update)Processing observation: 79/155 (full update)Processing observation: 80/155 (full update)Processing observation: 81/155 (full update)Processing observation: 82/155 (full update)Processing observation: 83/155 (full update)Processing observation: 84/155 (full update)Processing observation: 85/155 (full update)Processing observation: 86/155 (full update)Processing observation: 87/155 (full update)Processing observation: 88/155 (full update)Processing observation: 89/155 (full update)Processing observation: 90/155 (full update)Processing observation: 91/155 (full update)Processing observation: 92/155 (full update)Processing observation: 93/155 (full update)Processing observation: 94/155 (full update)Processing observation: 95/155 (full update)Processing observation: 96/155 (full update)Processing observation: 97/155 (full update)Processing observation: 98/155 (full update)Processing observation: 99/155 (full update)Processing observation: 100/155 (full update)Processing observation: 101/155 (full update)Processing observation: 102/155 (full update)Processing observation: 103/155 (full update)Processing observation: 104/155 (full update)Processing observation: 105/155 (full update)Processing observation: 106/155 (full update)Processing observation: 107/155 (full update)Processing observation: 108/155 (full update)Processing observation: 109/155 (full update)Processing observation: 110/155 (full update)Processing observation: 111/155 (full update)Processing observation: 112/155 (full update)Processing observation: 113/155 (full update)Processing observation: 114/155 (full update)Processing observation: 115/155 (full update)Processing observation: 116/155 (full update)Processing observation: 117/155 (full update)Processing observation: 118/155 (full update)Processing observation: 119/155 (full update)Processing observation: 120/155 (full update)Processing observation: 121/155 (full update)Processing observation: 122/155 (full update)Processing observation: 123/155 (full update)Processing observation: 124/155 (full update)Processing observation: 125/155 (full update)Processing observation: 126/155 (full update)Processing observation: 127/155 (full update)Processing observation: 128/155 (full update)Processing observation: 129/155 (full update)Processing observation: 130/155 (full update)Processing observation: 131/155 (full update)Processing observation: 132/155 (full update)Processing observation: 133/155 (full update)Processing observation: 134/155 (full update)Processing observation: 135/155 (full update)Processing observation: 136/155 (full update)Processing observation: 137/155 (full update)Processing observation: 138/155 (full update)Processing observation: 139/155 (full update)Processing observation: 140/155 (full update)Processing observation: 141/155 (full update)Processing observation: 142/155 (full update)Processing observation: 143/155 (full update)Processing observation: 144/155 (full update)Processing observation: 145/155 (full update)Processing observation: 146/155 (full update)Processing observation: 147/155 (full update)Processing observation: 148/155 (full update)Processing observation: 149/155 (full update)Processing observation: 150/155 (full update)Processing observation: 151/155 (full update)Processing observation: 152/155 (full update)Processing observation: 153/155 (full update)Processing observation: 154/155 (full update)Processing observation: 155/155 (full update)
+Processing observation: 1/155Processing observation: 2/155Processing observation: 3/155Processing observation: 4/155Processing observation: 5/155Processing observation: 6/155Processing observation: 7/155Processing observation: 8/155Processing observation: 9/155Processing observation: 10/155Processing observation: 11/155Processing observation: 12/155Processing observation: 13/155Processing observation: 14/155Processing observation: 15/155Processing observation: 16/155Processing observation: 17/155Processing observation: 18/155Processing observation: 19/155Processing observation: 20/155Processing observation: 21/155Processing observation: 22/155Processing observation: 23/155Processing observation: 24/155Processing observation: 25/155Processing observation: 26/155Processing observation: 27/155Processing observation: 28/155Processing observation: 29/155Processing observation: 30/155Processing observation: 31/155Processing observation: 32/155Processing observation: 33/155Processing observation: 34/155Processing observation: 35/155Processing observation: 36/155Processing observation: 37/155Processing observation: 38/155Processing observation: 39/155Processing observation: 40/155Processing observation: 41/155Processing observation: 42/155Processing observation: 43/155Processing observation: 44/155Processing observation: 45/155Processing observation: 46/155Processing observation: 47/155Processing observation: 48/155Processing observation: 49/155Processing observation: 50/155Processing observation: 51/155Processing observation: 52/155Processing observation: 53/155Processing observation: 54/155Processing observation: 55/155Processing observation: 56/155Processing observation: 57/155Processing observation: 58/155Processing observation: 59/155Processing observation: 60/155Processing observation: 61/155Processing observation: 62/155Processing observation: 63/155Processing observation: 64/155Processing observation: 65/155Processing observation: 66/155Processing observation: 67/155Processing observation: 68/155Processing observation: 69/155Processing observation: 70/155Processing observation: 71/155Processing observation: 72/155Processing observation: 73/155Processing observation: 74/155Processing observation: 75/155Processing observation: 76/155Processing observation: 77/155Processing observation: 78/155Processing observation: 79/155Processing observation: 80/155Processing observation: 81/155Processing observation: 82/155Processing observation: 83/155Processing observation: 84/155Processing observation: 85/155Processing observation: 86/155Processing observation: 87/155Processing observation: 88/155Processing observation: 89/155Processing observation: 90/155Processing observation: 91/155Processing observation: 92/155Processing observation: 93/155Processing observation: 94/155Processing observation: 95/155Processing observation: 96/155Processing observation: 97/155Processing observation: 98/155Processing observation: 99/155Processing observation: 100/155Processing observation: 101/155Processing observation: 102/155Processing observation: 103/155Processing observation: 104/155Processing observation: 105/155Processing observation: 106/155Processing observation: 107/155Processing observation: 108/155Processing observation: 109/155Processing observation: 110/155Processing observation: 111/155Processing observation: 112/155Processing observation: 113/155Processing observation: 114/155Processing observation: 115/155Processing observation: 116/155Processing observation: 117/155Processing observation: 118/155Processing observation: 119/155Processing observation: 120/155Processing observation: 121/155Processing observation: 122/155Processing observation: 123/155Processing observation: 124/155Processing observation: 125/155Processing observation: 126/155Processing observation: 127/155Processing observation: 128/155Processing observation: 129/155Processing observation: 130/155Processing observation: 131/155Processing observation: 132/155Processing observation: 133/155Processing observation: 134/155Processing observation: 135/155Processing observation: 136/155Processing observation: 137/155Processing observation: 138/155Processing observation: 139/155Processing observation: 140/155Processing observation: 141/155Processing observation: 142/155Processing observation: 143/155Processing observation: 144/155Processing observation: 145/155Processing observation: 146/155Processing observation: 147/155Processing observation: 148/155Processing observation: 149/155Processing observation: 150/155Processing observation: 151/155Processing observation: 152/155Processing observation: 153/155Processing observation: 154/155Processing observation: 155/155
   Predicting chunk [0:47/48]
+PSGP used the following parameters:
 Covariance function : Sum
 + Component: 1
   Covariance function : Isotropic Exponential
-  Range (P0) : 4230.6786 (Log transformed)
-  Variance (P1) : 5.7938 (Log transformed)
+  Range (P0) : 844.4929 (Log transformed)
+  Variance (P1) : 1.1116 (Log transformed)
 + Component: 2
-  Covariance function : White noise
-  Variance (P0) : 0.0280 (Log transformed)
+  Covariance function : Matern 5/2 covariance function
+  Length scale (P0) : 1752.4855 (Log transformed)
+  Variance (P1) : 0.7933 (Log transformed)
 + Component: 3
   Covariance function : Constant
-  Amplitude (P0) : 0.0445 (Log transformed)
+  Amplitude (P0) : 0.0221 (Log transformed)
++ Component: 4
+  Covariance function : White noise
+  Variance (P0) : 0.0302 (Log transformed)
+Done.
 > krigingObject = postProcess(krigingObject)
 > 
 > # Send predictions back to Java. Not sure how to deal with this spatial object though...?
 > summary(krigingObject$outputTable)
        x                y               mean          variance      
- Min.   :179019   Min.   :330013   Min.   :4.771   Min.   :0.07746  
- 1st Qu.:179485   1st Qu.:330829   1st Qu.:5.243   1st Qu.:0.12015  
- Median :180183   Median :331644   Median :5.776   Median :0.30006  
- Mean   :180183   Mean   :331644   Mean   :6.195   Mean   :0.49497  
- 3rd Qu.:180882   3rd Qu.:332459   3rd Qu.:7.323   3rd Qu.:0.69777  
- Max.   :181348   Max.   :333275   Max.   :7.977   Max.   :1.98648  
-   excprob5.9        cumdistr5.9         quantile0.1   
- Min.   :0.000587   Min.   :1.312e-05   Min.   :3.890  
- 1st Qu.:0.104064   1st Qu.:2.674e-02   1st Qu.:4.622  
- Median :0.418146   Median :5.819e-01   Median :5.127  
- Mean   :0.508302   Mean   :4.917e-01   Mean   :5.386  
- 3rd Qu.:0.973258   3rd Qu.:8.959e-01   3rd Qu.:6.390  
- Max.   :0.999987   Max.   :9.994e-01   Max.   :7.079  
+ Min.   :179019   Min.   :330013   Min.   :4.762   Min.   :0.04867  
+ 1st Qu.:179485   1st Qu.:330829   1st Qu.:5.314   1st Qu.:0.09017  
+ Median :180183   Median :331644   Median :5.875   Median :0.26886  
+ Mean   :180183   Mean   :331644   Mean   :6.235   Mean   :0.46928  
+ 3rd Qu.:180882   3rd Qu.:332459   3rd Qu.:7.410   3rd Qu.:0.66389  
+ Max.   :181348   Max.   :333275   Max.   :8.015   Max.   :1.82461  
+   excprob5.9         cumdistr5.9         quantile0.1   
+ Min.   :8.187e-05   Min.   :1.251e-07   Min.   :4.040  
+ 1st Qu.:6.178e-02   1st Qu.:2.508e-02   1st Qu.:4.632  
+ Median :4.842e-01   Median :5.158e-01   Median :5.155  
+ Mean   :5.178e-01   Mean   :4.822e-01   Mean   :5.462  
+ 3rd Qu.:9.749e-01   3rd Qu.:9.382e-01   3rd Qu.:6.434  
+ Max.   :1.000e+00   Max.   :9.999e-01   Max.   :7.206  
 > summary(krigingObject$observations)
 Object of class SpatialPointsDataFrame
 Coordinates:

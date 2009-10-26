@@ -47,7 +47,7 @@ ModelTrainer::ModelTrainer(Optimisable& m) : model(m)
 	errorTolerance = 1.0e-6;
 	parameterTolerance = 1.0e-4;
 	
-	gradientCheck = true; // perform a gradient check
+	gradientCheck = false; // perform a gradient check
 	analyticGradients = true; // use analytic gradient calculations
 	
 	functionEvaluations = 0; // reset function counter
@@ -85,22 +85,15 @@ double ModelTrainer::errorFunction(vec params)
 vec ModelTrainer::errorGradients(vec params)
 {
     vec xOld = getParameters();
-    vec p = xOld;
     vec grad;
-    
-    // Use default parameters for those not in optimisation mask
-    if (maskSet) {
-        for (int i=0; i<p.length(); i++) {
-            if (optimisationMask(i)) p(i) = params(i);
-        }
-    }
+
     
 	if(analyticGradients)
 	{
 		gradientEvaluations++;
 		
 		// Computer error gradient
-		setParameters(p);
+		setParameters(params);
 		grad = model.gradient();
 		
 		// Don't forget to reset parameters to their initial state
@@ -113,7 +106,7 @@ vec ModelTrainer::errorGradients(vec params)
 	
 	// Gradient is zero for parameters not in optimisation mask
 	if (maskSet) {
-	    for (int i=0; i<p.length(); i++) {
+	    for (int i=0; i<optimisationMask.length(); i++) {
 	        if (optimisationMask(i) == false) grad(i) = 0.0;
 	    }
 	}
@@ -189,11 +182,10 @@ vec ModelTrainer::getParameters()
 		return maskedParameters;
 	}
 	else
+	*/
 	{
 		return model.getParametersVector();
 	}
-	*/
-    return model.getParametersVector();
 }
 
 void ModelTrainer::checkGradient()

@@ -15,6 +15,17 @@ CovarianceFunction::~CovarianceFunction()
 }
 
 
+/**
+ * Compute auto-covariance of a single input X  
+ */ 
+void CovarianceFunction::computeSymmetric(double &c, const vec& x) const 
+{
+   mat C(1,1);
+   computeSymmetric(C,x.transpose());
+   c = C(0,0);
+}
+
+
 void CovarianceFunction::computeSymmetric(mat& C, const mat& X) const
 {
 	// ensure that data dimensions match supplied covariance matrix
@@ -23,7 +34,7 @@ void CovarianceFunction::computeSymmetric(mat& C, const mat& X) const
 
 	if (X.rows() == 1)
 	{
-	    C.set(0, 0, computeDiagonalElement(X.get_row(1)));
+	    C.set(0, 0, computeDiagonalElement(X.get_row(0)));
 	    return;
 	}
 	
@@ -50,6 +61,19 @@ void CovarianceFunction::computeSymmetric(mat& C, const mat& X) const
 void CovarianceFunction::computeSymmetricGrad(vec& V, const mat& X) const
 {
 
+}
+
+
+
+/**
+ * Compute covariance between a set of inputs X and single input x
+ */
+void CovarianceFunction::computeCovariance(vec& c, const mat& X, const vec& x) const
+{
+    mat Xmat(x);
+    mat C(X.rows(),1);
+    computeCovariance(C,X,Xmat.transpose());
+    c = C.get_col(0);
 }
 
 /**
@@ -185,7 +209,7 @@ void CovarianceFunction::computeDistanceMatrix(mat& DM, const mat& X) const
 	{
 		for(int j=0; j<i; j++)
 		{
-			value = sum(itpp::pow(X.get_row(i) - X.get_row(j) , 2.0));
+			value = sum( sqr( X.get_row(i) - X.get_row(j) ) );
 			DM.set(i, j, value);
 			DM.set(j, i, value);
 		}

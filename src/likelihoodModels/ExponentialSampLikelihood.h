@@ -36,9 +36,9 @@ class ExponentialSampLikelihood : public SamplingLikelihood
 {
 public:
 	ExponentialSampLikelihood(double Lambda);
+	ExponentialSampLikelihood(double Lambda, double (*transform)(double));
 	virtual ~ExponentialSampLikelihood();
 
-	virtual double modelFunction(const double x) const = 0;
 	double updateCoefficients(double& K1, double& K2, double Observation, double ModelMean, double ModelVariance) const;
 	void displayParameters() const;
 

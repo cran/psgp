@@ -3,9 +3,8 @@
 ConstantCF::ConstantCF(double amp) : CovarianceFunction("Constant")
 {
 	numberParameters = 1;
-	setDefaultTransforms();
 	amplitude = amp;
-
+	setDefaultTransforms();
 }
 
 ConstantCF::~ConstantCF()
@@ -15,12 +14,12 @@ ConstantCF::~ConstantCF()
 
 inline double ConstantCF::computeElement(const vec& A, const vec& B) const
 {
-	return 1 / amplitude;
+	return 1.0 / amplitude;
 }
 
 inline double ConstantCF::computeDiagonalElement(const vec& A) const
 {
-	return 1 / amplitude;
+	return 1.0 / amplitude;
 }
 
 double ConstantCF::getParameter(int parameterNumber) const
@@ -74,15 +73,8 @@ void ConstantCF::getParameterPartialDerivative(mat& PD, const int parameterNumbe
 	{
 		case 0 :
 		{
-			for(int i = 0; i < X.rows(); i++)
-			{
-				for(int j = 0; j < X.rows(); j++)
-				{
-					PD(i,j) = -1 / amplitude;
-				}
-			}
+		    PD = -gradientModifier/(amplitude*amplitude) * ones(X.rows(), X.rows());
 			return;
-			break;
 		}
 	}
 	cerr << "Warning: should not have reached here in ConstantCF::getParameterPartialDerivative" << endl;

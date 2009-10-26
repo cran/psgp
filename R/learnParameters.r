@@ -1,77 +1,88 @@
 learnParameters <- function(object) {
-
-save(object, file="Output.rdata")
-
-#since we are using the full covariance matrix here, we need
-#to limit the number of observations
-inputs = object$observations
-pred = object$predictionLocations
-
-# JOS: the line below used to be higher and tried to access nrow(m), which
-#      did not exist
-#      Is it not rather arbitrary to choose the 1000 first observations?
-#      Would it make more sense to sample from the observations if you want
-#      to limit the number?
-#maxObs = min(nrow(inputs), 1000)
-#inputs = inputs[1:maxObs,]
-
-# put data into an easy parseable format for the backend C++ code
-x = coordinates(inputs)
-
-# JOS: Allow for other names for the dependent variable
-depVar = as.character(object$formulaString[[2]])
-y = as.numeric(inputs@data[[depVar]])
-
-# put obsError and sensorID into vectors
-observationError = as.integer(inputs$oeid)
-sensorModel = as.integer(inputs$sensor)
-
-# vector of strings of meta data
-metaData = object$obsChar
-
-# error variance vector
-# JOS: Introduced a check to see if var is exisiting in the object
-#      Giving 0 otherwise
-#      Is e supposed to include indices to error models, or only variances?      
-#      Would you need to be able to pass uncObject as well, as we discussed 
-#      in Wageningen
-if ("var" %in% names(inputs)) {
-  e = as.numeric(inputs@data$var)
-} else {
-  e = rep(0,length(y))
-}
-
-
-vario = array()
-# some defaults
-vario[1] = 2; # variogram model
-vario[2] = 1; # range
-vario[3] = 1; # sill
-vario[4] = 0.1; # nugget
-
-# JOS: Would it not be better to use automap here? 
-#      Your default seems rather arbitrary...
-#      The function only searches among the models you have defined in 
-#      vmodels 
-#vmodels = c("Exp","Gau")
-#varioModel = autofitVariogram(object$formulaString,
-#                  object$observations,model=vmodels)$var_model
-#vario[1] = varioModel$model[2]
-#vario[2] = varioModel[[3]][2]
-#vario[3] = varioModel[[2]][2]
-#vario[4] = varioModel[[2]][1]
-
-# call the C code
-r <- .Call("estParam", x, y, e, vario, observationError, sensorModel, metaData,
-	PACKAGE = "psgp")
-
-# there must be a better way of doing this?
-# does R have switch/case?
-# JOS: switch exists (?switch), but I think this might be even better:
-mod = vgm()$short[r[1]]
-vmodel = vgm(r[3], mod, r[2], r[4])
-vmodel$beta = r[5]
-object$variogramModel = vmodel
-object
+  
+  # Extract observations and prediction locations
+  inputs = object$observations
+  pred   = object$predictionLocations
+  
+  # Put data into an easy parseable format for the backend C++ code
+  x = coordinates(inputs)
+  
+  # JOS: Allow for other names for the dependent variable
+  depVar = as.character(object$formulaString[[2]])
+  y = as.numeric(inputs@data[[depVar]])
+  
+  #-------------------------------------
+  # Extract observation error components
+  #-------------------------------------
+  # To each observation corresponds:
+  # - the index of an error model (oeid), i.e. the model oeid(i) is used 
+  #   for obs i
+  # - a sensor model (sensorid) - THIS IS NOT USED YET
+  # - and either:
+  #   - a full metadata description of the error models, i.e. a list of
+  #     strings in the form "<distname>,<bias>,<variance>". For example:
+  #     [ "GAUSSIAN,0.0,1.3"
+  #       "GAUSSIAN,0.2,1.6" ]
+  #     At the moment, only a GAUSSIAN distribution with zero bias is 
+  #     allowed by PSGP.
+  #   or:
+  #   - the variances of the error models (oevar) - which variance is used 
+  #     for a particular observation is determined by the index in oeid.
+  #   - the biases of the error models (oebias) - same as above for the bias
+  #     The variance and bias terms are only taken into account if no metadata
+  #     is provided, and are converted to a valid metadata table.
+  obsErrId = as.integer(inputs$oeid)
+  sensorId = as.integer(inputs$sensor)
+  
+  # Retrieve metadata
+  metaData = object$obsChar
+  
+  # If no metadata, attempt to build it from the variances
+  # (observations$oevar) and, if available, biases (observations$oebias)
+  # in the observations data structure
+  if (is.null(metaData)) 
+  {
+    metaData <- buildMetadata(inputs);
+  }
+  
+  #------------------------------------------
+  # Estimate range/sill using variogram model
+  #------------------------------------------
+  vario = array()
+  vmodels = c("Exp","Gau")   # Restrict to exponential or gaussian models
+  varioModel = autofitVariogram(object$formulaString,
+                    object$observations,model=vmodels)$var_model
+  vario[1] = varioModel$model[2]        # Model used (Gaussian: 1, Exp: 2)
+  vario[2] = varioModel[[3]][2]         # Range
+  vario[3] = varioModel[[2]][2]         # Sill
+  vario[4] = varioModel[[2]][1]         # Nugget
+  
+  
+  #------------------------------------------
+  # call the C code
+  #------------------------------------------
+  try(
+    r <- .Call("estParam", x, y, vario, obsErrId, sensorId, metaData,
+              PACKAGE = "psgp")
+  )
+  
+  #------------------------------------------
+  # Retrieve and store PSGP parameters
+  #------------------------------------------
+  # PSGP covariance parameters (log transformed)
+  # We store them in the variogram model - this is a hack really, we just
+  # use the variogram model data frame for storage!
+  
+  # Create dummy variogram model - this allows us to store 2x9 values
+  # as the first column is for text
+  vmodel = vgm(0, "Exp", 1, 0)
+  # Use N/A to indicate that something is "wrong" with this variogram model
+  # This should make sure it is not used or returns an error if it is.
+  vmodel[1:2,1] = NA    
+  vmodel[1,2:9] = r[1:8]           # Store PSGP parameters in columns
+  vmodel[2,2:9] = r[9:16]          # 2 to 9
+  
+  object$variogramModel = vmodel
+  object
 }
 

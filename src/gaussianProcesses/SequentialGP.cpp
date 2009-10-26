@@ -78,7 +78,7 @@ void SequentialGP::computePosterior(const LikelihoodType& noiseModel)
         int nobs = Observations.length();
         for(int i=0; i<nobs; i++)	
         {
-            cout << "\rAdding observations: " << i << "/" << Observations.length()  << flush;
+            cout << "\rAdding observations: " << i+1 << "/" << Observations.length()  << flush;
             addOne(rndIdx(i), noiseModel, fixActiveSet);
         }
         // cout << endl;
@@ -154,10 +154,11 @@ void SequentialGP::computePosterior(const ivec& LikelihoodModel, const Vec<Likel
 
         for(int i=0; i<Observations.length(); i++)	
         {
-            assert((LikelihoodModel(rndIdx(i))) <= noiseModels.length());
-            assert((LikelihoodModel(rndIdx(i))) >= 1);
-            cout << "\r  Adding observations: " << i << "/" << Observations.length() << flush;
-            addOne(rndIdx(i), *noiseModels(LikelihoodModel(rndIdx(i)) - 1), fixActiveSet);
+            cout << "\r  Processing observations: " << rndIdx(i)+1 << "/" << Observations.length();
+            cout << " using likelihood model " << LikelihoodModel(rndIdx(i)) << flush;
+            assert((LikelihoodModel(rndIdx(i))) < noiseModels.length());
+            assert((LikelihoodModel(rndIdx(i))) >= 0);
+            addOne(rndIdx(i), *noiseModels(LikelihoodModel(rndIdx(i))), fixActiveSet);
         }
         cout << endl;
     }
@@ -165,6 +166,8 @@ void SequentialGP::computePosterior(const ivec& LikelihoodModel, const Vec<Likel
 
 /**
  * addOne - split into parts
+ * 
+ * See Lehel Eq. 4.19 and 4.20 + Appendix G.(a)
  */
 void SequentialGP::addOne_siteRemoval(int index) 
 {
@@ -175,11 +178,13 @@ void SequentialGP::addOne_siteRemoval(int index)
         vec projectionRow = projectionP.get_row(index);
         vec teK = KB * projectionRow;
 
-        // Eq. 4.19 and 4.20 in Lehel
-        vec tMe = (eye(sizeActiveSet) + (C * KB)) * projectionRow;
+        // vec tMe = (eye(sizeActiveSet) + (C * KB)) * projectionRow;
+        // RB: below is more efficient
+        vec tMe = projectionRow + C*teK;
+        
         double tV = lambdaP(index) / (1 - (lambdaP(index) * dot(teK, tMe))); // do we need a check for a zero here?
-        Alpha = Alpha + tMe * tV * (dot(teK, Alpha) - alphaP(index));
-        C = C + (outer_product(tMe, tMe) * tV);
+        Alpha += tMe * tV * (dot(teK, Alpha) - alphaP(index));
+        C += outer_product(tMe, tMe) * tV;
     }
 }
 
@@ -227,7 +232,8 @@ void SequentialGP::addOne_updateGammaEhat(double &gamma, vec &eHat, const double
     }
     else
     {
-        temp.set_size(sizeActiveSet, sizeActiveSet, false);
+        // RB: temp should be a scalar (cast to matrix for type coherence, but 1x1)
+        // temp.set_size(sizeActiveSet, sizeActiveSet, false);
 
         ////////// LOOK FOR MORE EFFICIENT ALTERNATIVES
         //      eHat = inv(KB) * KX; // should use invKB
@@ -273,10 +279,8 @@ void SequentialGP::addOne_removeCollapsedPoints()
         {
             break;
         }
-        cout << scores(removalCandidate) << endl;
         cout << "deleteActivePoint(" << removalCandidate << ")" << endl;
         deleteActivePoint(removalCandidate);
-        cout << sizeActiveSet << endl;
     }    
 }
 
@@ -369,14 +373,14 @@ void SequentialGP::updateSparse(mat& KX, vec& eHat, const double gamma, const do
     if(momentProjection)
     {
         double eta = 1.0 + (rtp1 * gamma);
-        Alpha = Alpha + (sHat * (qtp1 / eta));
-        C = C + (sHatOuter * (rtp1 / eta));
+        Alpha += sHat * (qtp1 / eta);
+        C += sHatOuter * (rtp1 / eta);
     }
     else
     {
         // Lehel: Sec. 3.5 
-        Alpha = Alpha + (sHat * qtp1);
-        C = C + (sHatOuter * rtp1);
+        Alpha += sHat * qtp1;
+        C += sHatOuter * rtp1;
     }
 
     assert(eHat.length() == projectionP.cols());
@@ -384,7 +388,7 @@ void SequentialGP::updateSparse(mat& KX, vec& eHat, const double gamma, const do
 
     // update EP parameters
     ratio = qtp1 / rtp1;
-    logZ(index)= logEvidence + (log(2 * pi) - log(abs(rtp1)) - (qtp1 * ratio)) / 2.0;
+    logZ(index) = logEvidence + (log(2 * pi) - log(abs(rtp1)) - (qtp1 * ratio)) / 2.0;
     projectionP.set_row(index, eHat);
     alphaP(index) = currentMean - ratio;
     lambdaP(index) = -rtp1 / (1.0 + (rtp1 * currentVar));
@@ -482,14 +486,11 @@ vec SequentialGP::scoreActivePoints(ScoringMethod sm)
     case FullKL : // Lehel: Eq. 3.23 
         diagC = diag(C);
         // diagS = diag((projectionP.transpose() * diag(lambdaP)) * projectionP); // need to find a more efficient way of doing this
-
-        // RB: Improved version
+        // RB: Improved version - do not use the above: it is the same as below but MUCH slower.
         diagS = zeros(projectionP.cols());
         for (int i=0; i<projectionP.cols(); i++) {
           diagS(i) = elem_mult_sum(lambdaP, elem_mult(projectionP.get_col(i),projectionP.get_col(i)));
         }
-        
-        // cout << "|diagS2 - diagS|= " << sum(abs(diagS2 - diagS)) << endl;
         
         term1 = elem_div(elem_mult(Alpha,Alpha), diagC + diagInvGram);
         term2 = elem_div(diagS, diagInvGram);
@@ -564,7 +565,8 @@ void SequentialGP::deleteActivePoint(int index)
             restIdx(temp++) = i;
         }
     }	
-
+    
+    
     // this bit could be considered to be a bit messy
     q_star = Q(delIdx, delIdx);
     c_star = C(delIdx, delIdx);
@@ -574,7 +576,7 @@ void SequentialGP::deleteActivePoint(int index)
     {
         red_q(i) = Q(restIdx(i), delIdx);			
     }
-
+    
     if(momentProjection)
     {
         // These correspond to Lehel Appendix D
@@ -587,16 +589,15 @@ void SequentialGP::deleteActivePoint(int index)
         }
         double delAlpha = Alpha(delIdx);
         Alpha.del(delIdx);
-        Alpha = Alpha - (red_Ag * (delAlpha / (q_star + c_star)));
+        Alpha -= red_Ag * (delAlpha / (q_star + c_star));
 
         C.del_row(delIdx);
         C.del_col(delIdx);
-        C = C + outer_product(red_q, red_q / q_star) - outer_product(red_Ag, red_Ag / (q_star + c_star));		
+        C += outer_product(red_q, red_q / q_star) - outer_product(red_Ag, red_Ag / (q_star + c_star));		
 
         
         //  net.w  = net.w(exI,:) - red_Ag * ((q_star+c_star)\net.w(rmI));
         //  net.C  = net.C(exI,exI) + red_q * (q_star\red_q') - red_Ag * ((q_star+c_star)\red_Ag');
-
     }
     else
     {
@@ -621,7 +622,6 @@ void SequentialGP::deleteActivePoint(int index)
         C = (C - matQ) - matQ.transpose();	//  net.C = net.C - tempQ - tempQ';
     }
 
-
     if(!momentProjection)
     {	
         vec prDel = pow(projectionP.get_col(delIdx), 2.0);
@@ -632,18 +632,18 @@ void SequentialGP::deleteActivePoint(int index)
         // lDel  = full(ep.lamP*prDel);
         // ep.lamP = ep.lamP + diag(lDel.^2./(q_star + lDel));
     }
-
+    
     // ep.projP = ep.projP(:,exI) - ep.projP(:,rmI) * (q_star \ red_q');
     vec projDel = projectionP.get_col(delIdx);
     projectionP.del_col(delIdx);
-    projectionP = projectionP - outer_product(projDel, red_q / q_star);
+    projectionP -= outer_product(projDel, red_q / q_star);
 
 
     Q.del_row(delIdx);
-    Q.del_col(delIdx); 
+    Q.del_col(delIdx);
     
     // net.KBinv  = net.KBinv(exI,exI) - red_q*(q_star\red_q');
-    Q = Q - (outer_product(red_q, red_q) / q_star);
+    Q -= (outer_product(red_q, red_q) / q_star);
 
 
     KB.del_row(delIdx);
@@ -785,13 +785,17 @@ void SequentialGP::recomputePosterior()
 {
     mat KBold = KB;
     mat Kplus(Observations.length(), sizeActiveSet);
-
     covFunc.computeSymmetric(KB, ActiveSet);
     covFunc.computeCovariance(Kplus, Locations, ActiveSet);
-    backslash(KB.transpose(), Kplus.transpose(), projectionP); // output is rightmost parameter
+    
+    // projectionP should be transpose(inv(KB)*Kplus), not inv(KB)*Kplus (size is wrong otherwise)   
+    mat projectionPtrans(projectionP.cols(), projectionP.rows());
+    backslash(KB, Kplus.transpose(), projectionPtrans); // output is rightmost parameter
+    projectionP = projectionPtrans.transpose();
+
     mat lambdaPdiag = diag(lambdaP);
-    mat projLam = projectionP * lambdaPdiag;
-    mat UU = projLam * projectionP.transpose();
+    mat projLam = projectionP.transpose() * lambdaPdiag;
+    mat UU = projLam * projectionP;
     mat CC = UU * KB + eye(sizeActiveSet);
     Alpha = backslash(CC, projLam * alphaP);
     C = -backslash(CC, UU);

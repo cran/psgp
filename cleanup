@@ -1,0 +1,10 @@
+#!/bin/bash
+# Remove configure files
+rm config.log config.status src/config.h src/Makevars
+
+# Remove object files
+for i in `find -L . -name "*.o"`; do
+  echo "Deleting " $i
+  rm $i
+done
+

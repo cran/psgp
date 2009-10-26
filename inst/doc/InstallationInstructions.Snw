@@ -1,0 +1,53 @@
+\documentclass[a4paper]{article}
+\title{PSGP package installation instructions}
+\author{Remi Barillec}
+\usepackage[colorlinks]{hyperref}
+\newcommand{\code}[1]{\texttt{#1}}
+% The following commented line is used by R build - do not remove
+% \VignetteIndexEntry{Installation instructions}
+\begin{document}
+\maketitle
+
+\section{Introduction}
+The \code{psgp} package provides a spatial interpolation method based on Projected Sequential Gaussian Processes (PSGP). The PSGP \cite{Csato02} is an approximation to the standard Gaussian process \cite{Rasmussen96} whereby the observations are projected onto a subset of optimal "active" observations, thus reducing possible redundancy in the data and allowing for faster, memory efficient, interpolation. The projection is done in a sequential manner, that is one observation is projected onto the active subset at a time. This allows for larger datasets to be processed, and overcomes the limitations of standard Gaussian processes related to storing the full covariance matrix (which can be unfeasible for really large datasets).
+
+\section{Installation instructions (Linux)}
+The \code{psgp} package is written in C++ and relies on the \code{IT++} (\url{http://sourceforge.net/apps/wordpress/itpp/}) library for linear algebra. It is thus necessary, prior to installing the \code{psgp} package, to install \code{IT++}. Note that the current release is only supported for Linux platforms.
+
+\subsection{Installing from a repository}
+On Linux distributions, this can be achieved by installing the relevant packages from the repository. For examples, in Ubuntu 8.04 (Hardy), this can be done by running the following in a terminal:
+\begin{verbatim}
+$ sudo apt-get install libitpp6gf libitpp-dev libitpp6-dbg
+\end{verbatim}
+Distribution-specific packages are also available from the \code{IT++} website: \url{http://sourceforge.net/apps/wordpress/itpp/download/}.
+
+\subsection{Installing from the source}
+Alternately, it is possible to compile the \code{IT++} library directly from source. The source code and installation instructions are available from \url{http://sourceforge.net/apps/wordpress/itpp/download/}.
+
+
+\section{Installation options}
+\code{IT++} provides a configuration script called \code{itpp-config} which is used during the package installation to determine the location of the \code{IT++} libraries and header files. For a non standard installation of \code{IT++}, it might be necessary to indicate the path to the \code{itpp-config} script (if the folder is not in the user's \code{\$PATH}). This can be done by passing a \code{configure} option to the \code{R CMD INSTALL} program, as follows:
+\begin{verbatim}
+$ R CMD INSTALL --configure-args='--with-itpp-config=/home/rb/itpp/bin'
+\end{verbatim}
+where the \code{itpp-config} script is located in the \code{/home/rb/itpp/bin} directory.
+
+\section{Contact}
+For further help, please contact the package maintainer.
+
+\begin{thebibliography}{1}
+\bibitem{Csato02}
+  Lehel Csat\'{o},
+  \emph{Gaussian Proceeses -- Iterative Sparse Approximations}
+  Ph.D. Thesis,
+  NCRG, Aston University, UK,
+  2002
+\bibitem{Rasmussen96}
+  Carl Edward Rasmussen and Christopher K. Williams,
+  \emph{Gaussian Processes for Machine Learning},
+  The MIT Press, Cambridge, Massachusetts,
+  1996
+\end{thebibliography}
+\bibliographystyle{authordate1}
+
+\end{document}

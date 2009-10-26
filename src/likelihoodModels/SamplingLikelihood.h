@@ -36,24 +36,42 @@
 
 using namespace itpp;
 
+/**
+ * A sampling-based likelihood model. This allows for an additional transform
+ * (mapping from state space to observation space) to be specified. By default,
+ * the identity is used (the state variables are observed directly).
+ */
 class SamplingLikelihood : public LikelihoodType
 {
 public:
+    // Default constructor - using identity observation operator (or transform)
 	SamplingLikelihood();
+	
+	// Constructur - using specified observation operator (or transform)
+	SamplingLikelihood( double (*_transform)(double) );
+	
 	virtual ~SamplingLikelihood();
 
 	void setSamplingParameters(int Samples, int Cycles);
 
-	virtual double modelFunction(const double x) const = 0;
-	vec modelFunction(const vec x) const;
+	// vec modelFunction(const vec x) const;
 
-	virtual double updateCoefficients(double& K1, double& K2, double Observation, double ModelMean, double ModelVariance) const = 0;
-
+	// Update the r and q coefficients
+	virtual double updateCoefficients(double& K1, double& K2, double Observation, double ModelMean, 
+	                          double ModelVariance) const = 0;
+	
+	// Update the r and q coefficients under the specified observation operator
+	// virtual double updateCoefficients( double& K1, double& K2, double Observation,   double ModelMean, 
+	//                                    double ModelVariance, double obsOperator(double) ) const = 0;
+	
+	// Identity operator - for use if no observation operator is specified 
+	static double identity(const double x) { return x; }
 
 protected:
 	int numberSamples;
 	int numberCycles;
-
+	double (*transform)(double);    // Mapping from state space to observation space
+	
 };
 #endif /*SAMPLINGLIKELIHOOD_H_*/
 
