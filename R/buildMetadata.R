@@ -12,21 +12,21 @@ buildMetadata <- function(observations)
     
     # If no bias provided, use zero bias for each error model
     if (is.null(obsErrBias) || length(obsErrBias) == 0) {
-      obsErrBias = rep(0.0, length(obsErrVar));
+      obsErrBias = rep(0.0, length(obsErrVar))
     }
     
     # Check that we have enough variances and biases, i.e.
     # we need at least max(observations$oeid) error models where oeid
     # is a vector of indexes giving the error model used for each
     # observation
-    nErrorModels = max(observations$oeid,0);
+    nErrorModels = max(observations$oeid,0)
     if ( length(obsErrVar) < nErrorModels || length(obsErrBias) < nErrorModels )
     {
-      print("Observation error index exceeds number of error models");
-      print("Make sure that the length of observations$oevar (and observations$oebias ");
-      print("if provided) is at least equal to the number of error ");
-      print("models requested (as given by max(observations$oeid))");
-      print("Observation error is ignored in the rest of the procedure");
+      print("Observation error index exceeds number of error models")
+      print("Make sure that the length of observations$oevar (and observations$oebias ")
+      print("if provided) is at least equal to the number of error ")
+      print("models requested (as given by max(observations$oeid))")
+      print("Observation error is ignored in the rest of the procedure")
     }
     else 
     {

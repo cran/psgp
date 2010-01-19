@@ -36,23 +36,55 @@ spatialPredict.psgp = function(object,...) {
     }
     
     #if (require(astonGeostats)) {
-      p = makePrediction(object, psgpLogParams)
+    nPred = nrow(coordinates(object$predictionLocations))
+    nsim = ifelse("nsim" %in% names(dots),dots$nsim,0) 
+    if (!"nclus" %in% names(dots) && "nclus" %in% names(object$params) && nsim == 0 && nPred >= 5000 ) 
+      nclus = object$params$nclus else nclus = 1
+    if (nclus > 1) {
+      if (!suppressMessages(suppressWarnings(require(doSNOW))))
+  	    stop("nclus is > 1, but package doSNOW is not available")    
+
+      clus <- c(rep("localhost", nclus))
+      cl <- makeCluster(clus, type = "SOCK")
+      registerDoSNOW(cl)
+      clusterEvalQ(cl, library(psgp))
+      formulaString = object$formulaString
+      observations = object$observations
+      predictionLocations = object$predictionLocations
+      variogramModel = object$variogramModel
+#      clusterExport(cl, list("formulaString", "observations", "predictionLocations",
+#           "variogramModel", "nmax", "nsim", "debug.level"))
+     # split prediction locations:
+      splt = sample(1:nclus, nPred, replace = TRUE)
+      splt = rep(1:nclus, each = ceiling(nPred/nclus), length.out = nPred)
+      newdlst = lapply(as.list(1:nclus), function(w) predictionLocations[splt == w,])
+      nobject = object
+      pred <- foreach(i = 1:nclus) %dopar% {
+        nobject$predictionLocations = newdlst[[i]]
+        makePrediction(nobject, psgpLogParams)
+      }
+      stopCluster(cl)
+      var1.pred = unlist(lapply(pred,FUN = function(pp) pp[[1]]))
+      var1.var = unlist(lapply(pred,FUN = function(pp) pp[[2]]))
       object$predictions = SpatialPointsDataFrame(object$predictionLocations,
-        data = data.frame(var1.pred = unlist(p[1]),var1.var=unlist(p[2])))
-      nsim = ifelse("nsim" %in% names(dots),dots$nsim,0) 
-      if (nsim > 0) {
-        nmax = object$params$nmax
-        object$predictions = cbind(object$predictions,krige(object$formulaString,object$observations, 
-               object$predictionLocations,object$variogramModel,nsim=nsim,nmax = nmax,debug.level = object$params$debug.level))
-      }
-      if (rotated) {
-        object$observations = objTemp$observations
-        object$predictionLocations = objTemp$predictionLocations
-        object$predictions@coords = coordinates(object$predictionLocations)
-        object$predictions@bbox = bbox(object$predictionLocations)
-        proj4string(object$predictions) = proj4string(object$predictionLocations)
-      }
-      names(object$predictions) = c("var1.pred","var1.var")
-    #}
+        data = data.frame(var1.pred = var1.pred,var1.var=var1.var))
+    } else {  
+      pred = makePrediction(object, psgpLogParams)
+      object$predictions = SpatialPointsDataFrame(object$predictionLocations,
+        data = data.frame(var1.pred = unlist(pred[1]),var1.var=unlist(pred[2])))
+    }
+    if (nsim > 0) {
+      nmax = object$params$nmax
+      object$predictions = cbind(object$predictions,krige(object$formulaString,object$observations, 
+             object$predictionLocations,object$variogramModel,nsim=nsim,nmax = nmax,debug.level = object$params$debug.level))
+    }
+    if (rotated) {
+      object$observations = objTemp$observations
+      object$predictionLocations = objTemp$predictionLocations
+      object$predictions@coords = coordinates(object$predictionLocations)
+      object$predictions@bbox = bbox(object$predictionLocations)
+      proj4string(object$predictions) = proj4string(object$predictionLocations)
+    }
+    names(object$predictions) = c("var1.pred","var1.var")
     object
 }

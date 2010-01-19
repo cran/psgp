@@ -44,7 +44,7 @@ double GaussianSampLikelihoodMathML::updateCoefficients(double& K1, double& K2, 
 	// population monte carlo bit here
 	for(int iCyc=0; iCyc < SamplingLikelihood::numberCycles; iCyc++)
 	{
-		vec sx = mq + (itpp::randn(SamplingLikelihood::numberSamples) * sq);
+		vec sx = mq + (itpp::randn(SamplingLikelihood::numberSamples) * sq);
 		// vec transH = SamplingLikelihood::modelFunction(sx);
 		vec transH = apply_function(transform, sx);
 		

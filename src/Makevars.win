@@ -1,0 +1,31 @@
+#
+# Makevars script for windows compilation introduced in psgp v0.2-10
+# Ben Ingram, psgp v0.2-10 (19-01-2010)
+#
+
+
+PKG_CPPFLAGS = -I$(LIB_ITPP)/include -g -Wall -fmessage-length=0 -DNDEBUG -O3 -pipe -I.
+
+PKG_LIBS =  -L$(LIB_ITPP)/lib -litpp -llapack -lblas -lgfortranbegin -lgfortran -lmingw32 -lmoldname -lmingwex -lmsvcrt -luser32 -lkernel32 -ladvapi32 -lshell32 -lR -lg2c
+
+OBJECTS = astonGeostats.o \
+          RInterface.o \
+          gaussianProcesses/GaussianProcess.o \
+          gaussianProcesses/PSGP.o \
+          gaussianProcesses/ForwardModel.o \
+          covarianceFunctions/ConstantCF.o \
+          covarianceFunctions/CovarianceFunction.o \
+          covarianceFunctions/ExponentialCF.o \
+          covarianceFunctions/Matern5CF.o \
+          covarianceFunctions/WhiteNoiseCF.o \
+          covarianceFunctions/SumCovarianceFunction.o \
+          covarianceFunctions/Transform.o \
+          covarianceFunctions/LogTransform.o \
+          covarianceFunctions/IdentityTransform.o \
+          likelihoodModels/AnalyticLikelihood.o \
+          likelihoodModels/LikelihoodType.o \
+          likelihoodModels/GaussianLikelihood.o \
+          optimisation/Optimisable.o \
+          optimisation/ModelTrainer.o \
+          optimisation/SCGModelTrainer.o \
+          itppext/itppext.o
