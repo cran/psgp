@@ -35,7 +35,7 @@ public:
     string  getParameterName(int parameterNumber) const;
 
 private:
-    static const double nu = 1.5;     // Nu parameter
+//    static const double nu = 1.5;     // Nu parameter
     double lengthScale;                // Length scale parameter
     double variance;                   // Variance parameter
 };
