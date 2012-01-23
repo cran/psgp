@@ -150,7 +150,7 @@ void SCGModelTrainer::Train(int numIterations)
 
 		if(success)
 		{
-			if ((max(max(alpha * direction)) < parameterTolerance) && (abs( fNew - fOld )) < errorTolerance )
+			if ((max(alpha * direction) < parameterTolerance) && (abs( fNew - fOld )) < errorTolerance )
 			{
 				functionValue = fNew;
 				// setParameters(x); 

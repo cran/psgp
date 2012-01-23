@@ -10,16 +10,17 @@
 
 #include <vector>
 #include <string>
+
 #include "likelihoodModels/LikelihoodType.h"
 #include "likelihoodModels/GaussianLikelihood.h"
 #include "psgp_common.h"
-#include <R.h>
-#include <Rinternals.h>
+
+#include "Rinternals.h"
+#define length Rf_length
+#define allocVector Rf_allocVector
 
 // ID for invalid noise model (when using observation noise)
 #define INVALID_MODEL_NAME "INVALID_MODEL"
-
-using namespace std;
 
 class SensorMetadataParser {
 public:

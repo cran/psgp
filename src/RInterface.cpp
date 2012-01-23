@@ -2,9 +2,8 @@
 #include "psgp_data.h"
 #include "psgp_estimator.h"
 
-#include <R.h>
-#include <Rinternals.h>
-#include <Rmath.h>
+#define length Rf_length
+#define allocVector Rf_allocVector
 
 /**
  * Interface between R and C++.
@@ -47,7 +46,7 @@ SEXP estimateParams(SEXP xData, SEXP yData, SEXP vario, SEXP sensorIndices,
 
 	// PSGP parameters in R format
 	SEXP R_psgpParams;
-	PROTECT(R_psgpParams = allocVector(REALSXP, NUM_PSGP_PARAMETERS));
+	PROTECT( R_psgpParams = allocVector(REALSXP, NUM_PSGP_PARAMETERS) );
 
 	// Create and allocate pointer to PSGP parameter vector
 	double* psgpParams = REAL(R_psgpParams);
@@ -118,7 +117,6 @@ SEXP predict(SEXP xData, SEXP yData, SEXP xPred, SEXP R_psgpParams, SEXP sensorI
 	PROTECT(varResult = allocVector(REALSXP, numPred));
 	PROTECT(ans = allocVector(VECSXP, 2));
 
-	// should use an IT++ factory for vectors
 	double* ptr_meanResult = REAL(meanResult);
 	double* ptr_varResult = REAL(varResult);
 	for(int i=0; i < numPred; i++)

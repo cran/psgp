@@ -11,16 +11,15 @@
 #include <algorithm>
 #include <cstdlib>
 
-#include <armadillo>
 #include "psgp_common.h"
 #include "psgp_settings.h"
 #include "likelihoodModels/LikelihoodType.h"
 #include "sensor_metadata_parser.h"
 
-#include <R.h>
-#include <Rinternals.h>
+#include "Rinternals.h"
 
-using namespace std;
+#define length Rf_length
+#define allocVector Rf_allocVector
 
 class PsgpData {
 public:

@@ -922,7 +922,7 @@ double PSGP::objective() const {
 
 	default:
 		// RB: This really ought to throw an exception
-		// cerr << "Error in PSGP::objective: Unknown likelihood type." << endl;
+		Rprintf("Error in PSGP::objective: Unknown likelihood type.");
 		return 0.0;
 	}
 	return evidence;

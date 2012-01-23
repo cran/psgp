@@ -5,16 +5,11 @@
 #define ARMA_USE_BLAS
 #define ARMA_USE_LAPACK
 
-// Disable 
-#define NDEBUG
-
 /**
  * Various generic functions required by PSGP
  */
 #include <string>
-#include <armadillo>
-#include <R.h>
-#include <Rinternals.h>
+#include <RcppArmadillo.h>
 
 #define COLUMN_ORDER 0
 #define ROW_ORDER 1
@@ -36,9 +31,9 @@ double cond(mat M, int p=2); // Condition number for matrix p-norm (1 or 2)
 uvec randperm(int n);  // Random permutation of numbers between 0 and N-1
 uvec sequence(int from, int to);
 
-vec min(vec u, vec v); // Minimum elements from 2 vectors of equal length 
+vec min(vec u, vec v); // Minimum elements from 2 vectors of equal length
 
-mat concat_cols(mat X, vec y); // Concatenate matrix and vector 
+mat concat_cols(mat X, vec y); // Concatenate matrix and vector
 mat concat_cols(mat X, mat Y); // Concatenate matrix and matrix
 
 vec mean_rows(mat X);  // vector of column means
