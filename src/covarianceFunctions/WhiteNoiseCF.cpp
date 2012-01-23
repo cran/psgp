@@ -32,9 +32,9 @@ inline double WhiteNoiseCF::computeDiagonalElement(const vec& A) const
 	return variance;
 }
 
-double WhiteNoiseCF::getParameter(int parameterNumber) const
+double WhiteNoiseCF::getParameter(unsigned int parameterNumber) const
 {
-	assert(parameterNumber == 0);
+	
 
 	switch(parameterNumber)
 	{
@@ -42,13 +42,13 @@ double WhiteNoiseCF::getParameter(int parameterNumber) const
 					break;
 		default: break;
 	}
-	cerr << "Warning: should not have reached here in WhiteNoiseCF::getParameter" << endl;
+	Rprintf("Warning: should not have reached here in WhiteNoiseCF::getParameter");
 	return(0.0);
 }
 
-void WhiteNoiseCF::setParameter(int parameterNumber, const double value)
+void WhiteNoiseCF::setParameter(unsigned int parameterNumber, const double value)
 {
-	assert(parameterNumber == 0);
+	
 
 	switch(parameterNumber)
 	{
@@ -58,9 +58,9 @@ void WhiteNoiseCF::setParameter(int parameterNumber, const double value)
 	}
 }
 
-string WhiteNoiseCF::getParameterName(int parameterNumber) const
+string WhiteNoiseCF::getParameterName(unsigned int parameterNumber) const
 {
-	assert(parameterNumber == 0);
+	
 
 	switch(parameterNumber)
 	{
@@ -72,9 +72,9 @@ string WhiteNoiseCF::getParameterName(int parameterNumber) const
 	return("Unknown parameter");
 }
 
-void WhiteNoiseCF::getParameterPartialDerivative(mat& PD, const int parameterNumber, const mat& X) const
+void WhiteNoiseCF::getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X) const
 {
-	assert(parameterNumber == 0);
+	
 
 	Transform* t = getTransform(parameterNumber);
 	double gradientModifier = t->gradientTransform(getParameter(parameterNumber));
@@ -89,5 +89,5 @@ void WhiteNoiseCF::getParameterPartialDerivative(mat& PD, const int parameterNum
 			break;
 		}
 	}
-	cerr << "Warning: should not have reached here in GaussianCF::getParameterPartialDerivative" << endl;
+    Rprintf("Warning: should not have reached here in GaussianCF::getParameterPartialDerivative");
 }

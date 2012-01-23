@@ -29,8 +29,7 @@
 #ifndef CONSTANTCF_H_
 #define CONSTANTCF_H_
 
-#include <cassert>
-
+#include "../psgp_common.h"
 #include "CovarianceFunction.h"
 
 class ConstantCF : public CovarianceFunction
@@ -42,15 +41,15 @@ public:
 	inline double computeElement(const vec& A, const vec& B) const;
 	inline double computeDiagonalElement(const vec& A) const;
 	
-	void getParameterPartialDerivative(mat& PD, const int parameterNumber, const mat& X) const;
+	void getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X) const;
 	
-	void setParameter(int parameterNumber, const double value);
-	double getParameter(int parameterNumber) const;
+	void setParameter(unsigned int parameterNumber, const double value);
+	double getParameter(unsigned int parameterNumber) const;
 	
-	string getParameterName(int parameterNumber) const;	
+	string getParameterName(unsigned int parameterNumber) const;
 	
 private:
-	double amplitude;
+	double amplitude;  // Inverse variance
 
 };
 

@@ -1,8 +1,5 @@
 #include "ExponentialCF.h"
 
-using namespace std;
-using namespace itpp;
-
 ExponentialCF::ExponentialCF(double lengthscale, double var) : CovarianceFunction("Isotropic Exponential")
 {
 	numberParameters = 2;
@@ -15,7 +12,7 @@ ExponentialCF::ExponentialCF(double lengthscale, double var) : CovarianceFunctio
 ExponentialCF::ExponentialCF(vec parameters) : CovarianceFunction("Isotropic Exponential")
 {
 	numberParameters = 2;
-	assert(parameters.size() == getNumberParameters());
+	
 	range = parameters(0);
 	variance = parameters(1);
 	setDefaultTransforms();
@@ -38,7 +35,7 @@ inline double ExponentialCF::computeDiagonalElement(const vec& A) const
 
 inline double ExponentialCF::calcExponential(const vec& V) const
 {
-	return variance * exp( -sqrt(sum(pow(V, 2.0))) / (2.0*range));
+	return variance * exp( -sqrt( arma::accu( arma::square(V) ) ) / (2.0*range));
 }
 
 inline double ExponentialCF::calcExponentialDiag() const
@@ -46,10 +43,10 @@ inline double ExponentialCF::calcExponentialDiag() const
 	return variance;
 }
 
-void ExponentialCF::setParameter(int parameterNumber, const double value)
+void ExponentialCF::setParameter(unsigned int parameterNumber, const double value)
 {
-	assert(parameterNumber < getNumberParameters());
-	assert(parameterNumber >= 0);
+	
+	
 
 
 
@@ -59,15 +56,15 @@ void ExponentialCF::setParameter(int parameterNumber, const double value)
 					break;
 		case 1 : variance = value;
 					break;
-		default: assert(false);
+		default: 
 					break;
 	}
 }
 
-double ExponentialCF::getParameter(int parameterNumber) const
+double ExponentialCF::getParameter(unsigned int parameterNumber) const
 {
-	assert(parameterNumber < getNumberParameters());
-	assert(parameterNumber >= 0);
+	
+	
 
 	switch(parameterNumber)
 	{
@@ -75,17 +72,17 @@ double ExponentialCF::getParameter(int parameterNumber) const
 					break;
 		case 1 : return(variance);
 					break;
-		default: assert(false);
+		default: 
 					break;
 	}
-	cerr << "Warning: should not have reached here in GaussianCF::getParameter" << endl;
+	Rprintf("Warning: should not have reached here in GaussianCF::getParameter");
 	return(0.0);
 }
 
-string ExponentialCF::getParameterName(int parameterNumber) const
+string ExponentialCF::getParameterName(unsigned int parameterNumber) const
 {
-	assert(parameterNumber < getNumberParameters());
-	assert(parameterNumber >= 0);
+	
+	
 
 	switch(parameterNumber)
 	{
@@ -99,10 +96,10 @@ string ExponentialCF::getParameterName(int parameterNumber) const
 	return("Unknown parameter");
 }
 
-void ExponentialCF::getParameterPartialDerivative(mat& PD, const int parameterNumber, const mat& X) const
+void ExponentialCF::getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X) const
 {
-	assert(parameterNumber < getNumberParameters());
-	assert(parameterNumber >= 0);
+	
+	
 
 	Transform* t = getTransform(parameterNumber);
 	double gradientModifier = t->gradientTransform(getParameter(parameterNumber));
@@ -112,10 +109,11 @@ void ExponentialCF::getParameterPartialDerivative(mat& PD, const int parameterNu
 		case 0 :
 		{
 			mat DM;
-			DM.set_size(PD.rows(), PD.cols());
+			DM.set_size(PD.n_rows, PD.n_cols);
 			computeSymmetric(PD, X);
 			computeDistanceMatrix(DM, X);
-			elem_mult_inplace(0.5 * sqrt(DM)  * (gradientModifier / pow(range, 2.0)), PD);
+			// elem_mult_inplace(0.5 * sqrt(DM)  * (gradientModifier / pow(range, 2.0)), PD);
+            PD %= 0.5 * arma::sqrt(DM)  * (gradientModifier / pow(range, 2.0));
 			return;
 			break;
 		}
@@ -128,5 +126,5 @@ void ExponentialCF::getParameterPartialDerivative(mat& PD, const int parameterNu
 			break;
 		}
 	}
-	cerr << "Warning: should not have reached here in GaussianCF::getParameterPartialDerivative" << endl;
+	Rprintf("Warning: should not have reached here in GaussianCF::getParameterPartialDerivative");
 }

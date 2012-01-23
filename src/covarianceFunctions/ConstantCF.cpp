@@ -22,9 +22,9 @@ inline double ConstantCF::computeDiagonalElement(const vec& A) const
 	return 1.0 / amplitude;
 }
 
-double ConstantCF::getParameter(int parameterNumber) const
+double ConstantCF::getParameter(unsigned int parameterNumber) const
 {
-	assert(parameterNumber == 0);
+	
 
 	switch(parameterNumber)
 	{
@@ -32,13 +32,13 @@ double ConstantCF::getParameter(int parameterNumber) const
 					break;
 		default: break;
 	}
-	cerr << "Warning: should not have reached here in ConstantCF::getParameter" << endl;
+	Rprintf("Warning: should not have reached here in ConstantCF::getParameter");
 	return(0.0);
 }
 
-void ConstantCF::setParameter(int parameterNumber, const double value)
+void ConstantCF::setParameter(unsigned int parameterNumber, const double value)
 {
-	assert(parameterNumber == 0);
+	
 
 	switch(parameterNumber)
 	{
@@ -48,9 +48,9 @@ void ConstantCF::setParameter(int parameterNumber, const double value)
 	}
 }
 
-string ConstantCF::getParameterName(int parameterNumber) const
+string ConstantCF::getParameterName(unsigned int parameterNumber) const
 {
-	assert(parameterNumber == 0);
+	
 
 	switch(parameterNumber)
 	{
@@ -62,9 +62,9 @@ string ConstantCF::getParameterName(int parameterNumber) const
 	return("Unknown parameter");
 }
 
-void ConstantCF::getParameterPartialDerivative(mat& PD, const int parameterNumber, const mat& X) const
+void ConstantCF::getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X) const
 {
-	assert(parameterNumber == 0);
+	
 
 	Transform* t = getTransform(parameterNumber);
 	double gradientModifier = t->gradientTransform(getParameter(parameterNumber));
@@ -73,9 +73,9 @@ void ConstantCF::getParameterPartialDerivative(mat& PD, const int parameterNumbe
 	{
 		case 0 :
 		{
-		    PD = -gradientModifier/(amplitude*amplitude) * ones(X.rows(), X.rows());
+		    PD = -gradientModifier/(amplitude*amplitude) * arma::ones(X.n_rows, X.n_rows);
 			return;
 		}
 	}
-	cerr << "Warning: should not have reached here in ConstantCF::getParameterPartialDerivative" << endl;
+	Rprintf("Warning: should not have reached here in ConstantCF::getParameterPartialDerivative");
 }

@@ -33,12 +33,7 @@
 #include "Transform.h"
 
 #include <cmath>
-#include <vector>
-#include <cassert>
-#include <itpp/itbase.h>
-
-using namespace std;
-using namespace itpp;
+#include "../psgp_common.h"
 
 class SumCovarianceFunction : public CovarianceFunction
 {
@@ -51,18 +46,18 @@ public:
 	inline double computeElement(const vec& A, const vec& B) const;
 	inline double computeDiagonalElement(const vec& A) const;
 	
-	void getParameterPartialDerivative(mat& PD, const int parameterNumber, const mat& X) const;
+	void getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X) const;
 	
-	void setParameter(const int parameterNumber, const double value);
-	double getParameter(const int parameterNumber) const;
+	void setParameter(const unsigned int parameterNumber, const double value);
+	double getParameter(const unsigned int parameterNumber) const;
 	
-	string getParameterName(const int parameterNumber) const;
+	string getParameterName(const unsigned int parameterNumber) const;
 	
 	void setParameters(const vec p);
 	vec getParameters() const;
 
-	void setTransform(int parameterNumber, Transform* newTransform);
-	Transform* getTransform(int parameterNumber) const;
+	void setTransform(unsigned int parameterNumber, Transform* newTransform);
+	Transform* getTransform(unsigned int parameterNumber) const;
 
 	void addCovarianceFunction(CovarianceFunction& cf);
 	void displayCovarianceParameters(int nspaces = 0) const;

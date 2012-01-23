@@ -6,7 +6,7 @@
 
 \title{Projected Sequential Gaussian Processes for spatial interpolation}
 
-\author{Remi Barillec, Ben Ingram}
+\author{Ben Ingram, Remi Barillec}
 
 \description{ The \code{psgp} package provides a spatial interpolation method based on Projected Sequential Gaussian Processes (PSGP) for the \code{intamap} package. The PSGP is an approximation to the standard Gaussian process whereby the observations are projected onto a subset of optimal "active" observations, thus reducing possible redundancy in the data and allowing for faster, memory efficient, interpolation. The projection is done in a sequential manner, that is one observation is projected onto the active subset at a time. This allows for larger datasets to be processed, and overcomes the limitations of standard Gaussian processes related to storing the full covariance matrix (which can be unfeasible for really large datasets).
 
@@ -21,9 +21,9 @@ This implementation of PSGP for spatial interpolation uses a mixture of covarian
 
 \section{Measurement errors}{ It is possible to include measurement errors if these are available. These will be taken into account when estimating parameters and making predictions. See \code{\link{learnParameters}} for more information. }
 
-\section{System requirements}{ the PSGP package is written in C++ and uses the IT++ library for all linear algebra routines. }
+\section{System requirements}{ the PSGP package is written in C++ and uses the Armadillo library for all linear algebra routines.}
 \references{
   \url{http://www.intamap.org}
-  
-  \url{http://sourceforge.net/apps/wordpress/itpp/}
+
+  \url{http://arma.sourceforge.net}
 }

@@ -30,27 +30,23 @@
 #ifndef PSGP_H_
 #define PSGP_H_
 
-#include <itpp/itbase.h>
-
 #include "ForwardModel.h"
 #include "../optimisation/Optimisable.h"
 #include "../covarianceFunctions/CovarianceFunction.h"
 #include "../likelihoodModels/LikelihoodType.h"
-#include "../likelihoodModels/GaussianSampLikelihood.h"
-#include "itppext/itppext.h"
 
-#include <cassert>
+#include <vector>
+#include "../psgp_common.h"
 
 #define LAMBDA_TOLERANCE 1e-10
-
-using namespace std;
-using namespace itpp;
 
 #ifndef SEQUENTIALGP_H_
     enum ScoringMethod { Geometric, MeanComponent, FullKL };
     enum LikelihoodCalculation { FullEvid, Approximate, UpperBound };
 #endif
-    
+
+using namespace psgp_arma;
+
 // We went through 3 implementations of the algorithm as we optimised it. 
 // Although we could have left the latest version only (V3) as it is the
 // fastest/most memory efficient, we have left the previous versions 
@@ -66,11 +62,11 @@ public:
 	virtual ~PSGP();
 
 	void computePosterior(const LikelihoodType& noiseModel);
-	void computePosterior(const ivec& LikelihoodModel, const Vec<LikelihoodType *> noiseModels);
+	void computePosterior(const arma::ivec& LikelihoodModel, const std::vector<LikelihoodType *> noiseModels);
 	void resetPosterior();
 	void recomputePosterior();
 	
-	void computePosteriorFixedActiveSet(const LikelihoodType& noiseModel, ivec iActive);
+	void computePosteriorFixedActiveSet(const LikelihoodType& noiseModel, uvec iActive);
 	void recomputePosteriorFixedActiveSet(const LikelihoodType& noiseModel);
 	
 	/**
@@ -101,12 +97,12 @@ public:
 	 * Accessors/Modifiers
 	 */
 	int  getSizeActiveSet()      { return sizeActiveSet; }
-	ivec getActiveSetIndices()   { return idxActiveSet; }
+	uvec getActiveSetIndices()   { return idxActiveSet; }
 	mat  getActiveSetLocations() { return ActiveSet; }
-	vec  getActiveSetObservations() { return Observations(idxActiveSet); }
+	vec  getActiveSetObservations() { return Observations.elem(idxActiveSet); }
 
 	void setActiveSetSize(int n) { maxActiveSet = n; }
-	void setActiveSet(ivec activeIndexes, mat activeLocations);
+	void setActiveSet(uvec activeIndexes, mat activeLocations);
 	void setLikelihoodType(LikelihoodCalculation lc);
 	
 		
@@ -121,13 +117,13 @@ private:
     mat& Locations;
     vec& Observations;
     
-    int nObs;  // Number of observations
+    unsigned int nObs;  // Number of observations
     
     // Covariance function
     CovarianceFunction& covFunc;
     
-    int     sizeActiveSet;
-    int     maxActiveSet;
+    unsigned int     sizeActiveSet;
+    unsigned int     maxActiveSet;
     double  epsilonTolerance;
     bool    momentProjection;
     int     iterChanging;
@@ -142,7 +138,7 @@ private:
     double gammaTolerance;  // Threshold determining whether an observation is added to active set
 
     mat     ActiveSet;     // Active set
-    ivec    idxActiveSet;  // Indexes of observations in active set 
+    uvec    idxActiveSet;  // Indexes of observations in active set
 
     mat P;              // projection coefficient matrix (full obs onto active set)
     vec meanEP;         // EP mean parameter (a)
@@ -161,7 +157,7 @@ private:
     mat C_aug;
     vec alpha_aug;
     mat ActiveSet_aug;
-    ivec idxActiveSet_aug;
+    uvec idxActiveSet_aug;
     mat P_aug;
     
     // Augmented stuff - version 2: only store the changes, not the full matrices
@@ -183,25 +179,25 @@ private:
     
     
 	// These methods provide the core algorithm
-    void processObservationEP(const int iObs, const LikelihoodType &noiseModel, const bool fixActiveSet);
-    void EP_removePreviousContribution(int iObs);
+    void processObservationEP(const unsigned int iObs, const LikelihoodType &noiseModel, const bool fixActiveSet);
+    void EP_removePreviousContribution(unsigned int iObs);
     void EP_updateIntermediateComputations(double &cavityMean, double &cavityVar, double &sigmaLoc,
                                            vec &k, double &gamma, vec &eHat, vec loc);
-    void EP_updateEPParameters(int iObs, double q, double r, double cavityMean, double cavityVar, 
+    void EP_updateEPParameters(unsigned int iObs, double q, double r, double cavityMean, double cavityVar,
                                double logEvidence);
     void EP_removeCollapsedPoints();
     
     // ALGO_V1: Implementation of the add/remove active point, version 1
-    void addActivePoint(int iObs, double q, double r, vec k, double sigmaLoc, double gamma, vec eHat);
-    void deleteActivePoint(int iObs);
+    void addActivePoint(unsigned int iObs, double q, double r, vec k, double sigmaLoc, double gamma, vec eHat);
+    void deleteActivePoint(unsigned int iObs);
     
     // ALGO_V2: Implementation of the add/remove active point, version 2 (augmented matrices)
-    void addActivePointAugmented_v1(int iObs, double q, double r, vec k, double sigmaLoc, double gamma, vec eHat);
-    void swapActivePoint_v1(int iObs);
+    void addActivePointAugmented_v1(unsigned int iObs, double q, double r, vec k, double sigmaLoc, double gamma, vec eHat);
+    void swapActivePoint_v1(unsigned int iObs);
 
     // ALGO_V3: Implementation of the add/remove active point, version 3 (no augmented matrices)
-    void addActivePointAugmented_v2(int iObs, double q, double r, vec k, double sigmaLoc, double gamma, vec eHat);
-    void swapActivePoint_v2(int iObs);
+    void addActivePointAugmented_v2(unsigned int iObs, double q, double r, vec k, double sigmaLoc, double gamma, vec eHat);
+    void swapActivePoint_v2(unsigned int iObs);
     
     void stabiliseCoefficients(double& q, double& r, double cavityMean, double cavityVar, double upperTolerance, double lowerTolerance);
 	vec scoreActivePoints(ScoringMethod sm);

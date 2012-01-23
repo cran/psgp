@@ -29,8 +29,7 @@
 #ifndef FORWARDMODEL_H_
 #define FORWARDMODEL_H_
 
-#include <itpp/itbase.h>
-using namespace itpp;
+#include "../psgp_common.h"
 
 class ForwardModel
 {

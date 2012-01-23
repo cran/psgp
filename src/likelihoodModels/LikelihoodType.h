@@ -30,7 +30,7 @@
 #define LIKELIHOODTYPE_H_
 
 #include <string>
-#include <itpp/itbase.h>
+#include "../psgp_common.h"
 
 using namespace std;
 
@@ -39,10 +39,7 @@ class LikelihoodType
 public:
 	LikelihoodType();
 	virtual ~LikelihoodType();
-
 	double virtual updateCoefficients(double& K1, double& K2, double Observation, double ModelMean, double ModelVariance) const = 0;
-
-
 };
 
 #endif /*LIKELIHOODTYPE_H_*/

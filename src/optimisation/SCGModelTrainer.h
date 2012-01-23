@@ -29,16 +29,14 @@
 #ifndef SCGMODELTRAINER_H_
 #define SCGMODELTRAINER_H_
 
-#include <iostream>
 #include <vector>
 #include <string>
-#include <itpp/itbase.h>
+#include "../psgp_common.h"
 
 #include "Optimisable.h"
 #include "ModelTrainer.h"
 
 using namespace std;
-using namespace itpp;
 
 class SCGModelTrainer : public ModelTrainer
 {

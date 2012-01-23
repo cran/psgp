@@ -35,9 +35,6 @@
  // 12 Dec 2008 - BRI - First implementation. 
  //
  
- 
- 
- 
 #include "ModelTrainer.h"
 
 ModelTrainer::ModelTrainer(Optimisable& m) : model(m)
@@ -106,8 +103,8 @@ vec ModelTrainer::errorGradients(vec params)
 	
 	// Gradient is zero for parameters not in optimisation mask
 	if (maskSet) {
-	    for (int i=0; i<optimisationMask.length(); i++) {
-	        if (optimisationMask(i) == false) grad(i) = 0.0;
+	    for (unsigned int i=0; i<optimisationMask.n_elem; i++) {
+	        if (optimisationMask(i) == 0) grad(i) = 0.0;
 	    }
 	}
 	
@@ -149,9 +146,9 @@ void ModelTrainer::setParameters(const vec p)
 	if(maskSet)
 	{
 		vec maskedParameters = model.getParametersVector();
-		for(int i = 0 ; i < optimisationMask.size() ; i++)
+		for(unsigned int i = 0 ; i < optimisationMask.size() ; i++)
 		{
-			if(optimisationMask(i)) maskedParameters(i) = p(i);
+			if(optimisationMask(i)==1) maskedParameters(i) = p(i);
 		}
 		model.setParametersVector(maskedParameters);
 	}
@@ -171,10 +168,10 @@ vec ModelTrainer::getParameters()
 	{
 		vec p = model.getParametersVector();
 		vec maskedParameters;
-		assert(optimisationMask.size() == p.size());
+		
 		for(int i = 0 ; i < optimisationMask.size() ; i++)
 		{
-			if(optimisationMask(i) == true)
+			if(optimisationMask(i) == 1)
 			{
 				maskedParameters = concat(maskedParameters, p(i));
 			}
@@ -193,63 +190,59 @@ void ModelTrainer::checkGradient()
 	vec xOld = getParameters();
 	vec gNew = model.gradient();
 	int numParams = gNew.size();
-	int pos = 0;
 	
 	double delta;
 
-	cout << "==========================" << endl;
-	cout << "GRADCHECK" << endl;
-	cout << "X = " << xOld << endl << endl;
-	cout << "     Delta, Analytic, Diff" << endl;
-	cout << "--------------------------" << endl;
-	
+	Rprintf ("==========================\n");
+	Rprintf("Gradient check\n");
+	Rprintf("Delta, Analytic, Diff\n");
+	Rprintf("--------------------------\n");;
 
 	for(int i=0; i < numParams; i++)
 	{
-		cout << "#" << i << " ";
 		if(maskSet)
 		{
-			if(optimisationMask(i))
+			if(optimisationMask(i)==1)
 			{
 				delta = calculateNumericalGradient(i, xOld);
-				cout << " ";
 			}
 			else
 			{
 				delta = 0.0;
 				gNew(i) = 0.0;
-				cout << "x";
 			}
 		}
 		else
 		{
 			delta = calculateNumericalGradient(i, xOld);
 		}
-		cout << " " << delta << ", " << gNew(i) << ", " << abs(delta - gNew(i)) <<endl;
+
+		Rprintf(" %f %f %f\n", delta , gNew(i) , abs(delta - gNew(i)));
 
 	}
-	cout << "==========================" << endl;
+	Rprintf("==========================\n");
 
 }
 
 void ModelTrainer::Summary() const
 {
-	cout << "================================================" << endl;
-	cout << "Training summary     : " << algorithmName << endl;
-	cout << "------------------------------------------------" << endl;
-	cout << "Error tolerance      : " << errorTolerance << endl;
-	cout << "Parameter tolerance  : " << parameterTolerance << endl;
-	cout << "Function evaluations : " << functionEvaluations << endl;
-	cout << "Gradient evaluations : " << gradientEvaluations << endl;
-	cout << "Function value       : " << functionValue << endl;
-	cout << "================================================" << endl;
+	Rprintf("================================================\n");
+	Rprintf("Training summary     : %s\n", algorithmName.c_str());
+	Rprintf("------------------------------------------------\n");
+	Rprintf("Error tolerance      : %f", errorTolerance );
+	Rprintf("Parameter tolerance  : %f", parameterTolerance );
+	Rprintf("Function evaluations : %d", functionEvaluations );
+	Rprintf("Gradient evaluations : %d", gradientEvaluations );
+	Rprintf("Function value       : %f\n", functionValue);
+	Rprintf("================================================\n");;
 }
 
 double ModelTrainer::lineFunction(vec param, double lambda, vec direction)
 {
 	double f;
 	vec xOld = getParameters();
-	f = errorFunction(param + (lambda * direction));
+	vec v = lambda * direction + param;
+	f = errorFunction( v );
 	setParameters(xOld);
 	return(f);
 }
@@ -377,13 +370,6 @@ void ModelTrainer::lineMinimiser(double &fx, double &x, double fa, vec params, v
 					v = u; fv = fu;
 				}
 			}
-// add an option for lineMinimiser display?
-//			if (display)
-//			{
-//				//fprintf(1, 'Cycle %4d  Error %11.6f\n', n, fx);
-//				cout << "Line Minimiser: Cycle " << n;
-//				cout << "  Error " << fx << endl;
-//			}
 		}
 	}
 }

@@ -29,7 +29,6 @@
 #ifndef GAUSSIANLIKELIHOOD_H_
 #define GAUSSIANLIKELIHOOD_H_
 
-
 #include "LikelihoodType.h"
 #include "AnalyticLikelihood.h"
 

@@ -29,9 +29,8 @@
 #ifndef WHITENOISECF_H_
 #define WHITENOISECF_H_
 
-#include <cassert>
-
 #include "CovarianceFunction.h"
+#include "../psgp_common.h"
 
 class WhiteNoiseCF : public CovarianceFunction
 {
@@ -42,12 +41,12 @@ public:
 	inline double computeElement(const vec& A, const vec& B) const;
 	inline double computeDiagonalElement(const vec& A) const;
 	
-	void getParameterPartialDerivative(mat& PD, const int parameterNumber, const mat& X) const;
+	void getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X) const;
 	
-	void setParameter(int parameterNumber, const double value);
-	double getParameter(int parameterNumber) const;
+	void setParameter(unsigned int parameterNumber, const double value);
+	double getParameter(unsigned int parameterNumber) const;
 	
-	string getParameterName(int parameterNumber) const;
+	string getParameterName(unsigned int parameterNumber) const;
 	
 	
 	

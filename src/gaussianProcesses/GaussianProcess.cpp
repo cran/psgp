@@ -1,93 +1,90 @@
 #include "GaussianProcess.h"
 
-using namespace std;
-using namespace itpp;
-
-GaussianProcess::GaussianProcess(int Inputs, int Outputs, mat& Xdata, vec& ydata, CovarianceFunction& cf) : Locations(Xdata), Observations(ydata), covFunc(cf), ForwardModel(Inputs, Outputs)
-{
-	assert(Locations.rows() == Observations.size());
+GaussianProcess::GaussianProcess(int Inputs, int Outputs, mat& Xdata,
+		vec& ydata, CovarianceFunction& cf) :
+		Locations(Xdata), Observations(ydata), covFunc(cf), ForwardModel(Inputs,
+				Outputs) {
+	
 
 }
 
-GaussianProcess::~GaussianProcess()
-{
+GaussianProcess::~GaussianProcess() {
 }
 
 //void GaussianProcess::train(mat& C, const mat& X) const
 //{
 //	mat A;
-//	A.set_size(C.rows(), C.cols(), false);
+//	A.set_size(C.n_rows, C.n_cols, false);
 //	covFunc->computeSymmetric(A, X);
 //	inv(A, C);
 //}
 
-void GaussianProcess::makePredictions(vec& Mean, vec& Variance, const mat& Xpred) const
-{
-	makePredictions(Mean, Variance, Xpred, covFunc);	
+void GaussianProcess::makePredictions(vec& Mean, vec& Variance,
+		const mat& Xpred) const {
+	makePredictions(Mean, Variance, Xpred, covFunc);
 }
 
-void GaussianProcess::makePredictions(vec& Mean, vec& Variance, const mat& Xpred, CovarianceFunction &cf) const
-{
-	assert(Mean.size() == Variance.size());
-	assert(Xpred.rows() == Mean.size());
+void GaussianProcess::makePredictions(vec& Mean, vec& Variance,
+		const mat& Xpred, CovarianceFunction &cf) const {
+	
+	
 
 	mat Sigma(Observations.size(), Observations.size());
-	mat Cpred(Locations.rows(), Xpred.rows());
+	mat Cpred(Locations.n_rows, Xpred.n_rows);
 
-	cf.computeCovariance(Cpred, Locations, Xpred);                   // k = k(X,x*)
-	covFunc.computeSymmetric(Sigma, Locations);                      // K = K(X,X)
+	cf.computeCovariance(Cpred, Locations, Xpred); // k = k(X,x*)
+	covFunc.computeSymmetric(Sigma, Locations); // K = K(X,X)
 
-	vec alpha = ls_solve(Sigma, Observations);                       // a = K^{-1} * y
-	Mean = Cpred.transpose() * alpha;                                // mu* = k' * K^{-1} * y
+	// vec alpha = ls_solve(Sigma, Observations);                       // a = K^{-1} * y
+	vec alpha = arma::solve(inv(Sigma), Observations);
+	Mean = Cpred.t() * alpha; // mu* = k' * K^{-1} * y
 
-	vec variancePred(Xpred.rows());
-	cf.computeDiagonal(variancePred, Xpred);                    // k* = K(x*,x*)
-	mat v = ls_solve(computeCholesky(Sigma).transpose(), Cpred);     // v = K^{-1} * k
-	Variance = variancePred - sum(elem_mult(v, v));                  // diag( k* - k'*K^{-1}*k )
+	vec variancePred(Xpred.n_rows);
+	cf.computeDiagonal(variancePred, Xpred); // k* = K(x*,x*)
+	// mat v = ls_solve(computeCholesky(Sigma).transpose(), Cpred);     // v = K^{-1} * k
+	mat v = solve(inv(computeCholesky(Sigma).t()), Cpred);
+	Variance = variancePred - sum(v % v); // diag( k* - k'*K^{-1}*k )
 }
 
-void GaussianProcess::makePredictions(vec& Mean, vec& Variance, const mat& Xpred, const mat& C) const
-{
+void GaussianProcess::makePredictions(vec& Mean, vec& Variance,
+		const mat& Xpred, const mat& C) const {
 
-	assert(Mean.size() == Variance.size());
-	assert(Xpred.rows() == Mean.size());
+	
+	
 
 	mat Sigma, cholSigma;
 	cholSigma.set_size(Observations.size(), Observations.size());
-	
+
 	Sigma.set_size(Observations.size(), Observations.size());
-//	cholSigma.set_size(Observations.rows(), Observations.rows());
-	
+//	cholSigma.set_size(Observations.n_rows, Observations.n_rows);
+
 	covFunc.computeSymmetric(Sigma, Locations);
 
-	mat Cpred;
-	Cpred.set_size(Locations.rows(), Xpred.rows(), false);
+	mat Cpred(Locations.n_rows, Xpred.n_rows);
 
 	covFunc.computeCovariance(Cpred, Locations, Xpred);
 
 	//mat alpha = C * Observations;
 
 	covFunc.computeSymmetric(Sigma, Locations);
-	
+
 	cholSigma = computeCholesky(Sigma);
 
-	vec alpha = ls_solve_chol(cholSigma, Observations);
+	// vec alpha = ls_solve_chol(cholSigma, Observations);
+	vec alpha = solve(inv(Sigma), Observations);
 
-	Mean = Cpred.transpose() * alpha;
+	Mean = Cpred.t() * alpha;
 
-	vec sigsq;
+	vec sigsq(Xpred.n_rows);
 
-	sigsq.set_size(Xpred.rows(), false);
-	
-	covFunc.computeDiagonal(sigsq, Xpred);	
+	covFunc.computeDiagonal(sigsq, Xpred);
 
-	Variance = sum(elem_mult((Cpred.transpose() * C), Cpred.transpose()), 2);	
-	Variance = sigsq + Variance;	
-	
+	Variance = sum((Cpred.t() * C) % Cpred.t(), 0);
+	Variance = sigsq + Variance;
+
 }
 
-double GaussianProcess::loglikelihood() const
-{
+double GaussianProcess::loglikelihood() const {
 
 	mat Sigma(Observations.size(), Observations.size());
 	mat cholSigma(Observations.size(), Observations.size());
@@ -100,141 +97,123 @@ double GaussianProcess::loglikelihood() const
 	vec alpha = invSigma * Observations;
 
 //	vec alpha = ls_solve(Sigma, Observations);
-	
-	double out1 = 0.5 * dot(Observations,alpha);
 
-	double out2 = sum(log(diag(cholSigma)));
-		
-	return out1 + out2 + 0.5*Observations.size()*log(2*pi);
-	
+	double out1 = 0.5 * dot(Observations, alpha);
+
+	double out2 = arma::accu(arma::log(arma::diagvec(cholSigma)));
+
+	return out1 + out2 + 0.5 * Observations.n_elem * log(2 * arma::math::pi());
+
 }
 
-vec GaussianProcess::getParametersVector() const
-{
+vec GaussianProcess::getParametersVector() const {
 	return covFunc.getParameters();
 }
 
-void GaussianProcess::setParametersVector(const vec p)
-{
+void GaussianProcess::setParametersVector(const vec p) {
 	covFunc.setParameters(p);
 }
 
-double GaussianProcess::objective() const
-{
+double GaussianProcess::objective() const {
 	return loglikelihood();
 }
 
 /*
-vec GaussianProcess::gradient() const
-{
+ vec GaussianProcess::gradient() const
+ {
+ vec grads(covFunc.getNumberParameters());
+
+
+ mat Sigma(Observations.size(), Observations.size());
+ mat cholSigma(Observations.size(), Observations.size());
+
+ covFunc.computeSymmetric(Sigma, Locations);
+
+ cholSigma = computeCholesky(Sigma);
+
+ vec alpha = ls_solve(Sigma, Observations);
+ //	mat W = ls_solve(cholSigma, ls_solve(cholSigma.transpose(), eye(Observations.size()))) - outer_product(alpha, alpha, false);
+ mat W = (inv(Sigma) - outer_product(alpha, alpha, false));
+
+ mat partialDeriv(Observations.size(), Observations.size());
+
+ for(int i = 0; i < covFunc.getNumberParameters(); i++)
+ {
+ covFunc.getParameterPartialDerivative(partialDeriv, i, Locations);
+ //grads(i) = sum(sum(elem_mult(W, partialDeriv))) / 2;
+ grads(i) = elem_mult_sum(W, partialDeriv) / 2;
+ // official - but slower		grads(i) = sum(diag(W * partialDeriv)) / 2;
+ }
+ return grads;
+ }
+ */
+
+vec GaussianProcess::gradient() const {
 	vec grads(covFunc.getNumberParameters());
 
-	
-	mat Sigma(Observations.size(), Observations.size());
-	mat cholSigma(Observations.size(), Observations.size());
-
-	covFunc.computeSymmetric(Sigma, Locations);
-
-	cholSigma = computeCholesky(Sigma);
-
-	vec alpha = ls_solve(Sigma, Observations);
-//	mat W = ls_solve(cholSigma, ls_solve(cholSigma.transpose(), eye(Observations.size()))) - outer_product(alpha, alpha, false);
-	mat W = (inv(Sigma) - outer_product(alpha, alpha, false));
-
-	mat partialDeriv(Observations.size(), Observations.size());
-
-	for(int i = 0; i < covFunc.getNumberParameters(); i++)
-	{
-		covFunc.getParameterPartialDerivative(partialDeriv, i, Locations);
-		//grads(i) = sum(sum(elem_mult(W, partialDeriv))) / 2;
-		grads(i) = elem_mult_sum(W, partialDeriv) / 2;
-// official - but slower		grads(i) = sum(diag(W * partialDeriv)) / 2;
-	}
-	return grads; 
-}
-*/
-
-vec GaussianProcess::gradient() const
-{
-	vec grads(covFunc.getNumberParameters());
-
-	
-	mat Sigma(Observations.size(), Observations.size());
-	mat cholSigma(Observations.size(), Observations.size());
+	mat Sigma(Observations.n_elem, Observations.n_elem);
+	mat cholSigma(Observations.n_elem, Observations.n_elem);
 
 	covFunc.computeSymmetric(Sigma, Locations);
 	cholSigma = computeCholesky(Sigma);
 	mat invSigma = computeInverseFromCholesky(Sigma);
 	vec alpha = invSigma * Observations;
 
-
-
-
 //	vec alpha = ls_solve(Sigma, Observations);
-	mat W = (invSigma - outer_product(alpha, alpha, false));
+	mat W = (invSigma - alpha * alpha.t());
 
 	mat partialDeriv(Observations.size(), Observations.size());
 
-	for(int i = 0; i < covFunc.getNumberParameters(); i++)
-	{
+	for (unsigned int i = 0; i < covFunc.getNumberParameters(); i++) {
 		covFunc.getParameterPartialDerivative(partialDeriv, i, Locations);
 		//grads(i) = sum(sum(elem_mult(W, partialDeriv))) / 2;
-		grads(i) = elem_mult_sum(W, partialDeriv) / 2;
+		grads(i) = arma::accu(W % partialDeriv) / 2.0;
 // official - but slower		grads(i) = sum(diag(W * partialDeriv)) / 2;
 	}
-	return grads; 
+	return grads;
 }
 
-
-
-
-
-vec GaussianProcess::getGradientVector() const
-{
+vec GaussianProcess::getGradientVector() const {
 	return gradient();
 }
 
-mat GaussianProcess::computeCholesky(const mat& iM) const 
-{
-	mat M = iM;// oops, was i inadvertantly writing to this?
-	assert(M.rows() == M.cols());
+mat GaussianProcess::computeCholesky(const mat& iM) const {
+	mat M = iM; // oops, was i inadvertantly writing to this?
 	
+
 	const double ampl = 1.0e-10;
 	const int maxAttempts = 10;
-	
-	mat cholFactor(M.rows(), M.cols());
+
+	mat cholFactor(M.n_rows, M.n_cols);
 
 	int l = 0;
 	bool success = chol(M, cholFactor);
-	if(success)
-	{
+	if (success) {
 		return cholFactor;
-	}
-	else
-	{
-		double noiseFactor = abs(ampl * (trace(M) / double(M.rows())));
-		while(!success)
-		{
-			M = M + (noiseFactor * eye(M.rows()));
+	} else {
+		double noiseFactor = abs(ampl * (trace(M) / double(M.n_rows)));
+		while (!success) {
+			M = M + (noiseFactor * arma::eye(M.n_rows, M.n_rows));
 
-			if(l > maxAttempts)
-			{
-				cerr << "Unable to compute cholesky decomposition" << endl;
+			if (l > maxAttempts) {
+				Rprintf("Unable to compute cholesky decomposition");
 				break;
 			}
 			l++;
 			noiseFactor = noiseFactor * 10;
 			success = chol(M, cholFactor);
 		}
-		cout << "Matrix not positive definite.  After " << l << " attempts, " << noiseFactor << " added to the diagonal" << endl;
+		Rprintf(
+				"Matrix not positive definite.  After %d attempts, %f added to the diagonal",
+				l, noiseFactor);
 	}
 	return cholFactor;
 }
 
-mat GaussianProcess::computeInverseFromCholesky(const mat& C) const
-{
+mat GaussianProcess::computeInverseFromCholesky(const mat& C) const {
 	mat cholFactor = computeCholesky(C);
-	mat invChol = backslash(cholFactor, eye(cholFactor.rows()));
-	return invChol * invChol.transpose();
+	mat invChol = solve(cholFactor,
+			arma::eye(cholFactor.n_rows, cholFactor.n_rows));
+	return invChol * invChol.t();
 }
 

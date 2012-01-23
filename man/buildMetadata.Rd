@@ -11,7 +11,7 @@
   \item{observations}{ an observations data frame containing a vector of observation variances (\code{obserations$oevar}) and, optionally, a list of observation biases (\code{observationS$oebias}). If the biases are omitted, a zero bias is assumed for all likelihood models.}
 }
 \details{
-  \code{buildMetadata} builds a metadata table of likelihood model descriptors in the PSGP framework. The likelihood models are assumed Gaussian with variances specified in the vector \code{observations$oevar} (the bias is assumed to be zero). Optionally, biases can be specified in the \code{observations$oebias} vector. However, biases are not taken into account in the current version of the package (they will be in a future release). 
+  \code{buildMetadata} builds a metadata table of likelihood model descriptors in the PSGP framework. The likelihood models are assumed Gaussian with variances specified in the vector \code{observations$oevar} (the bias is assumed to be zero). Optionally, biases can be specified in the \code{observations$oebias} vector. However, biases are not taken into account in the current version of the PSGP package (they will be in a future release). 
 }
 \references{
   \url{http://www.intamap.org/}

@@ -2,7 +2,7 @@
 
 IdentityTransform::IdentityTransform()
 {
-	transformName = "Not";
+	transformName = "Not transformed";
 }
 
 IdentityTransform::~IdentityTransform()

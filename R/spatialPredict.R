@@ -59,6 +59,7 @@ spatialPredict.psgp = function(object,...) {
       splt = rep(1:nclus, each = ceiling(nPred/nclus), length.out = nPred)
       newdlst = lapply(as.list(1:nclus), function(w) predictionLocations[splt == w,])
       nobject = object
+      i <- 1
       pred <- foreach(i = 1:nclus) %dopar% {
         nobject$predictionLocations = newdlst[[i]]
         makePrediction(nobject, psgpLogParams)

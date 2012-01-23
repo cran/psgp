@@ -62,7 +62,7 @@ learnParameters <- function(object) {
   # call the C code
   #------------------------------------------
   try(
-    r <- .Call("estParam", x, y, vario, obsErrId, sensorId, metaData,
+    r <- .Call("estimateParams", x, y, vario, obsErrId, sensorId, metaData,
               PACKAGE = "psgp")
   )
   

@@ -1,143 +1,138 @@
+#include "psgp_settings.h"
+#include "psgp_data.h"
+#include "psgp_estimator.h"
 
-#include <stdlib.h>
-#include <stdio.h>
+#include <R.h>
+#include <Rinternals.h>
+#include <Rmath.h>
 
-#include "astonGeostats.h"
-#include "R.h"
-#include "Rmath.h"
-#include "Rinternals.h"
+/**
+ * Interface between R and C++.
+ * This provides 2 wrapper functions which format the R data pointers to PSGP-compatible
+ * objects and pointers.
+ */
 
 #define NUM_VARIOGRAM_PARAMETERS 5
 
-using namespace std;
-
 extern "C" {
-    SEXP predict(SEXP xData, SEXP yData, SEXP xPred, SEXP psgpPar, 
-                 SEXP errorIdx, SEXP sensorIdx, SEXP metaData)
-    {
 
-        SEXP meanResult;
-        SEXP varResult;
-        SEXP ans;
-        
-        // These are not used by PSGP anymore. Instead, we use the parameters 
-        // stored in psgpParameters 
-        // double range, sill, nugget, bias;
-        int xDataLen, yDataLen, xPredLen;
-        double *xDataPtr, *yDataPtr, *xPredPtr;
-        
-        // PSGP covariance function parameters
-        double  *psgpParameters = REAL(psgpPar);
-        
-        int     *errorPtr, *sensorPtr;
-        char    **metaDataTable;
+/**
+ * Populate a PsgpData object with the data from R structures
+ */
+PsgpData prepareData(SEXP xData, SEXP yData, SEXP params, SEXP sensorMetadata, SEXP sensorIndices, bool paramsFromVario) {
+	PsgpData data;
+	data.setX(xData);
+	data.setY(yData);
 
-        int metadataSize = length(metaData);
-        // The metadata table, if provided, is terminated by an empty line
-        // Need to remove it form the size
-        if (metadataSize > 0) metadataSize -= 1;
-
-        // there must be a more obvious way to get the dimensions of a matrix?
-        xDataLen = length(xData) / 2;
-        yDataLen = length(yData);
-        xPredLen = length(xPred) / 2;
-
-        PROTECT(meanResult = allocVector(REALSXP, xPredLen));
-        PROTECT(varResult = allocVector(REALSXP, xPredLen));
-        PROTECT(ans = allocVector(VECSXP, 2));
-
-        xPredPtr = REAL(xPred);
-        xDataPtr = REAL(xData);
-        yDataPtr = REAL(yData);
-        errorPtr = INTEGER(errorIdx);
-        sensorPtr= INTEGER(sensorIdx);
-
-        // we need to make a table of pointers to the sensor model strings
-        metaDataTable = (char**)calloc(metadataSize, sizeof(char *));
-
-        // casting from a const pointer to a non-const pointer is a bit
-        // of nightmare, but I'm not really sure what the other options are?
-        for (int i = 0; i < metadataSize; i++ )
-        {
-            metaDataTable[i] = const_cast<char*>(CHAR(STRING_ELT(VECTOR_ELT(metaData, i),0)));
-        }
-
-        /*
-        makePredictions(xDataLen, xPredLen, eDataLen, xDataPtr, yDataPtr, xPredPtr, eDataPtr, 
-                metadataSize, errorPtr, sensorPtr, metaDataTable,
-                REAL(meanResult), REAL(varResult),
-                &range, &sill, &nugget, &bias, model);
-        */
-        printf("-- Making predictions\n");
-        makePredictions(xDataLen, xPredLen, xDataPtr, yDataPtr, xPredPtr, 
-                        metadataSize, errorPtr, sensorPtr, metaDataTable,
-                        REAL(meanResult), REAL(varResult), psgpParameters);
-        
-        SET_VECTOR_ELT(ans, 0, meanResult);
-        SET_VECTOR_ELT(ans, 1, varResult);
-
-        UNPROTECT(3);
-        return ans;
-    }
+	// If variogram parameters are passed in, use them to set PSGP parameters
+	// If none are passed in, they won't be used (they are only used for parameter
+	// estimation, not for prediction)
+	if (paramsFromVario) {
+		data.setPsgpParamsFromVariogram(params);
+	} else {
+		data.setPsgpParamsFromInference(params);
+	}
+	data.setSensorMetadata(sensorIndices, sensorMetadata);
+	return data;
 }
 
-extern "C" {
-    SEXP estParam(SEXP xData, SEXP yData, SEXP vario, SEXP errorIdx, SEXP sensorIdx, SEXP metaData)
-    {
-        // SEXP meanResult;
-        // SEXP varResult;
-        SEXP params;
-        int xDataLen;
-        double *xDataPtr, *yDataPtr, *varioPtr;
-        int *errorPtr, *sensorPtr;
-        char **metaDataTable;
-        
+/**
+ * Estimate PSGP parameters
+ * We use the variogram parameters as a first guess
+ */
+SEXP estimateParams(SEXP xData, SEXP yData, SEXP vario, SEXP sensorIndices,
+		SEXP unusedIndices, SEXP sensorMetadata) {
 
-        int metadataSize = length(metaData);
-        // The metadata table, if provided, is terminated by an empty line
-        // The empty line will be for sensor model - unused at the moment
-        // so we simply discard (i.e. remove) it
-        if (metadataSize > 0) metadataSize -= 1;
-        
-        // there must be a more obvious way to get the dimensions of a matrix?
-        xDataLen = length(xData) / 2;
-        xDataPtr = REAL(xData);
-        yDataPtr = REAL(yData);
-        varioPtr = REAL(vario);
-        errorPtr = INTEGER(errorIdx);
-        sensorPtr= INTEGER(sensorIdx);
+	double *varioPtr = REAL(vario);   // Pointer to variogram parameters
 
-        // Check that all data arrays are coherent 
-        assert(xDataLen == length(yData));
-                
-        // we need to make a table of pointers to the sensor model strings
-        metaDataTable = (char**)calloc(metadataSize, sizeof(char *));
+	// PSGP parameters in R format
+	SEXP R_psgpParams;
+	PROTECT(R_psgpParams = allocVector(REALSXP, NUM_PSGP_PARAMETERS));
 
-        // casting from a const pointer to a non-const pointer is a bit
-        // of nightmare, but I'm not really sure what the other options are?
-        for (int i = 0; i < metadataSize; i++ )
-        {
-            metaDataTable[i] = const_cast<char*>(CHAR(STRING_ELT(VECTOR_ELT(metaData, i),0)));
-        }
+	// Create and allocate pointer to PSGP parameter vector
+	double* psgpParams = REAL(R_psgpParams);
+	UNPROTECT(1);
 
-        // Allocate parameter array
-        PROTECT(params = allocVector(REALSXP, NUM_PSGP_PARAMETERS));
-        double* psgpParameters = REAL(params);
-        UNPROTECT(1);
-        
-        // Copy current variogram parameters to parameter array
-        memcpy(psgpParameters, varioPtr, NUM_VARIOGRAM_PARAMETERS * sizeof(double));
-        
-        // Estimate parameters.
-        // This also updates the parameter values in psgpParameters 
-        // and in variogramParameters (if the initial parameters were not
-        // valid, i.e. negative...)
-        printf("-- Estimating parameters\n");
-        learnParameters(xDataLen, xDataPtr, yDataPtr,
-                        metadataSize, errorPtr, sensorPtr, 
-                        metaDataTable, psgpParameters);
-        
-        return params;
-    }
+	// Copy current variogram parameters to parameter array
+	memcpy(psgpParams, varioPtr, NUM_VARIOGRAM_PARAMETERS * sizeof(double));
+
+	// Convert data from R structures to vectors and matrices
+	// TODO: CHECK: errorIndices was used in the original code instead of sensorIndices
+	PsgpData data = prepareData(xData, yData, vario, sensorMetadata, sensorIndices, true);
+
+	// Estimate parameters.
+	// This also updates the parameter values in psgpParameters
+	// and in variogramParameters (if the initial parameters were not
+	// valid, i.e. negative...)
+	PsgpEstimator estimator;
+	vec params;
+	estimator.learnParameters(data, params);
+
+	// Copy final parameters over to psgpParameters
+	for(int i=0; i<params.n_elem; i++)
+	{
+	    *psgpParams++ = params(i);
+	}
+
+	// Add padding zeros (remember psgpParameters has fixed size and is
+	// likely to be bigger than we need)
+	for(int i=params.n_elem; i<NUM_PSGP_PARAMETERS; i++)
+	{
+	    *psgpParams++ = 0.0;
+	}
+
+	return R_psgpParams;
 }
+
+
+/**
+ * Predict at a new set of inputs xPred. Psgp parameters are passed in
+ * from R as R_psgpParams.
+ */
+SEXP predict(SEXP xData, SEXP yData, SEXP xPred, SEXP R_psgpParams, SEXP sensorIndices,
+		SEXP unusedIndices,  SEXP sensorMetadata) {
+
+	SEXP meanResult;
+	SEXP varResult;
+	SEXP ans;
+
+	// Convert data from R structures to vectors and matrices
+	PsgpData data = prepareData(xData, yData, R_psgpParams, sensorMetadata, sensorIndices, false);
+
+	vec psgpParams(REAL(R_psgpParams), length(R_psgpParams));
+
+	// Prediction inputs and outputs
+	int numPred = length(xPred)/2;
+	mat Xpred(REAL(xPred), numPred, 2);
+
+	vec meanPred(numPred);
+	vec varPred(numPred);
+
+	// Make predictions using PSGP
+	PsgpEstimator estimator;
+	Rprintf("Make prediction\n");
+	estimator.makePredictions(data, psgpParams, Xpred, meanPred, varPred);
+
+	// Copy results to R structures
+	PROTECT(meanResult = allocVector(REALSXP, numPred));
+	PROTECT(varResult = allocVector(REALSXP, numPred));
+	PROTECT(ans = allocVector(VECSXP, 2));
+
+	// should use an IT++ factory for vectors
+	double* ptr_meanResult = REAL(meanResult);
+	double* ptr_varResult = REAL(varResult);
+	for(int i=0; i < numPred; i++)
+	{
+		ptr_meanResult[i] = meanPred(i);
+		ptr_varResult[i] = varPred(i);
+	}
+
+	SET_VECTOR_ELT(ans, 0, meanResult);
+	SET_VECTOR_ELT(ans, 1, varResult);
+
+	UNPROTECT(3);
+	return ans;
+}
+} // END OF EXTERN C
+
 

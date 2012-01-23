@@ -29,15 +29,9 @@
 #ifndef OPTIMISABLE_H_
 #define OPTIMISABLE_H_
 
-#include <itpp/itbase.h>
-
-#include <iostream>
-#include <vector>
-#include <string>
-#include <cassert>
+#include "../psgp_common.h"
 
 using namespace std;
-using namespace itpp;
 
 class Optimisable
 {

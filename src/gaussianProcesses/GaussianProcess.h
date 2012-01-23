@@ -29,13 +29,11 @@
 #ifndef GAUSSIANPROCESS_H_
 #define GAUSSIANPROCESS_H_
 
-
 #include "ForwardModel.h"
 #include "../optimisation/Optimisable.h"
 #include "../covarianceFunctions/CovarianceFunction.h"
 #include "../covarianceFunctions/Transform.h"
-
-#include "itpp/itbase.h"
+#include "../psgp_common.h"
 
 class GaussianProcess : public ForwardModel, public Optimisable
 {

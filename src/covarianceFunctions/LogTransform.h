@@ -29,10 +29,7 @@
 #ifndef LOGTRANSFORM_H_
 #define LOGTRANSFORM_H_
 
-#include <itpp/itbase.h>
 #include "Transform.h"
-
-using namespace itpp;
 
 class LogTransform : public Transform
 {

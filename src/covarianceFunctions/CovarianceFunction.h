@@ -29,18 +29,14 @@
 #ifndef COVARIANCEFUNCTION_H_
 #define COVARIANCEFUNCTION_H_
 
-#include <iostream>
-#include <vector>
 #include <string>
-#include <cassert>
-#include <itpp/itbase.h>
+#include "../psgp_common.h"
 
 #include "Transform.h"
 #include "IdentityTransform.h"
 #include "LogTransform.h"
 
 using namespace std;
-using namespace itpp;
 
 class CovarianceFunction
 {
@@ -62,22 +58,22 @@ public:
 	virtual double computeElement(const vec& A, const vec& B) const = 0;
 	virtual double computeDiagonalElement(const vec& A) const = 0;
 	
-	virtual void getParameterPartialDerivative(mat& PD, const int parameterNumber, const mat& X) const = 0;
+	virtual void getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X) const = 0;
 	
-	virtual void   setParameter(const int parameterNumber, const double value) = 0;
-	virtual double getParameter(const int parameterNumber) const = 0;
+	virtual void   setParameter(const unsigned int parameterNumber, const double value) = 0;
+	virtual double getParameter(const unsigned int parameterNumber) const = 0;
 	
-	virtual string getParameterName(const int parameterNumber) const = 0;
+	virtual string getParameterName(const unsigned int parameterNumber) const = 0;
 
 // add something about transformations here
 
-	virtual void setTransform(int parameterNumber, Transform* newTransform);
-	virtual Transform* getTransform(int parameterNumber) const;
+	virtual void setTransform(unsigned int parameterNumber, Transform* newTransform);
+	virtual Transform* getTransform(unsigned int parameterNumber) const;
 	
 	virtual void setParameters(const vec p);
 	virtual vec getParameters() const;
 	
-	int getNumberParameters() const;
+	unsigned int getNumberParameters() const;
 	
 	virtual void displayCovarianceParameters(int nspaces = 0) const;
 
@@ -90,7 +86,7 @@ protected:
 	
 	
 	string covarianceName;
-	int numberParameters;
+	unsigned int numberParameters;
 	bool transformsApplied;
 
 private:

@@ -1,13 +1,10 @@
 #include "SumCovarianceFunction.h"
 
 using namespace std;
-using namespace itpp;
 
 SumCovarianceFunction::SumCovarianceFunction(vector<CovarianceFunction> cfVec) : CovarianceFunction("Sum Covariance")
 {
-
-	cout << "NOT IMPLEMENTED YET!!!" << endl;
-
+	Rprintf("NOT IMPLEMENTED YET!!!");
 }
 
 SumCovarianceFunction::SumCovarianceFunction(CovarianceFunction& cf) : CovarianceFunction("Sum Covariance")
@@ -32,7 +29,7 @@ inline double SumCovarianceFunction::computeElement(const vec& A, const vec& B) 
 {
 	double k = 0.0;
 
-	for(std::vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
+	for(vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
 	{
 		k = k + covFunctions[i]->computeElement(A, B);
 	}
@@ -44,7 +41,7 @@ inline double SumCovarianceFunction::computeDiagonalElement(const vec& A) const
 {
 	double k = 0.0;
 
-	for(std::vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
+	for(vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
 	{
 		k = k + covFunctions[i]->computeDiagonalElement(A);
 	}
@@ -54,27 +51,25 @@ inline double SumCovarianceFunction::computeDiagonalElement(const vec& A) const
 
 void SumCovarianceFunction::displayCovarianceParameters(int nspaces) const
 {
-	string space(nspaces, ' ');
-	
-    cout << space << "Covariance function : Sum" << endl;
-	for(std::vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
+    Rprintf("Covariance function : Sum\n");
+	for(vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
 	{
-		cout << space << "+ Component: " << (i+1) << endl;
+		Rprintf("+ Component: %d\n", i+1);
 		covFunctions[i]->displayCovarianceParameters(nspaces+2);
 	}
 }
 
-void SumCovarianceFunction::getParameterPartialDerivative(mat& PD, const int parameterNumber, const mat& X) const
+void SumCovarianceFunction::getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X) const
 {
 
 //	vec result;
-	int pos = 0;
+	unsigned int pos = 0;
 
 //	result.set_size(getNumberParameters());
 
-	for(std::vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
+	for(vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
 	{
-		for(int j = 0; j < (covFunctions[i]->getNumberParameters()) ; j++)
+		for(unsigned int j = 0; j < (covFunctions[i]->getNumberParameters()) ; j++)
 		{
 			if(parameterNumber == pos)
 			{
@@ -87,12 +82,12 @@ void SumCovarianceFunction::getParameterPartialDerivative(mat& PD, const int par
 }
 
 
-Transform* SumCovarianceFunction::getTransform(int parameterNumber) const
+Transform* SumCovarianceFunction::getTransform(unsigned int parameterNumber) const
 {
-	int pos = 0;
-	for(std::vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
+	unsigned int pos = 0;
+	for(vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
 	{
-		for(int j = 0; j < (covFunctions[i]->getNumberParameters()) ; j++)
+		for(unsigned int j = 0; j < (covFunctions[i]->getNumberParameters()) ; j++)
 		{
 			if(parameterNumber == pos)
 			{
@@ -102,20 +97,22 @@ Transform* SumCovarianceFunction::getTransform(int parameterNumber) const
 		}
 	}
 
+	// We shouldn't reach here
+	throw new std::exception();
 }
 
 
-void SumCovarianceFunction::setTransform(int parameterNumber, Transform* newTransform)
+void SumCovarianceFunction::setTransform(unsigned int parameterNumber, Transform* newTransform)
 {
-	assert(parameterNumber >= 0);
-	assert(parameterNumber < getNumberParameters());
+	
+	
 
 	//transforms[parameterNumber] = newTransform;
 
-	int pos = 0;
-	for(std::vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
+	unsigned int pos = 0;
+	for(vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
 	{
-		for(int j = 0; j < (covFunctions[i]->getNumberParameters()) ; j++)
+		for(unsigned int j = 0; j < (covFunctions[i]->getNumberParameters()) ; j++)
 		{
 			if(parameterNumber == pos)
 			{
@@ -132,12 +129,12 @@ void SumCovarianceFunction::setParameters(const vec p)
 {
 	int parFrom = 0;
 	int parTo = 0;
-	for(std::vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
+	for(vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
 	{
 	    // RB: Extract parameters for covariance function j
 	    parFrom = parTo;
 	    parTo += covFunctions[i]->getNumberParameters();
-	    covFunctions[i]->setParameters( p(parFrom, parTo-1) ); 
+	    covFunctions[i]->setParameters( p.subvec(parFrom, parTo-1) ); 
 	        
 	    /*
 	    for(int j = 0; j < (covFunctions[i]->getNumberParameters()) ; j++)
@@ -154,13 +151,13 @@ void SumCovarianceFunction::setParameters(const vec p)
 vec SumCovarianceFunction::getParameters() const
 {
 	vec result;
-	int pos = 0;
+	unsigned int pos = 0;
 
 	result.set_size(getNumberParameters());
 
-	for(std::vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
+	for(vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
 	{
-		for(int j = 0; j < (covFunctions[i]->getNumberParameters()) ; j++)
+		for(unsigned int j = 0; j < (covFunctions[i]->getNumberParameters()) ; j++)
 		{
 			Transform* t = covFunctions[i]->getTransform(j);
 			double d = t->forwardTransform(covFunctions[i]->getParameter(j));
@@ -171,13 +168,13 @@ vec SumCovarianceFunction::getParameters() const
 	return result;
 }
 
-void SumCovarianceFunction::setParameter(const int parameterNumber, const double value)
+void SumCovarianceFunction::setParameter(const unsigned int parameterNumber, const double value)
 {
 
-	cout << "SumCovarianceFunction::setParameter" << endl;
+	Rprintf("SumCovarianceFunction::setParameter");
 /*
 	int pnum = 0;
-	for(std::vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
+	for(vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
 	{
 		int numParams = covFunctions[i]->getNumberParameters();
 		if(parameterNumber < (pnum + numParams))
@@ -188,15 +185,15 @@ void SumCovarianceFunction::setParameter(const int parameterNumber, const double
 		pnum = pnum + numParams;
 	}
 	*/
-	cerr << "We shouldn't reach here - setParam : " << parameterNumber << endl;
+	Rprintf("We shouldn't reach here - setParam : %d", parameterNumber);
 }
 
-double SumCovarianceFunction::getParameter(const int parameterNumber) const
+double SumCovarianceFunction::getParameter(const unsigned int parameterNumber) const
 {
 	int pos = 0;
-	for(std::vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
+	for(vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
 	{
-		for(int j = 0; j < (covFunctions[i]->getNumberParameters()) ; j++)
+		for(unsigned int j = 0; j < (covFunctions[i]->getNumberParameters()) ; j++)
 		{
 			if(parameterNumber == pos)
 			{
@@ -205,24 +202,24 @@ double SumCovarianceFunction::getParameter(const int parameterNumber) const
 			pos = pos + 1;
 		}
 	}
-	assert(false);
+	
 	return(0.0);
 
 }
 
-string SumCovarianceFunction::getParameterName(const int parameterNumber) const
+string SumCovarianceFunction::getParameterName(const unsigned int parameterNumber) const
 {
-	int pnum = 0;
-	for(std::vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
+	unsigned int pnum = 0;
+	for(vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
 	{
-		int numParams = covFunctions[i]->getNumberParameters();
+		unsigned int numParams = covFunctions[i]->getNumberParameters();
 		if(parameterNumber < (pnum + numParams))
 		{
 			return (covFunctions[i]->getParameterName(parameterNumber - pnum));
 		}
 		pnum = pnum + numParams;
 	}
-	cerr << "We shouldn't reach here - getParamName" << endl;
+	Rprintf("We shouldn't reach here - getParamName");
 	return("Unknown");
 }
 

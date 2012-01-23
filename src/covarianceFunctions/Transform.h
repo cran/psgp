@@ -29,12 +29,9 @@
 #ifndef TRANSFORM_H_
 #define TRANSFORM_H_
 
-#include <string>
-
-#include <itpp/itbase.h>
+#include "../psgp_common.h"
 
 using namespace std;
-using namespace itpp;
 
 const double MAXEXP = 36;
 

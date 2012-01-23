@@ -29,22 +29,16 @@
 #ifndef MODELTRAINER_H_
 #define MODELTRAINER_H_
 
-#include <iostream>
-#include <vector>
-#include <string>
-#include <itpp/itbase.h>
-
 #include "Optimisable.h"
-#include "../gaussianProcesses/SequentialGP.h"
-
+#include "../psgp_common.h"
+#include <string>
 
 const double PHI = ((1.0 + sqrt(5.0)) / 2.0);
 const double CPHI = (1.0 - (1.0/PHI));
-const double TOL = sqrt(eps);
+const double TOL = sqrt( arma::math::eps() );
 const double TINY = (1.0e-10);
 
-using namespace std;
-using namespace itpp;
+using namespace psgp_arma;
 
 class ModelTrainer
 {
@@ -65,7 +59,7 @@ public:
 
 	void setFiniteDifferenceDelta(double d) {epsilon = d;};
 
-	void setOptimisationMask(bvec& m) {optimisationMask = m; maskSet = true;};
+	void setOptimisationMask(uvec& m) {optimisationMask = m; maskSet = true;};
 	
 	void checkGradient();
 	
@@ -100,7 +94,7 @@ protected:
 	double lineMinimiserParameterTolerance;
 
 	bool maskSet;
-	bvec optimisationMask;
+	uvec optimisationMask;
 
 	double epsilon;
 

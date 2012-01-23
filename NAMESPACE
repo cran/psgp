@@ -1,6 +1,8 @@
-useDynLib(psgp)
-
 import(intamap)
+import(RcppArmadillo)
+import(doSNOW)
+
+useDynLib(psgp)
 
 export(estimateParameters, spatialPredict, learnParameters, makePrediction, buildMetadata)
 

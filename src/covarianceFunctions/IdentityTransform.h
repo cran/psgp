@@ -29,10 +29,7 @@
 #ifndef IDENTITYTRANSFORM_H_
 #define IDENTITYTRANSFORM_H_
 
-#include <itpp/itbase.h>
 #include "Transform.h"
-
-using namespace itpp;
 
 class IdentityTransform : public Transform
 {

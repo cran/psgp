@@ -45,7 +45,8 @@ SCGModelTrainer::~SCGModelTrainer()
 {
 
 }
-void SCGModelTrainer::Train(int numIterations){
+void SCGModelTrainer::Train(int numIterations)
+{
 	double sigma0 = 1.0e-4;
 	double beta = 1.0;
 	double betaMin = 1.0e-15;
@@ -57,7 +58,8 @@ void SCGModelTrainer::Train(int numIterations){
 	double delta; // check delta and Delta
 	double alpha, fOld, fNew, fNow;
 	double Delta;
-			
+    double EPS = arma::math::eps();
+    
 	vec direction, gradNew, gradOld, gPlus, xPlus, xNew;
 	vec x = getParameters();
 				
@@ -78,12 +80,7 @@ void SCGModelTrainer::Train(int numIterations){
 		
 	if(gradientCheck)
 	{
-		if (analyticGradients) 
-		    cout << "Using analytical gradients" << endl;
-		else
-		    cout << "Using numerical (finite differences) gradient" << endl;
-		
-	    checkGradient();
+		checkGradient();
 	}
 		
 	// Main loop
@@ -101,7 +98,7 @@ void SCGModelTrainer::Train(int numIterations){
 			kappa = dot(direction, direction);
 
 			// eps exists in ITPP? remember to check this!
-			if(kappa < eps)
+			if(kappa < EPS)
 			{
 				functionValue = fNow;
 				setParameters(x);
@@ -113,7 +110,8 @@ void SCGModelTrainer::Train(int numIterations){
 			theta = dot(direction, gPlus - gradNew) / sigma;	
 		}
 		
-		delta = theta + (beta * kappa);			
+		delta = theta + (beta * kappa);
+			
 		if ( delta <= 0.0 )
 		{	
 		    delta = beta * kappa;
@@ -147,14 +145,12 @@ void SCGModelTrainer::Train(int numIterations){
 			
 		if(display)
 		{
-			cout << "Cycle " << j;
-			cout << "  Error " << fNow;
-			cout << "  Scale " << beta << endl;
+			Rprintf("Cycle %d   Error %f  Scale %f\n", j, fNow, beta);
 		}
 
 		if(success)
 		{
-			if ((max(alpha * direction) < parameterTolerance) && (abs( fNew - fOld )) < errorTolerance )
+			if ((max(max(alpha * direction)) < parameterTolerance) && (abs( fNew - fOld )) < errorTolerance )
 			{
 				functionValue = fNew;
 				// setParameters(x); 
@@ -202,7 +198,7 @@ void SCGModelTrainer::Train(int numIterations){
 		
 	if(display)
 	{
-		cout << "Warning: Maximum number of iterations has been exceeded" << endl;		
+		Rprintf("Warning: Maximum number of iterations has been exceeded\n");
 	}
 
 	functionValue = fOld;

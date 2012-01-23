@@ -2,8 +2,6 @@
 #define MATERN5CF_H_
 
 #include "CovarianceFunction.h"
-#include <itpp/itbase.h>
-#include <itpp/stat/misc_stat.h>
 
 /**
  * Isotropic Matern covariance function with nu=5/2.
@@ -24,14 +22,14 @@ public:
     inline double computeDiagonalElement(const vec& A) const;
     
     // Partial derivative of covariance function with respect to a given parameter
-    void    getParameterPartialDerivative(mat& PD, const int parameterNumber, const mat& X) const;
+    void    getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X) const;
     
     // Set and get a given parameter
-    void    setParameter(int parameterNumber, const double value);
-    double  getParameter(int parameterNumber) const;
+    void    setParameter(unsigned int parameterNumber, const double value);
+    double  getParameter(unsigned int parameterNumber) const;
 
     // Returns the name of a given parameter
-    string  getParameterName(int parameterNumber) const;
+    string  getParameterName(unsigned int parameterNumber) const;
 
 private:
 //    static const double nu = 2.5;      // Nu parameter
