@@ -1,7 +1,7 @@
 spatialPredict.psgp = function(object,...) {
 
     dots = list(...)
-    
+    iparams = getIntamapParams(object$params, ...)
     # PSGP parameters are stored in the variogram model data frame
     # This is a hack to remain compatible with intamap. The first column
     # is discarded as it is for 
@@ -38,15 +38,15 @@ spatialPredict.psgp = function(object,...) {
     #if (require(astonGeostats)) {
     nPred = nrow(coordinates(object$predictionLocations))
     nsim = ifelse("nsim" %in% names(dots),dots$nsim,0) 
-    if (!"nclus" %in% names(dots) && "nclus" %in% names(object$params) && nsim == 0 && nPred >= 5000 ) 
-      nclus = object$params$nclus else nclus = 1
+    if ("nclus" %in% names(object$params) && nsim == 0 && nPred >= 5000 ) 
+      nclus = iparams$nclus else nclus = 1
     if (nclus > 1) {
-      if (!suppressMessages(suppressWarnings(require(doSNOW))))
-  	    stop("nclus is > 1, but package doSNOW is not available")    
+      if (!suppressMessages(suppressWarnings(require(doParallel))))
+  	    stop("nclus is > 1, but package doParallel is not available")    
 
       clus <- c(rep("localhost", nclus))
       cl <- makeCluster(clus, type = "SOCK")
-      registerDoSNOW(cl)
+      registerDoParallel(cl, nclus)
       clusterEvalQ(cl, library(psgp))
       formulaString = object$formulaString
       observations = object$observations
@@ -89,3 +89,4 @@ spatialPredict.psgp = function(object,...) {
     names(object$predictions) = c("var1.pred","var1.var")
     object
 }
+

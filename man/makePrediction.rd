@@ -3,7 +3,6 @@
 \title{Spatial projected sequential GP prediction}
 \description{\code{makePrediction} performs prediction/interpolation within the PSGP package.
 }
-\synopsis{ makePrediction(object, vario) }
 \usage{ makePrediction(object, vario) }
 \arguments{
   \item{object}{ a list object of intamap type. Most arguments necessary for

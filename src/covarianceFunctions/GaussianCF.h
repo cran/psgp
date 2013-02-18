@@ -26,74 +26,40 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef COVARIANCEFUNCTION_H_
-#define COVARIANCEFUNCTION_H_
+#ifndef GAUSSIANCF_H_
+#define GAUSSIANCF_H_
 
-#include <string>
-#include "../psgp_common.h"
+#include "CovarianceFunction.h"
 
-#include "Transform.h"
-#include "IdentityTransform.h"
-#include "LogTransform.h"
+#include <cmath>
+#include <cassert>
+#include <itpp/itbase.h>
 
-using namespace std;
+using namespace itpp;
 
-class CovarianceFunction
+class GaussianCF : public CovarianceFunction
 {
 public:
-	CovarianceFunction(string name);
-	virtual ~CovarianceFunction();
+	GaussianCF(double lengthscale, double var);
+	GaussianCF(vec parameters);
 	
-	virtual void computeSymmetric(double& c, const vec& X) const;
-	virtual void computeSymmetric(mat& C, const mat& X) const;
+	virtual ~GaussianCF();
 	
-	virtual void computeSymmetricGrad(vec& V, const mat& X) const;
+	inline double computeElement(const vec& A, const vec& B) const;
+	inline double computeDiagonalElement(const vec& A) const;
+	void getParameterPartialDerivative(mat& PD, const int parameterNumber, const mat& X) const;
 	
-	virtual void computeCovariance(vec& C, const mat& X, const vec& x) const;
-	virtual void computeCovariance(mat& C, const mat& X1, const mat& X2) const;
+	void setParameter(int parameterNumber, const double value);
+	double getParameter(int parameterNumber) const;
 	
-	virtual void computeDiagonal(mat& C, const mat& X) const;
-	virtual void computeDiagonal(vec& C, const mat& X) const;	
+	string getParameterName(int parameterNumber) const;
 	
-	virtual double computeElement(const vec& A, const vec& B) const = 0;
-	virtual double computeDiagonalElement(const vec& A) const = 0;
-	
-	virtual void getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X) const = 0;
-	
-	virtual void   setParameter(const unsigned int parameterNumber, const double value) = 0;
-	virtual double getParameter(const unsigned int parameterNumber) const = 0;
-	
-	virtual string getParameterName(const unsigned int parameterNumber) const = 0;
-
-// add something about transformations here
-
-	virtual void setTransform(unsigned int parameterNumber, Transform* newTransform);
-	virtual Transform* getTransform(unsigned int parameterNumber) const;
-	
-	virtual void setParameters(const vec p);
-	virtual vec getParameters() const;
-	
-	unsigned int getNumberParameters() const;
-	
-	virtual void displayCovarianceParameters(int nspaces = 0) const;
-
-	void computeDistanceMatrix(mat& DM, const mat& X) const;
-
-	
-
-protected:
-	virtual void setDefaultTransforms();
-	
-	
-	string covarianceName;
-	unsigned int numberParameters;
-	bool transformsApplied;
-
 private:
-	vector<Transform *> transforms;
-
-
-
+	inline double calcGaussian(const vec& V) const;
+	inline double calcGaussianDiag() const;
+	
+	double variance;
+	double range;
 };
 
-#endif /*COVARIANCEFUNCTION_H_*/
+#endif /*GAUSSIANCF_H_*/

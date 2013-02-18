@@ -4,9 +4,6 @@
 \description{
   \code{learnParameters} performs maximum likelihood parameter estimation in the PSGP framework.
 }
-\synopsis{ 
-  learnParameters(object) 
-}
 \usage{
   learnParameters(object)
 }

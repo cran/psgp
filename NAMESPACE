@@ -1,6 +1,5 @@
 import(intamap)
 import(RcppArmadillo)
-import(doSNOW)
 
 useDynLib(psgp)
 
