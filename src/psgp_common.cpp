@@ -58,7 +58,7 @@ vec utr_vec(mat M)
 mat ltr_mat(vec v)
 {
     // Retrieve dimension of matrix
-    int N =  (int) floor(sqrt(2*v.n_elem));
+    int N =  (int) floor(sqrt(2.*v.n_elem));
 
 
 
@@ -83,7 +83,7 @@ mat ltr_mat(vec v)
 mat utr_mat(vec v)
 {
     // Retrieve dimension of matrix
-    int N =  (int) floor(sqrt(2*v.n_elem));
+    int N =  (int) floor(sqrt(2.*v.n_elem));
 
 
 

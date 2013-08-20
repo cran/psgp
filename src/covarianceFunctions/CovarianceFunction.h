@@ -79,8 +79,6 @@ public:
 
 	void computeDistanceMatrix(mat& DM, const mat& X) const;
 
-	
-
 protected:
 	virtual void setDefaultTransforms();
 	

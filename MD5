@@ -1,5 +1,5 @@
-f4e93339fd43fbb43eb656eb9b2d6b7e *ChangeLog
-0b7a21236eceac4015333a2dfbdd19aa *DESCRIPTION
+a556326bb22051825dc49f98d268af40 *ChangeLog
+51131e76bf14a939c30b158ba0f370fa *DESCRIPTION
 8083f4f68aac9443423c2c93e78a0bc5 *NAMESPACE
 d509d141e44c56877b301d30422bdd6c *R/buildMetadata.R
 63f3b2f71aa13552b417d9c5a30a4cc8 *R/estimateParameters.R
@@ -7,7 +7,7 @@ fbdbf32248da0389733d48349489cea7 *R/learnParameters.R
 db65b23e542deb57e3676f784b2e6bcb *R/makePrediction.R
 b6821f38bdb0fe72e9b3b140c1ed8877 *R/spatialPredict.R
 d71b43903df5c8598ec4cc29f557f14c *R/summary.R
-ad9ee96e1926f3af57415a31c2be5760 *inst/doc/InstallationInstructions.R
+5cc9031ed59ea5c948109b0ec64d959f *build/vignette.rds
 b7a5a1dbb67fed964b4948be02ee0a30 *inst/doc/InstallationInstructions.Rnw
 c3b364e237c21bf8909b817e74c4b4c3 *inst/doc/InstallationInstructions.pdf
 3832345f6afc34c2ec952f349f93fbc6 *man/buildMetadata.Rd
@@ -16,13 +16,13 @@ c3b364e237c21bf8909b817e74c4b4c3 *inst/doc/InstallationInstructions.pdf
 80902f6585efaf93c7bcb3757a076b58 *man/makePrediction.rd
 d0261eb9d54930c1d1c0fd5cd2c38cd5 *man/psgp-package.Rd
 7c07aac9e11d830af812080102acb5a4 *man/spatialPredict.Rd
-ba228736ce5086e943d62d21163dda84 *src/Makevars
+0330c902cb50f66b075ce968683bfed7 *src/Makevars
 f8b42504b30929d3cd40f8531e5db6f0 *src/Makevars.win
 b75ee40e412c708802e37d95c3b816dc *src/RInterface.cpp
 add364df971e6887124a77980e554bb3 *src/covarianceFunctions/ConstantCF.cpp
 98702049b1c37ff07d94b7bf29be0a88 *src/covarianceFunctions/ConstantCF.h
 9219f987e2022b4dd6ae741fc885a002 *src/covarianceFunctions/CovarianceFunction.cpp
-caffb2480eefecb6c50d0c0835b8aa00 *src/covarianceFunctions/CovarianceFunction.h
+a397f799eb5bff891ec1556b7d5d0282 *src/covarianceFunctions/CovarianceFunction.h
 9daed2dc59f07232ca1c5b9dfcdacb85 *src/covarianceFunctions/ExponentialCF.cpp
 e0d23bddcdaa3a85e60c5b6f5cc8eae0 *src/covarianceFunctions/ExponentialCF.h
 8a9af3f95150490d1881a09b70cde2a0 *src/covarianceFunctions/GaussianCF.cpp
@@ -33,8 +33,8 @@ e0d23bddcdaa3a85e60c5b6f5cc8eae0 *src/covarianceFunctions/ExponentialCF.h
 3ed8f4e5ecce6490ea5c427047beb7a3 *src/covarianceFunctions/LogTransform.h
 32d5ed959420cd0e080aedf9c041dd93 *src/covarianceFunctions/Matern5CF.cpp
 d42b3de58a822188e85718f63f69c1e7 *src/covarianceFunctions/Matern5CF.h
-d5c1dca1852047db624554bd1862d2a4 *src/covarianceFunctions/SumCovarianceFunction.cpp
-4e90257f9c64f29d34f8a80a0384d0fd *src/covarianceFunctions/SumCovarianceFunction.h
+82c458ea474e36a61b19369d48db1c6b *src/covarianceFunctions/SumCovarianceFunction.cpp
+6a6a74883d43a8317fb09cc13ec2127d *src/covarianceFunctions/SumCovarianceFunction.h
 87e717ec28618d7df9e7c47e1cbcab7d *src/covarianceFunctions/Transform.cpp
 0fbb6d1cd100be1db9a8495db0269a9a *src/covarianceFunctions/Transform.h
 9cae867d70008ad55d9f6e73f833b915 *src/covarianceFunctions/WhiteNoiseCF.cpp
@@ -57,7 +57,7 @@ cbe7309091955accb9d811db77ebf1ff *src/optimisation/Optimisable.cpp
 8f2edb2edabeb3b326b7be66d28d3502 *src/optimisation/Optimisable.h
 acdb680c921d15ae71caf38501e95c0c *src/optimisation/SCGModelTrainer.cpp
 d6dc8f16253b85fb7eaa9d0e71c4266a *src/optimisation/SCGModelTrainer.h
-b8bedee8d645de693a418e310627fdd1 *src/psgp_common.cpp
+78fcad171465e41466bf90b436d2918d *src/psgp_common.cpp
 9d7a48a576ff18e8c63c695b8731df97 *src/psgp_common.h
 69682e37b504ef52aef6540add295c27 *src/psgp_data.cpp
 c5cc7a1048c931cf3cfe51f03daddf00 *src/psgp_data.h

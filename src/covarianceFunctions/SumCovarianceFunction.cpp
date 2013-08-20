@@ -2,10 +2,10 @@
 
 using namespace std;
 
-SumCovarianceFunction::SumCovarianceFunction(vector<CovarianceFunction> cfVec) : CovarianceFunction("Sum Covariance")
-{
-	Rprintf("NOT IMPLEMENTED YET!!!");
-}
+// SumCovarianceFunction::SumCovarianceFunction(vector<CovarianceFunction> cfVec) : CovarianceFunction("Sum Covariance")
+// {
+// 	Rprintf("NOT IMPLEMENTED YET!!!");
+// }
 
 SumCovarianceFunction::SumCovarianceFunction(CovarianceFunction& cf) : CovarianceFunction("Sum Covariance")
 {
@@ -25,7 +25,7 @@ SumCovarianceFunction::~SumCovarianceFunction()
 {
 }
 
-inline double SumCovarianceFunction::computeElement(const vec& A, const vec& B) const
+double SumCovarianceFunction::computeElement(const vec& A, const vec& B) const
 {
 	double k = 0.0;
 
@@ -37,7 +37,7 @@ inline double SumCovarianceFunction::computeElement(const vec& A, const vec& B) 
 	return k;
 }
 
-inline double SumCovarianceFunction::computeDiagonalElement(const vec& A) const
+double SumCovarianceFunction::computeDiagonalElement(const vec& A) const
 {
 	double k = 0.0;
 
@@ -62,10 +62,7 @@ void SumCovarianceFunction::displayCovarianceParameters(int nspaces) const
 void SumCovarianceFunction::getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X) const
 {
 
-//	vec result;
 	unsigned int pos = 0;
-
-//	result.set_size(getNumberParameters());
 
 	for(vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
 	{
@@ -190,7 +187,7 @@ void SumCovarianceFunction::setParameter(const unsigned int parameterNumber, con
 
 double SumCovarianceFunction::getParameter(const unsigned int parameterNumber) const
 {
-	int pos = 0;
+	unsigned int pos = 0;
 	for(vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
 	{
 		for(unsigned int j = 0; j < (covFunctions[i]->getNumberParameters()) ; j++)

@@ -38,18 +38,26 @@
 class SumCovarianceFunction : public CovarianceFunction
 {
 public:
-	SumCovarianceFunction(vector<CovarianceFunction> cfVec);
+	// SumCovarianceFunction(vector<CovarianceFunction> cfVec);
 	SumCovarianceFunction(CovarianceFunction& cf);
 	
-	virtual ~SumCovarianceFunction();
+	~SumCovarianceFunction();
 
-	inline double computeElement(const vec& A, const vec& B) const;
-	inline double computeDiagonalElement(const vec& A) const;
+	double computeElement(const vec& A, const vec& B) const;
+	double computeDiagonalElement(const vec& A) const;
 	
 	void getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X) const;
 	
-	void setParameter(const unsigned int parameterNumber, const double value);
+	void setParameter(const unsigned int parameterNumber, const double value) const;
 	double getParameter(const unsigned int parameterNumber) const;
+
+	// C++ 11 - no need to declare the implementation
+	void getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X);
+	
+	void setParameter(const unsigned int parameterNumber, const double value);
+	double getParameter(const unsigned int parameterNumber);
+	
+	string getParameterName(const unsigned int parameterNumber);
 	
 	string getParameterName(const unsigned int parameterNumber) const;
 	
@@ -65,7 +73,5 @@ public:
 private:
 	vector<CovarianceFunction *> covFunctions;
 };
-
-
 
 #endif /*SUMCOVARIANCEFUNCTION_H_*/

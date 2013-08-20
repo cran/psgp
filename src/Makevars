@@ -28,6 +28,3 @@ OBJECTS = RInterface.o \
         psgp_data.o \
         psgp_estimator.o \
         sensor_metadata_parser.o
-
-	
-	
