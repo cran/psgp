@@ -1,3 +1,5 @@
+import(gstat)
+import(automap)
 import(intamap)
 import(RcppArmadillo)
 

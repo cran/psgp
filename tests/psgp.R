@@ -1,4 +1,5 @@
-library(psgp) # requires intamap
+library(automap)
+library(psgp)
 
 data(meuse)
 observations = data.frame(x = meuse$x,y = meuse$y,value = log(meuse$zinc))
