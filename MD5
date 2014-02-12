@@ -1,6 +1,6 @@
-a556326bb22051825dc49f98d268af40 *ChangeLog
-51131e76bf14a939c30b158ba0f370fa *DESCRIPTION
-8083f4f68aac9443423c2c93e78a0bc5 *NAMESPACE
+178b709cc753f71dfc21961095558fc8 *ChangeLog
+676f214673e8e4300a77d6740cb18312 *DESCRIPTION
+63471404734f359c493b9d6358fc65c6 *NAMESPACE
 d509d141e44c56877b301d30422bdd6c *R/buildMetadata.R
 63f3b2f71aa13552b417d9c5a30a4cc8 *R/estimateParameters.R
 fbdbf32248da0389733d48349489cea7 *R/learnParameters.R
@@ -17,7 +17,7 @@ c3b364e237c21bf8909b817e74c4b4c3 *inst/doc/InstallationInstructions.pdf
 d0261eb9d54930c1d1c0fd5cd2c38cd5 *man/psgp-package.Rd
 7c07aac9e11d830af812080102acb5a4 *man/spatialPredict.Rd
 0330c902cb50f66b075ce968683bfed7 *src/Makevars
-f8b42504b30929d3cd40f8531e5db6f0 *src/Makevars.win
+3932b177c217cab319a54ef1df26325c *src/Makevars.win
 b75ee40e412c708802e37d95c3b816dc *src/RInterface.cpp
 add364df971e6887124a77980e554bb3 *src/covarianceFunctions/ConstantCF.cpp
 98702049b1c37ff07d94b7bf29be0a88 *src/covarianceFunctions/ConstantCF.h
@@ -67,7 +67,7 @@ c442433d86e7d5e32d1421c006183274 *src/psgp_estimator.h
 360a93896182f3e757f643ab2fe98880 *src/sensor_metadata_parser.cpp
 c6669d48b90829469144f50bf322911e *src/sensor_metadata_parser.h
 2455f696368edbdd448b576e1cea8996 *tests/meuse_psgp.R
-4770d1bd9977abbba08a0c1cbfbefdc1 *tests/meuse_psgp.Rout.save
+9fc7e836862bc3d37d06c033296e326f *tests/meuse_psgp.Rout.save
 2fc6a425eb3110f364f8462de5788442 *tests/psgp.R
-1d778807abdc549c282ebbf984e65f55 *tests/psgp.Rout.save
+87cb5cb3fc03f3c3b0eb6f70d815f4fc *tests/psgp.Rout.save
 b7a5a1dbb67fed964b4948be02ee0a30 *vignettes/InstallationInstructions.Rnw
