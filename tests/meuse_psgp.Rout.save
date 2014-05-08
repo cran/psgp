@@ -1,6 +1,6 @@
 
-R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R version 3.1.0 (2014-04-10) -- "Spring Dance"
+Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -36,7 +36,7 @@ Loading required package: sp
 +   class = "psgp"
 + )
 Loading required package: rgdal
-rgdal: version: 0.8-10, (SVN revision 478)
+rgdal: version: 0.8-16, (SVN revision 498)
 Geospatial Data Abstraction Library extensions to R successfully loaded
 Loaded GDAL runtime: GDAL 1.9.0, released 2011/12/29
 Path to GDAL shared files: /usr/share/gdal/1.9
@@ -77,7 +77,7 @@ Cycle 4   Error 98.047846  Scale 0.125000
 Cycle 5   Error 98.002947  Scale 0.062500
 Warning: Maximum number of iterations has been exceeded
 Cycle 1   Error 97.968412  Scale 1.000000
-Cycle 2   Error 97.507098  Scale 0.500000
+Cycle 2   Error 97.507097  Scale 0.500000
 Cycle 3   Error 97.494582  Scale 0.250000
 Cycle 4   Error 97.494582  Scale 0.125000
 Cycle 5   Error 97.167484  Scale 0.500000
@@ -105,11 +105,11 @@ Predict using PSGP
 PSGP used the following parameters:Covariance function : Sum
 + Component: 1
    Covariance function : Isotropic Exponential
-   Range  (P0) :853.719592
+   Range  (P0) :853.719578
    Variance  (P1) :1.070282
 + Component: 2
    Covariance function : Matern 5/2 covariance function
-   Length scale  (P0) :1306.632712
+   Length scale  (P0) :1306.632730
    Variance  (P1) :0.881519
 + Component: 3
    Covariance function : Constant
@@ -121,4 +121,4 @@ PSGP used the following parameters:Covariance function : Sum
 > 
 > proc.time()
    user  system elapsed 
-  1.864   0.096   2.120 
+  2.344   0.056   2.416 

@@ -1,6 +1,6 @@
 
-R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R version 3.1.0 (2014-04-10) -- "Spring Dance"
+Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -17,7 +17,6 @@ Type 'q()' to quit R.
 
 > library(automap)
 Loading required package: sp
-Loading required package: gstat
 > library(psgp)
 Loading required package: intamap
 > 
@@ -89,18 +88,18 @@ Predict using PSGP
 PSGP used the following parameters:Covariance function : Sum
 + Component: 1
    Covariance function : Isotropic Exponential
-   Range  (P0) :853.719555
+   Range  (P0) :853.719573
    Variance  (P1) :1.070282
 + Component: 2
    Covariance function : Matern 5/2 covariance function
-   Length scale  (P0) :1306.632772
+   Length scale  (P0) :1306.632744
    Variance  (P1) :0.881519
 + Component: 3
    Covariance function : Constant
    Amplitude  (P0) :0.023702
 > krigingObject = postProcess(krigingObject)
 Loading required package: rgdal
-rgdal: version: 0.8-10, (SVN revision 478)
+rgdal: version: 0.8-16, (SVN revision 498)
 Geospatial Data Abstraction Library extensions to R successfully loaded
 Loaded GDAL runtime: GDAL 1.9.0, released 2011/12/29
 Path to GDAL shared files: /usr/share/gdal/1.9
@@ -110,18 +109,18 @@ Path to PROJ.4 shared files: (autodetected)
 > # Send predictions back to Java. Not sure how to deal with this spatial object though...?
 > summary(krigingObject$outputTable)
        x                y               mean          variance      
- Min.   :179019   Min.   :330013   Min.   :4.764   Min.   :0.03598  
+ Min.   :179019   Min.   :330013   Min.   :4.764   Min.   :0.03600  
  1st Qu.:179485   1st Qu.:330829   1st Qu.:5.308   1st Qu.:0.07071  
  Median :180183   Median :331644   Median :5.847   Median :0.25432  
- Mean   :180183   Mean   :331644   Mean   :6.257   Mean   :0.48081  
- 3rd Qu.:180882   3rd Qu.:332459   3rd Qu.:7.478   3rd Qu.:0.69749  
- Max.   :181348   Max.   :333275   Max.   :8.178   Max.   :1.91187  
+ Mean   :180183   Mean   :331644   Mean   :6.256   Mean   :0.48082  
+ 3rd Qu.:180882   3rd Qu.:332459   3rd Qu.:7.477   3rd Qu.:0.69749  
+ Max.   :181348   Max.   :333275   Max.   :8.177   Max.   :1.91187  
    excprob5.9         cumdistr5.9       quantile0.1   
  Min.   :0.0000083   Min.   :0.00000   Min.   :3.999  
- 1st Qu.:0.0549936   1st Qu.:0.01972   1st Qu.:4.638  
- Median :0.4629030   Median :0.53710   Median :5.227  
- Mean   :0.5165047   Mean   :0.48350   Mean   :5.491  
- 3rd Qu.:0.9802820   3rd Qu.:0.94501   3rd Qu.:6.480  
+ 1st Qu.:0.0549834   1st Qu.:0.01972   1st Qu.:4.638  
+ Median :0.4628215   Median :0.53718   Median :5.228  
+ Mean   :0.5164844   Mean   :0.48352   Mean   :5.491  
+ 3rd Qu.:0.9802752   3rd Qu.:0.94502   3rd Qu.:6.480  
  Max.   :1.0000000   Max.   :0.99999   Max.   :7.298  
 > summary(krigingObject$observations)
 Object of class SpatialPointsDataFrame
@@ -160,4 +159,4 @@ Data attributes:
 > 
 > proc.time()
    user  system elapsed 
-  1.980   0.088   2.252 
+  2.444   0.048   2.514 

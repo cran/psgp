@@ -13,8 +13,6 @@
 
 #define NUM_VARIOGRAM_PARAMETERS 5
 
-extern "C" {
-
 /**
  * Populate a PsgpData object with the data from R structures
  */
@@ -34,6 +32,8 @@ PsgpData prepareData(SEXP xData, SEXP yData, SEXP params, SEXP sensorMetadata, S
 	data.setSensorMetadata(sensorIndices, sensorMetadata);
 	return data;
 }
+
+extern "C" {
 
 /**
  * Estimate PSGP parameters
