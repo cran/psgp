@@ -31,12 +31,12 @@
 #define PSGP_H_
 
 #include "ForwardModel.h"
-#include "../optimisation/Optimisable.h"
-#include "../covarianceFunctions/CovarianceFunction.h"
-#include "../likelihoodModels/LikelihoodType.h"
+#include "Optimisable.h"
+#include "CovarianceFunction.h"
+#include "LikelihoodType.h"
 
 #include <vector>
-#include "../psgp_common.h"
+#include "psgp_common.h"
 
 #define LAMBDA_TOLERANCE 1e-10
 

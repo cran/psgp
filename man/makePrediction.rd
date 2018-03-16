@@ -41,8 +41,6 @@
 }
 
 \references{ 
- \url{http://www.intamap.org/}
-
  L. Csato and M. Opper. Sparse online Gaussian processes. Neural Computation, 14(3):
 641-669, 2002.
 

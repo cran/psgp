@@ -58,7 +58,7 @@ void SCGModelTrainer::Train(int numIterations)
 	double delta; // check delta and Delta
 	double alpha, fOld, fNew, fNow;
 	double Delta;
-    double EPS = arma::math::eps();
+    double EPS = arma::datum::eps;
     
 	vec direction, gradNew, gradOld, gPlus, xPlus, xNew;
 	vec x = getParameters();

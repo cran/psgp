@@ -13,7 +13,7 @@
 
 #include "psgp_common.h"
 #include "psgp_settings.h"
-#include "likelihoodModels/LikelihoodType.h"
+#include "LikelihoodType.h"
 #include "sensor_metadata_parser.h"
 
 #include "Rinternals.h"

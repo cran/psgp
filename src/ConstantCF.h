@@ -26,40 +26,31 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef GAUSSIANCF_H_
-#define GAUSSIANCF_H_
+#ifndef CONSTANTCF_H_
+#define CONSTANTCF_H_
 
+#include "psgp_common.h"
 #include "CovarianceFunction.h"
 
-#include <cmath>
-#include <cassert>
-#include <itpp/itbase.h>
-
-using namespace itpp;
-
-class GaussianCF : public CovarianceFunction
+class ConstantCF : public CovarianceFunction
 {
 public:
-	GaussianCF(double lengthscale, double var);
-	GaussianCF(vec parameters);
-	
-	virtual ~GaussianCF();
+	ConstantCF(double amp);
+	virtual ~ConstantCF();
 	
 	inline double computeElement(const vec& A, const vec& B) const;
 	inline double computeDiagonalElement(const vec& A) const;
-	void getParameterPartialDerivative(mat& PD, const int parameterNumber, const mat& X) const;
 	
-	void setParameter(int parameterNumber, const double value);
-	double getParameter(int parameterNumber) const;
+	void getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X) const;
 	
-	string getParameterName(int parameterNumber) const;
+	void setParameter(unsigned int parameterNumber, const double value);
+	double getParameter(unsigned int parameterNumber) const;
+	
+	string getParameterName(unsigned int parameterNumber) const;
 	
 private:
-	inline double calcGaussian(const vec& V) const;
-	inline double calcGaussianDiag() const;
-	
-	double variance;
-	double range;
+	double amplitude;  // Inverse variance
+
 };
 
-#endif /*GAUSSIANCF_H_*/
+#endif /*CONSTANTCF_H_*/

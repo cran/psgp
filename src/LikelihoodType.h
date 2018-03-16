@@ -26,45 +26,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef GAUSSIANPROCESS_H_
-#define GAUSSIANPROCESS_H_
+#ifndef LIKELIHOODTYPE_H_
+#define LIKELIHOODTYPE_H_
 
-#include "ForwardModel.h"
-#include "../optimisation/Optimisable.h"
-#include "../covarianceFunctions/CovarianceFunction.h"
-#include "../covarianceFunctions/Transform.h"
-#include "../psgp_common.h"
+#include <string>
+#include "psgp_common.h"
 
-class GaussianProcess : public ForwardModel, public Optimisable
+using namespace std;
+
+class LikelihoodType
 {
 public:
-	GaussianProcess(int Inputs, int Outputs, mat& Xdata, vec& ydata, CovarianceFunction& cf);
-	virtual ~GaussianProcess();
-
-	void   makePredictions(vec& Mean, vec& Variance, const mat& Xpred, const mat& C) const;
-	void   makePredictions(vec& Mean, vec& Variance, const mat& Xpred, CovarianceFunction &cf) const;
-	void   makePredictions(vec& Mean, vec& Variance, const mat& Xpred) const;
-	double loglikelihood() const;
-
-	vec    getParametersVector() const;
-	void   setParametersVector(const vec p);
-
-	double objective() const;
-	vec    gradient() const;
-
-	void   estimateParameters();
-
-private:
-
-	mat    computeCholesky(const mat& iM) const;
-	mat    computeInverseFromCholesky(const mat& C) const;
-
-	vec    getGradientVector() const;
-
-	CovarianceFunction& covFunc;
-	mat& Locations;
-	vec& Observations;
-
+	LikelihoodType();
+	virtual ~LikelihoodType();
+	double virtual updateCoefficients(double& K1, double& K2, double Observation, double ModelMean, double ModelVariance) const = 0;
 };
 
-#endif /*GAUSSIANPROCESS_H_*/
+#endif /*LIKELIHOODTYPE_H_*/

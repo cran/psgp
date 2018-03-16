@@ -41,9 +41,6 @@ spatialPredict.psgp = function(object,...) {
     if ("nclus" %in% names(object$params) && nsim == 0 && nPred >= 5000 ) 
       nclus = iparams$nclus else nclus = 1
     if (nclus > 1) {
-      if (!suppressMessages(suppressWarnings(require(doParallel))))
-  	    stop("nclus is > 1, but package doParallel is not available")    
-
       clus <- c(rep("localhost", nclus))
       cl <- makeCluster(clus, type = "SOCK")
       registerDoParallel(cl, nclus)

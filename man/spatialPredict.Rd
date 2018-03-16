@@ -28,8 +28,8 @@
 }
 
 \examples{
-# Load our favourite data set
 data(meuse)
+meuse = meuse[1:100,]
 coordinates(meuse) = ~x+y
 meuse$value = log(meuse$zinc)
 data(meuse.grid)

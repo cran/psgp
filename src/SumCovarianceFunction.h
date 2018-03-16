@@ -26,37 +26,52 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef EXPONENTIALCF_H_
-#define EXPONENTIALCF_H_
+#ifndef SUMCOVARIANCEFUNCTION_H_
+#define SUMCOVARIANCEFUNCTION_H_
 
 #include "CovarianceFunction.h"
+#include "Transform.h"
 
 #include <cmath>
-#include "../psgp_common.h"
+#include "psgp_common.h"
 
-class ExponentialCF : public CovarianceFunction
+class SumCovarianceFunction : public CovarianceFunction
 {
 public:
-	ExponentialCF(double lengthscale, double var);
-	ExponentialCF(vec parameters);
+	// SumCovarianceFunction(vector<CovarianceFunction> cfVec);
+	SumCovarianceFunction(CovarianceFunction& cf);
 	
-	virtual ~ExponentialCF();
+	~SumCovarianceFunction();
+
+	double computeElement(const vec& A, const vec& B) const;
+	double computeDiagonalElement(const vec& A) const;
 	
-	inline double computeElement(const vec& A, const vec& B) const;
-	inline double computeDiagonalElement(const vec& A) const;
 	void getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X) const;
 	
-	void setParameter(unsigned int parameterNumber, const double value);
-	double getParameter(unsigned int parameterNumber) const;
+	void setParameter(const unsigned int parameterNumber, const double value) const;
+	double getParameter(const unsigned int parameterNumber) const;
+
+	// C++ 11 - no need to declare the implementation
+	void getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X);
 	
-	string getParameterName(unsigned int parameterNumber) const;
+	void setParameter(const unsigned int parameterNumber, const double value);
+	double getParameter(const unsigned int parameterNumber);
+	
+	string getParameterName(const unsigned int parameterNumber);
+	
+	string getParameterName(const unsigned int parameterNumber) const;
+	
+	void setParameters(const vec p);
+	vec getParameters() const;
+
+	void setTransform(unsigned int parameterNumber, Transform* newTransform);
+	Transform* getTransform(unsigned int parameterNumber) const;
+
+	void addCovarianceFunction(CovarianceFunction& cf);
+	void displayCovarianceParameters(int nspaces = 0) const;
 	
 private:
-	inline double calcExponential(const vec& V) const;
-	inline double calcExponentialDiag() const;
-	
-	double variance;
-	double range;
+	vector<CovarianceFunction *> covFunctions;
 };
 
-#endif /*EXPONENTIALCF_H_*/
+#endif /*SUMCOVARIANCEFUNCTION_H_*/

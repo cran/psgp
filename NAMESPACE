@@ -1,8 +1,14 @@
+useDynLib(psgp, .registration = TRUE)
 import(gstat)
 import(automap)
 import(intamap)
+import(doParallel)
+import(rgdal)
+import(foreach)
+import(sp)
+import(parallel)
+importFrom(Rcpp, evalCpp)
 
-useDynLib(psgp)
 
 export(estimateParameters, spatialPredict, learnParameters, makePrediction, buildMetadata)
 

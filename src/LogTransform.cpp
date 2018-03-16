@@ -18,7 +18,7 @@ double LogTransform::backwardTransform(const double b) const
 {
 	if(b < -MAXEXP)
 	{
-		return arma::math::eps();
+		return arma::datum::eps;
 	}
 	else
 	{

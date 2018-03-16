@@ -26,27 +26,29 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef SCGMODELTRAINER_H_
-#define SCGMODELTRAINER_H_
+#ifndef OPTIMISABLE_H_
+#define OPTIMISABLE_H_
 
-#include <vector>
-#include <string>
-#include "../psgp_common.h"
-
-#include "Optimisable.h"
-#include "ModelTrainer.h"
+#include "psgp_common.h"
 
 using namespace std;
 
-class SCGModelTrainer : public ModelTrainer
+class Optimisable
 {
 public:
-	SCGModelTrainer(Optimisable& m);
-	virtual ~SCGModelTrainer();
+	Optimisable();
+	virtual ~Optimisable();
 
-	void Train(int numIterations);
+	virtual double objective() const = 0;
+	virtual vec gradient() const = 0;
+	virtual vec getParametersVector() const = 0;
+	virtual void setParametersVector(const vec p) = 0;
+
+protected:
+
+
+private:
 
 };
 
-
-#endif /*SCGMODELTRAINER_H_*/
+#endif /*OPTIMISABLE_H_*/

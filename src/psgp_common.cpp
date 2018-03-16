@@ -301,7 +301,7 @@ vec ones(int m) {
 }
 
 double sign(double x) {
-    if (x<arma::math::eps()) {
+    if (x<arma::datum::eps) {
         return 0.0;
     } else if (x<0.0) {
         return -1.0;

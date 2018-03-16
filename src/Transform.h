@@ -26,80 +26,29 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef MODELTRAINER_H_
-#define MODELTRAINER_H_
+#ifndef TRANSFORM_H_
+#define TRANSFORM_H_
 
-#include "Optimisable.h"
-#include "../psgp_common.h"
-#include <string>
+#include "psgp_common.h"
 
-const double PHI = ((1.0 + sqrt(5.0)) / 2.0);
-const double CPHI = (1.0 - (1.0/PHI));
-const double TOL = sqrt( arma::math::eps() );
-const double TINY = (1.0e-10);
+using namespace std;
 
-using namespace psgp_arma;
+const double MAXEXP = 36;
 
-class ModelTrainer
+class Transform
 {
 public:
-	ModelTrainer(Optimisable& m);
-	virtual ~ModelTrainer();
+	Transform();
+	virtual ~Transform();
 
-	void Summary() const;
-	virtual void Train(int numIterations) = 0;
+	virtual double forwardTransform(const double a) const = 0;
+	virtual double backwardTransform(const double b) const = 0;
+	virtual double gradientTransform(const double g) const = 0;
 
-	void setDisplay(bool b) {display = b;};
-	void setCheckGradient(bool b) {gradientCheck = b;};
-	void setAnalyticGradients(bool b) {analyticGradients = b;};
-	void setErrorTolerance(double d) {errorTolerance = d;};
+	string type() const;
 
-	void setLineMinimiserIterations(int i) {lineMinimiserIterations = i;};
-	void setLineMinimiserParameterTolerance(double d) {lineMinimiserParameterTolerance = d;};
-
-	void setFiniteDifferenceDelta(double d) {epsilon = d;};
-
-	void setOptimisationMask(uvec& m) {optimisationMask = m; maskSet = true;};
-	
-	void checkGradient();
-	
 protected:
-	
-	vec numericalGradients(const vec params);
-	double calculateNumericalGradient(const int parameterNumber, const vec params);
-
-	double errorFunction(vec params);
-	vec errorGradients(vec params);
-
-	vec getParameters();
-	void setParameters(const vec p);
-
-	double lineFunction(vec x, double lambda, vec direction);
-	void lineMinimiser(double &fx, double &x, double fa, vec params, vec direction);
-	void bracketMinimum(double &br_min, double &br_mid, double &br_max, double a, double b, double fa, vec params, vec direction);
-
-	Optimisable& model;
-
-	bool display;
-	double errorTolerance;
-	double parameterTolerance;
-	bool gradientCheck;
-	bool analyticGradients;
-
-	int functionEvaluations;
-	int gradientEvaluations;
-	double functionValue;
-
-	int lineMinimiserIterations;
-	double lineMinimiserParameterTolerance;
-
-	bool maskSet;
-	uvec optimisationMask;
-
-	double epsilon;
-
-	string algorithmName;
+	string transformName;
 };
 
-
-#endif /*MODELTRAINER_H_*/
+#endif /*TRANSFORM_H_*/

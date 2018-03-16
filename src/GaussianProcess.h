@@ -26,31 +26,48 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef CONSTANTCF_H_
-#define CONSTANTCF_H_
+#ifndef GAUSSIANPROCESS_H_
+#define GAUSSIANPROCESS_H_
 
-#include "../psgp_common.h"
+#include "ForwardModel.h"
+#include "Optimisable.h"
 #include "CovarianceFunction.h"
+#include "Transform.h"
+#include "psgp_common.h"
 
-class ConstantCF : public CovarianceFunction
+class GaussianProcess : public ForwardModel, public Optimisable
 {
 public:
-	ConstantCF(double amp);
-	virtual ~ConstantCF();
+	GaussianProcess(int Inputs, int Outputs, mat& Xdata, vec& ydata, CovarianceFunction& cf);
+	virtual ~GaussianProcess();
+
+	void   makePredictions(vec& Mean, vec& Variance, const mat& Xpred, const mat& C) const;
+	void   makePredictions(vec& Mean, vec& Variance, const mat& Xpred, CovarianceFunction &cf) const;
+	void   makePredictions(vec& Mean, vec& Variance, const mat& Xpred) const;
+	double loglikelihood() const;
+
+	vec    getParametersVector() const;
+	void   setParametersVector(const vec p);
+
+	double objective() const;
+	vec    gradient() const;
+
+	void   estimateParameters();
+
 	
-	inline double computeElement(const vec& A, const vec& B) const;
-	inline double computeDiagonalElement(const vec& A) const;
 	
-	void getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X) const;
-	
-	void setParameter(unsigned int parameterNumber, const double value);
-	double getParameter(unsigned int parameterNumber) const;
-	
-	string getParameterName(unsigned int parameterNumber) const;
 	
 private:
-	double amplitude;  // Inverse variance
+
+	mat    computeCholesky(const mat& iM) const;
+	mat    computeInverseFromCholesky(const mat& C) const;
+
+	vec    getGradientVector() const;
+
+	CovarianceFunction& covFunc;
+	mat& Locations;
+	vec& Observations;
 
 };
 
-#endif /*CONSTANTCF_H_*/
+#endif /*GAUSSIANPROCESS_H_*/

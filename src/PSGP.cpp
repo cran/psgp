@@ -283,7 +283,7 @@ void PSGP::EP_updateEPParameters(unsigned int iObs, double q, double r,
 		double cavityMean, double cavityVar, double logEvidence) {
 	double ratio = q / r;
 	logZ(iObs) = logEvidence
-			+ (log(2.0 * arma::math::pi()) - log(abs(r)) - (q * ratio)) / 2.0;
+			+ (log(2.0 * arma::datum::pi) - log(abs(r)) - (q * ratio)) / 2.0;
 	meanEP(iObs) = cavityMean - ratio;
 	varEP(iObs) = -r / (1.0 + (r * cavityVar));
 }
@@ -756,7 +756,7 @@ void PSGP::stabiliseCoefficients(double& q, double& r, double cavityMean,
 
 	if (mod) {
 		r = -(tu / sqrtPt) / tu;
-		r = r + arma::math::eps();
+		r = r + arma::datum::eps;
 		r = r + r;
 	}
 }
@@ -978,7 +978,7 @@ double PSGP::compEvidence() const {
 
 	evid -= arma::accu(arma::square(meanEP) % varEP);
 	evid += 2.0 * sum(logZ);
-	evid -= varEP.n_elem * log(2.0 * arma::math::pi());
+	evid -= varEP.n_elem * log(2.0 * arma::datum::pi);
 	mat Klp = P.t() * arma::diagmat(varEP);
 	mat Ksm = (Klp * P) * KB_new + arma::eye(sizeActiveSet, sizeActiveSet);
 	vec Kall = Klp * meanEP;
@@ -1012,7 +1012,7 @@ double PSGP::compEvidenceApproximate() const {
 	double like1 = arma::accu(arma::log(arma::diagvec(arma::chol(Sigma))));
 	double like2 = 0.5 * dot(obsActiveSet, alpha);
 
-	return like1 + like2 + 0.5 * sizeActiveSet * log(2 * arma::math::pi());
+	return like1 + like2 + 0.5 * sizeActiveSet * log(2 * arma::datum::pi);
 }
 
 /**
@@ -1039,7 +1039,7 @@ double PSGP::compEvidenceUpperBound() const {
 					+ KB * (C + alpha * alpha.t()))
 					* solve(U, solve(U.t(), KB)));
 
-	return 0.5 * (like1 + like2 + sizeActiveSet * log(2 * arma::math::pi()));
+	return 0.5 * (like1 + like2 + sizeActiveSet * log(2 * arma::datum::pi));
 }
 
 /**

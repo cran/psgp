@@ -26,23 +26,27 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef FORWARDMODEL_H_
-#define FORWARDMODEL_H_
+#ifndef SCGMODELTRAINER_H_
+#define SCGMODELTRAINER_H_
 
-#include "../psgp_common.h"
+#include <vector>
+#include <string>
+#include "psgp_common.h"
 
-class ForwardModel
+#include "Optimisable.h"
+#include "ModelTrainer.h"
+
+using namespace std;
+
+class SCGModelTrainer : public ModelTrainer
 {
 public:
-	ForwardModel(int Inputs, int Outputs);
-	virtual ~ForwardModel();
+	SCGModelTrainer(Optimisable& m);
+	virtual ~SCGModelTrainer();
 
-	int getInputDimensions() const;
-	int getOutputDimensions() const;
+	void Train(int numIterations);
 
-private:
-	int inputDimensions;
-	int outputDimensions;
 };
 
-#endif /*FORWARDMODEL_H_*/
+
+#endif /*SCGMODELTRAINER_H_*/

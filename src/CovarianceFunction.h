@@ -30,7 +30,7 @@
 #define COVARIANCEFUNCTION_H_
 
 #include <string>
-#include "../psgp_common.h"
+#include "psgp_common.h"
 
 #include "Transform.h"
 #include "IdentityTransform.h"

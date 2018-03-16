@@ -30,7 +30,7 @@
 #define WHITENOISECF_H_
 
 #include "CovarianceFunction.h"
-#include "../psgp_common.h"
+#include "psgp_common.h"
 
 class WhiteNoiseCF : public CovarianceFunction
 {

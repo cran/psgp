@@ -68,14 +68,14 @@ SEXP estimateParams(SEXP xData, SEXP yData, SEXP vario, SEXP sensorIndices,
 	estimator.learnParameters(data, params);
 
 	// Copy final parameters over to psgpParameters
-	for(int i=0; i<params.n_elem; i++)
+	for(unsigned int i=0; i<params.n_elem; i++)
 	{
 	    *psgpParams++ = params(i);
 	}
 
 	// Add padding zeros (remember psgpParameters has fixed size and is
 	// likely to be bigger than we need)
-	for(int i=params.n_elem; i<NUM_PSGP_PARAMETERS; i++)
+	for(unsigned int i=params.n_elem; i<NUM_PSGP_PARAMETERS; i++)
 	{
 	    *psgpParams++ = 0.0;
 	}

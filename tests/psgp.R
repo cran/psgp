@@ -23,7 +23,7 @@ krigingObject = estimateParameters(krigingObject)
 krigingObject = spatialPredict(krigingObject)
 krigingObject = postProcess(krigingObject)
 
-# Send predictions back to Java. Not sure how to deal with this spatial object though...?
+# Send predictions back to Java. 
 summary(krigingObject$outputTable)
 summary(krigingObject$observations)
 summary(autoKrige(value~1,krigingObject$observations,predictionLocations)$krige_output)

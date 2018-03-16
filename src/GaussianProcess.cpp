@@ -2,8 +2,8 @@
 
 GaussianProcess::GaussianProcess(int Inputs, int Outputs, mat& Xdata,
 		vec& ydata, CovarianceFunction& cf) :
-		Locations(Xdata), Observations(ydata), covFunc(cf), ForwardModel(Inputs,
-				Outputs) {
+    ForwardModel(Inputs, Outputs), covFunc(cf), Locations(Xdata), 
+               Observations(ydata)  {
 	
 
 }
@@ -102,7 +102,7 @@ double GaussianProcess::loglikelihood() const {
 
 	double out2 = arma::accu(arma::log(arma::diagvec(cholSigma)));
 
-	return out1 + out2 + 0.5 * Observations.n_elem * log(2 * arma::math::pi());
+	return out1 + out2 + 0.5 * Observations.n_elem * log(2 * arma::datum::pi);
 
 }
 

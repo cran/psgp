@@ -26,29 +26,37 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef TRANSFORM_H_
-#define TRANSFORM_H_
+#ifndef EXPONENTIALCF_H_
+#define EXPONENTIALCF_H_
 
-#include "../psgp_common.h"
+#include "CovarianceFunction.h"
 
-using namespace std;
+#include <cmath>
+#include "psgp_common.h"
 
-const double MAXEXP = 36;
-
-class Transform
+class ExponentialCF : public CovarianceFunction
 {
 public:
-	Transform();
-	virtual ~Transform();
-
-	virtual double forwardTransform(const double a) const = 0;
-	virtual double backwardTransform(const double b) const = 0;
-	virtual double gradientTransform(const double g) const = 0;
-
-	string type() const;
-
-protected:
-	string transformName;
+	ExponentialCF(double lengthscale, double var);
+	ExponentialCF(vec parameters);
+	
+	virtual ~ExponentialCF();
+	
+	inline double computeElement(const vec& A, const vec& B) const;
+	inline double computeDiagonalElement(const vec& A) const;
+	void getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X) const;
+	
+	void setParameter(unsigned int parameterNumber, const double value);
+	double getParameter(unsigned int parameterNumber) const;
+	
+	string getParameterName(unsigned int parameterNumber) const;
+	
+private:
+	inline double calcExponential(const vec& V) const;
+	inline double calcExponentialDiag() const;
+	
+	double variance;
+	double range;
 };
 
-#endif /*TRANSFORM_H_*/
+#endif /*EXPONENTIALCF_H_*/

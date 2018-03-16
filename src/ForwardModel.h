@@ -26,20 +26,23 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef LIKELIHOODTYPE_H_
-#define LIKELIHOODTYPE_H_
+#ifndef FORWARDMODEL_H_
+#define FORWARDMODEL_H_
 
-#include <string>
-#include "../psgp_common.h"
+#include "psgp_common.h"
 
-using namespace std;
-
-class LikelihoodType
+class ForwardModel
 {
 public:
-	LikelihoodType();
-	virtual ~LikelihoodType();
-	double virtual updateCoefficients(double& K1, double& K2, double Observation, double ModelMean, double ModelVariance) const = 0;
+	ForwardModel(int Inputs, int Outputs);
+	virtual ~ForwardModel();
+
+	int getInputDimensions() const;
+	int getOutputDimensions() const;
+
+private:
+	int inputDimensions;
+	int outputDimensions;
 };
 
-#endif /*LIKELIHOODTYPE_H_*/
+#endif /*FORWARDMODEL_H_*/

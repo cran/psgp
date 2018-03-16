@@ -44,7 +44,6 @@
 \references{ 
     Csato and Opper, 2002; Ingram et al., 2008
     
-    \url{http://www.intamap.org/}
 }
 \author{Ben Ingram, Remi Barillec}
 \seealso{
