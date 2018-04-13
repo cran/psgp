@@ -79,7 +79,7 @@ SEXP estimateParams(SEXP xData, SEXP yData, SEXP vario, SEXP sensorIndices,
 	{
 	    *psgpParams++ = 0.0;
 	}
-
+	
 	return R_psgpParams;
 }
 

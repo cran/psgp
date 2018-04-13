@@ -127,11 +127,12 @@ void PsgpEstimator::setupPsgp(PsgpData &data, bool forPrediction) {
 
 	// Set up the likelihood - Gaussian by default, unless
 	// sensor models have been provided
-	GaussianLikelihood* defaultLikelihood;
+	
 
 	int numModels = data.getSensorModels().size();
 
 	if (numModels == 0) {
+		GaussianLikelihood* defaultLikelihood;
 		Rprintf("No noise model specified\n");
 		Rprintf("Defaulting to GAUSSIAN with variance %f\n",
 				(data.getNugget() * LIKELIHOOD_NUGGET_RATIO));
@@ -140,14 +141,17 @@ void PsgpEstimator::setupPsgp(PsgpData &data, bool forPrediction) {
 
 		// Compute initial posterior with default likelihood
 		psgp->computePosterior(*defaultLikelihood);
+		delete defaultLikelihood;
 	} else {
 		Rprintf("Observation error characteristics specified.\n");
 		Rprintf("Building error models from sensor metadata table.\n");
 
 		arma::ivec sensorIndices = data.getSensorIndices();
 		psgp->computePosterior(sensorIndices, data.getSensorModels());
-	}
 
+	}
+	
+	 
 	// Use approximate objective function (more stable)
 	psgp->setLikelihoodType(Approximate);
 }

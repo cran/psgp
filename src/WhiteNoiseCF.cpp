@@ -3,7 +3,6 @@
 WhiteNoiseCF::WhiteNoiseCF(double var) : CovarianceFunction("White noise")
 {
 	numberParameters = 1;
-	setDefaultTransforms();
 	variance = var;
 
 }
@@ -74,17 +73,14 @@ string WhiteNoiseCF::getParameterName(unsigned int parameterNumber) const
 
 void WhiteNoiseCF::getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X) const
 {
-	
 
-	Transform* t = getTransform(parameterNumber);
-	double gradientModifier = t->gradientTransform(getParameter(parameterNumber));
 
 	switch(parameterNumber)
 	{
 		case 0 :
 		{
 			computeSymmetric(PD, X);
-			PD *= (gradientModifier / variance);
+			PD *= (getParameter(parameterNumber) / variance);
 			return;
 			break;
 		}

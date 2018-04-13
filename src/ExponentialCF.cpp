@@ -3,7 +3,6 @@
 ExponentialCF::ExponentialCF(double lengthscale, double var) : CovarianceFunction("Isotropic Exponential")
 {
 	numberParameters = 2;
-	setDefaultTransforms();
 
 	range = lengthscale;
 	variance = var;
@@ -15,7 +14,7 @@ ExponentialCF::ExponentialCF(vec parameters) : CovarianceFunction("Isotropic Exp
 	
 	range = parameters(0);
 	variance = parameters(1);
-	setDefaultTransforms();
+
 }
 
 
@@ -99,10 +98,7 @@ string ExponentialCF::getParameterName(unsigned int parameterNumber) const
 void ExponentialCF::getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X) const
 {
 	
-	
 
-	Transform* t = getTransform(parameterNumber);
-	double gradientModifier = t->gradientTransform(getParameter(parameterNumber));
 
 	switch(parameterNumber)
 	{
@@ -113,7 +109,7 @@ void ExponentialCF::getParameterPartialDerivative(mat& PD, const unsigned int pa
 			computeSymmetric(PD, X);
 			computeDistanceMatrix(DM, X);
 			// elem_mult_inplace(0.5 * sqrt(DM)  * (gradientModifier / pow(range, 2.0)), PD);
-            PD %= 0.5 * arma::sqrt(DM)  * (gradientModifier / pow(range, 2.0));
+            PD %= 0.5 * arma::sqrt(DM)  * (getParameter(parameterNumber) / pow(range, 2.0));
 			return;
 			break;
 		}
@@ -121,7 +117,7 @@ void ExponentialCF::getParameterPartialDerivative(mat& PD, const unsigned int pa
 		case 1 :
 		{
 			computeSymmetric(PD, X);
-			PD *= (gradientModifier / variance);
+			PD *= (getParameter(parameterNumber) / variance);
 			return;
 			break;
 		}

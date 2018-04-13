@@ -32,7 +32,6 @@
 #include "ForwardModel.h"
 #include "Optimisable.h"
 #include "CovarianceFunction.h"
-#include "Transform.h"
 #include "psgp_common.h"
 
 class GaussianProcess : public ForwardModel, public Optimisable

@@ -4,7 +4,6 @@ ConstantCF::ConstantCF(double amp) : CovarianceFunction("Constant")
 {
 	numberParameters = 1;
 	amplitude = amp;
-	setDefaultTransforms();
 }
 
 ConstantCF::~ConstantCF()
@@ -65,15 +64,11 @@ string ConstantCF::getParameterName(unsigned int parameterNumber) const
 void ConstantCF::getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X) const
 {
 	
-
-	Transform* t = getTransform(parameterNumber);
-	double gradientModifier = t->gradientTransform(getParameter(parameterNumber));
-
 	switch(parameterNumber)
 	{
 		case 0 :
 		{
-		    PD = -gradientModifier/(amplitude*amplitude) * arma::ones(X.n_rows, X.n_rows);
+		    PD = -getParameter(parameterNumber)/(amplitude*amplitude) * arma::ones(X.n_rows, X.n_rows);
 			return;
 		}
 	}

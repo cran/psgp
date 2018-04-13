@@ -32,11 +32,9 @@
 #include <string>
 #include "psgp_common.h"
 
-#include "Transform.h"
-#include "IdentityTransform.h"
-#include "LogTransform.h"
-
 using namespace std;
+
+const double MAXEXP = 36;
 
 class CovarianceFunction
 {
@@ -64,11 +62,6 @@ public:
 	virtual double getParameter(const unsigned int parameterNumber) const = 0;
 	
 	virtual string getParameterName(const unsigned int parameterNumber) const = 0;
-
-// add something about transformations here
-
-	virtual void setTransform(unsigned int parameterNumber, Transform* newTransform);
-	virtual Transform* getTransform(unsigned int parameterNumber) const;
 	
 	virtual void setParameters(const vec p);
 	virtual vec getParameters() const;
@@ -80,15 +73,13 @@ public:
 	void computeDistanceMatrix(mat& DM, const mat& X) const;
 
 protected:
-	virtual void setDefaultTransforms();
+	double forwardTransform(double a) const;
+	double backwardTransform(const double b) const;
 	
 	
 	string covarianceName;
 	unsigned int numberParameters;
-	bool transformsApplied;
 
-private:
-	vector<Transform *> transforms;
 
 
 

@@ -30,7 +30,6 @@
 #define SUMCOVARIANCEFUNCTION_H_
 
 #include "CovarianceFunction.h"
-#include "Transform.h"
 
 #include <cmath>
 #include "psgp_common.h"
@@ -63,9 +62,6 @@ public:
 	
 	void setParameters(const vec p);
 	vec getParameters() const;
-
-	void setTransform(unsigned int parameterNumber, Transform* newTransform);
-	Transform* getTransform(unsigned int parameterNumber) const;
 
 	void addCovarianceFunction(CovarianceFunction& cf);
 	void displayCovarianceParameters(int nspaces = 0) const;

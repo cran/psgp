@@ -13,7 +13,6 @@ Matern5CF::Matern5CF(double ls, double var)
     variance = var;
     
     numberParameters = 2;
-    setDefaultTransforms();
 }
 
 
@@ -33,7 +32,6 @@ Matern5CF::Matern5CF(vec parameters)
     lengthScale = parameters(0);
     variance = parameters(1);
 
-    setDefaultTransforms();
 }
 
 
@@ -135,10 +133,6 @@ inline double Matern5CF::computeDiagonalElement(const vec& A) const
 void Matern5CF::getParameterPartialDerivative(mat& PD, const unsigned int parameterNumber, const mat& X) const
 {
     
-    
-
-    Transform* t = getTransform(parameterNumber);
-    double gradientModifier = t->gradientTransform(getParameter(parameterNumber));
 
     switch(parameterNumber)
     {
@@ -147,7 +141,7 @@ void Matern5CF::getParameterPartialDerivative(mat& PD, const unsigned int parame
             mat R2(PD.n_rows, PD.n_cols);
             computeDistanceMatrix(R2, (sqrt(5.0) / lengthScale) * X);
             mat R = sqrt(R2); 
-            PD = (gradientModifier * (variance/(3.0*lengthScale)) * (R2 %(1.0+R)))
+            PD = (getParameter(parameterNumber) * (variance/(3.0*lengthScale)) * (R2 %(1.0+R)))
                  % exp(-R);
             break;
         }
@@ -155,7 +149,7 @@ void Matern5CF::getParameterPartialDerivative(mat& PD, const unsigned int parame
         case 1 :
         {
             computeSymmetric(PD, X);
-            PD *= (gradientModifier / variance);
+            PD *= (getParameter(parameterNumber) / variance);
             break;
         }
     }

@@ -21,6 +21,10 @@ PsgpData::PsgpData() {
 }
 
 PsgpData::~PsgpData() {
+	for(size_t i=0; i<sensorModels.size(); i++)
+	{
+		delete sensorModels[i];
+	}
 }
 
 /**

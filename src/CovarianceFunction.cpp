@@ -5,7 +5,6 @@ using namespace std;
 CovarianceFunction::CovarianceFunction(string name)
 {
 	covarianceName = name;
-	transformsApplied = false;
 }
 
 CovarianceFunction::~CovarianceFunction()
@@ -127,17 +126,7 @@ void CovarianceFunction::displayCovarianceParameters(int nspaces) const
 	for(unsigned int i=0; i < (t.size()); i++)
 	{
 		Rprintf("%s %s  (P%d) :", space.c_str(), getParameterName(i).c_str(), i);
-		Rprintf("%f", transforms[i]->backwardTransform(t(i)));
-		/*
-		if(transformsApplied)
-		{
-			Rprintf(" (%s)", transforms[i]->type().c_str());
-		}
-		else
-		{
-            Rprintf( " (no transform applied)" );
-		}
-		*/
+		Rprintf("%f", backwardTransform(t(i)));
 		Rprintf("\n");
 	}
 
@@ -148,7 +137,7 @@ void CovarianceFunction::setParameters(const vec p)
 	
 	for(unsigned int i = 0; i < getNumberParameters() ; i++)
 	{
-		setParameter(i, transforms[i]->backwardTransform(p(i)));
+		setParameter(i, backwardTransform(p(i)));
 	}
 }
 
@@ -159,7 +148,7 @@ vec CovarianceFunction::getParameters() const
 	result.set_size(getNumberParameters());
 	for(unsigned int i = 0; i < getNumberParameters() ; i++)
 	{
-		result[i] = transforms[i]->forwardTransform(getParameter(i));
+		result[i] = forwardTransform(getParameter(i));
 	}
 	return result;
 }
@@ -169,33 +158,6 @@ unsigned int CovarianceFunction::getNumberParameters() const
 	return numberParameters;
 }
 
-void CovarianceFunction::setTransform(unsigned int parameterNumber, Transform* newTransform)
-{
-	
-	
-	
-	transforms[parameterNumber] = newTransform;
-}
-
-void CovarianceFunction::setDefaultTransforms()
-{
-	int sz = getNumberParameters();
-	LogTransform* defaultTransform = new LogTransform();
-	// IdentityTransform* defaultTransform = new IdentityTransform();
-
-	for(int i = transforms.size(); i < sz; i++)
-	{
-		transforms.push_back(defaultTransform);
-	}
-	transformsApplied = true;
-}
-
-Transform* CovarianceFunction::getTransform(unsigned int parameterNumber) const
-{
-	
-	
-	return transforms[parameterNumber];
-}
 
 void CovarianceFunction::computeDistanceMatrix(mat& DM, const mat& X) const
 {
@@ -214,3 +176,26 @@ void CovarianceFunction::computeDistanceMatrix(mat& DM, const mat& X) const
 		DM(i, i) = 0.0;
 	}
 }
+
+
+double CovarianceFunction::forwardTransform(double a) const
+{
+	return log(a);
+}
+
+double CovarianceFunction::backwardTransform(const double b) const
+{
+	if(b < -MAXEXP)
+	{
+		return arma::datum::eps;
+	}
+	else
+	{
+		if(b > MAXEXP)
+		{
+			return exp(MAXEXP);
+		}
+	}
+	return exp(b);
+}
+

@@ -1,7 +1,7 @@
 
-R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
-Copyright (C) 2017 The R Foundation for Statistical Computing
-Platform: i386-w64-mingw32/i386 (32-bit)
+R version 3.4.4 (2018-03-15) -- "Someone to Lean On"
+Copyright (C) 2018 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -98,11 +98,11 @@ Predict using PSGP
 PSGP used the following parameters:Covariance function : Sum
 + Component: 1
    Covariance function : Isotropic Exponential
-   Range  (P0) :853.589283
+   Range  (P0) :853.589273
    Variance  (P1) :1.070229
 + Component: 2
    Covariance function : Matern 5/2 covariance function
-   Length scale  (P0) :1307.069136
+   Length scale  (P0) :1307.069152
    Variance  (P1) :0.881427
 + Component: 3
    Covariance function : Constant
@@ -114,4 +114,4 @@ PSGP used the following parameters:Covariance function : Sum
 > 
 > proc.time()
    user  system elapsed 
-   5.92    0.37    6.23 
+  7.706   0.068   7.768 

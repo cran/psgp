@@ -11,14 +11,12 @@ SumCovarianceFunction::SumCovarianceFunction(CovarianceFunction& cf) : Covarianc
 {
 	covFunctions.push_back(&cf);
 	numberParameters = cf.getNumberParameters();
-	setDefaultTransforms();
 }
 
 void SumCovarianceFunction::addCovarianceFunction(CovarianceFunction& cf)
 {
 	covFunctions.push_back(&cf);
 	numberParameters = numberParameters + cf.getNumberParameters();
-	setDefaultTransforms();
 }
 
 SumCovarianceFunction::~SumCovarianceFunction()
@@ -79,48 +77,6 @@ void SumCovarianceFunction::getParameterPartialDerivative(mat& PD, const unsigne
 }
 
 
-Transform* SumCovarianceFunction::getTransform(unsigned int parameterNumber) const
-{
-	unsigned int pos = 0;
-	for(vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
-	{
-		for(unsigned int j = 0; j < (covFunctions[i]->getNumberParameters()) ; j++)
-		{
-			if(parameterNumber == pos)
-			{
-				return covFunctions[i]->getTransform(j);
-			}
-			pos = pos + 1;
-		}
-	}
-
-	// We shouldn't reach here
-	throw new std::exception();
-}
-
-
-void SumCovarianceFunction::setTransform(unsigned int parameterNumber, Transform* newTransform)
-{
-	
-	
-
-	//transforms[parameterNumber] = newTransform;
-
-	unsigned int pos = 0;
-	for(vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
-	{
-		for(unsigned int j = 0; j < (covFunctions[i]->getNumberParameters()) ; j++)
-		{
-			if(parameterNumber == pos)
-			{
-				covFunctions[i]->setTransform(j, newTransform);
-				return;
-			}
-			pos = pos + 1;
-		}
-	}
-}
-
 
 void SumCovarianceFunction::setParameters(const vec p)
 {
@@ -132,16 +88,6 @@ void SumCovarianceFunction::setParameters(const vec p)
 	    parFrom = parTo;
 	    parTo += covFunctions[i]->getNumberParameters();
 	    covFunctions[i]->setParameters( p.subvec(parFrom, parTo-1) ); 
-	        
-	    /*
-	    for(int j = 0; j < (covFunctions[i]->getNumberParameters()) ; j++)
-		{
-			Transform* t = covFunctions[i]->getTransform(j);
-			double d = t->backwardTransform(p(pos));
-			covFunctions[i]->setParameter(j, d);
-			pos = pos + 1;
-		}
-	    */
 	}
 }
 
@@ -156,8 +102,7 @@ vec SumCovarianceFunction::getParameters() const
 	{
 		for(unsigned int j = 0; j < (covFunctions[i]->getNumberParameters()) ; j++)
 		{
-			Transform* t = covFunctions[i]->getTransform(j);
-			double d = t->forwardTransform(covFunctions[i]->getParameter(j));
+			double d = forwardTransform(covFunctions[i]->getParameter(j));
 			result[pos] = d;
 			pos = pos + 1;
 		}

@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+Version 0.3-17 (12-04-2018)
+  * Fixed bug in R<->C++ interface
+
+Version 0.3-16 (11-04-2018)
+  * Fixed memory leaks due to parameter transformations
+
 Version 0.3-6 (08-05-2014)
   * Removed non-C compliant function from extern C declarations
 
