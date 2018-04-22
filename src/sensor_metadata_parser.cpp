@@ -29,11 +29,10 @@ SensorMetadataParser::~SensorMetadataParser() {
 vector<LikelihoodType*> SensorMetadataParser::parseMetadata(SEXP R_indices, SEXP R_metadata, arma::ivec &indices) {
 
 	unsigned int numModels = length(R_metadata);
-	vector<string> metadata;
 
 	// Shift indexes (starting from 1 in data, from 0 in Armadillo)
 	int* indexPtr = INTEGER(R_indices);
-	indices = arma::ivec(indexPtr, numModels);
+	indices = arma::ivec(indexPtr, length(R_indices));
 	indices -= 1;
 
 	// The metadata table, if provided, is terminated by an empty line
@@ -59,6 +58,7 @@ vector<LikelihoodType*> SensorMetadataParser::parseMetadata(SEXP R_indices, SEXP
  */
 vector<LikelihoodType*> SensorMetadataParser::parseMetadata(
 		vector<string> metadata) {
+	
 	vector<LikelihoodType*> sensorModels(metadata.size());
 
 	unsigned int numModels = sensorModels.size();

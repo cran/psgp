@@ -43,6 +43,7 @@ private:
 	void validateModels( std::vector<LikelihoodType*> &models );
 	void resetModelStats();
 	string formatParams(string params);
+	vector<string> metadata;
 };
 
 #endif /* SENSOR_METADATA_PARSER_H_ */

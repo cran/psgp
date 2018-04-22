@@ -46,11 +46,15 @@ SEXP estimateParams(SEXP xData, SEXP yData, SEXP vario, SEXP sensorIndices,
 
 	// PSGP parameters in R format
 	SEXP R_psgpParams;
+
 	PROTECT( R_psgpParams = allocVector(REALSXP, NUM_PSGP_PARAMETERS) );
+//	R_psgpParams = allocVector(REALSXP, NUM_PSGP_PARAMETERS);
+//	Rcpp::RObject protectArray(R_psgpParams);
 
 	// Create and allocate pointer to PSGP parameter vector
 	double* psgpParams = REAL(R_psgpParams);
-	UNPROTECT(1);
+
+
 
 	// Copy current variogram parameters to parameter array
 	memcpy(psgpParams, varioPtr, NUM_VARIOGRAM_PARAMETERS * sizeof(double));
@@ -58,14 +62,21 @@ SEXP estimateParams(SEXP xData, SEXP yData, SEXP vario, SEXP sensorIndices,
 	// Convert data from R structures to vectors and matrices
 	// TODO: CHECK: errorIndices was used in the original code instead of sensorIndices
 	PsgpData data = prepareData(xData, yData, vario, sensorMetadata, sensorIndices, true);
+	
 
 	// Estimate parameters.
 	// This also updates the parameter values in psgpParameters
 	// and in variogramParameters (if the initial parameters were not
 	// valid, i.e. negative...)
 	PsgpEstimator estimator;
+
+
+
 	vec params;
+
 	estimator.learnParameters(data, params);
+	
+	UNPROTECT(1);
 
 	// Copy final parameters over to psgpParameters
 	for(unsigned int i=0; i<params.n_elem; i++)
@@ -79,7 +90,8 @@ SEXP estimateParams(SEXP xData, SEXP yData, SEXP vario, SEXP sensorIndices,
 	{
 	    *psgpParams++ = 0.0;
 	}
-	
+
+
 	return R_psgpParams;
 }
 

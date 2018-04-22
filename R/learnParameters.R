@@ -33,10 +33,10 @@ learnParameters <- function(object) {
   #     is provided, and are converted to a valid metadata table.
   obsErrId = as.integer(inputs$oeid)
   sensorId = as.integer(inputs$sensor)
-  
+
   # Retrieve metadata
   metaData = object$obsChar
-  
+
   # If no metadata, attempt to build it from the variances
   # (observations$oevar) and, if available, biases (observations$oebias)
   # in the observations data structure
@@ -44,7 +44,9 @@ learnParameters <- function(object) {
   {
     metaData <- buildMetadata(inputs);
   }
-  
+
+
+ 
   #------------------------------------------
   # Estimate range/sill using variogram model
   #------------------------------------------

@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+Version 0.3-18 (17-04-2018)
+  * Fixed bug with sensor models
+
 Version 0.3-17 (12-04-2018)
   * Fixed bug in R<->C++ interface
 

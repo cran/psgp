@@ -1,9 +1,9 @@
-ed856b0b3ca5370bf9964fcfa3a97aa6 *ChangeLog
-c74b5bce42183e90ecd11d3ce9fd4ff7 *DESCRIPTION
+2a42fc92a22a7efe12c8bd6fe7fbe51b *ChangeLog
+1aca279d05863469c1403b043044b73a *DESCRIPTION
 9546e107eb766504a03f27573c0ae264 *NAMESPACE
 d509d141e44c56877b301d30422bdd6c *R/buildMetadata.R
 63f3b2f71aa13552b417d9c5a30a4cc8 *R/estimateParameters.R
-d7ec2a7c280be6708a74520cc4b153bc *R/learnParameters.R
+d1e7417eb53580a3e157c2204a9e7887 *R/learnParameters.R
 db65b23e542deb57e3676f784b2e6bcb *R/makePrediction.R
 2d5cf33656a421486e0120039be5abe2 *R/spatialPredict.R
 d71b43903df5c8598ec4cc29f557f14c *R/summary.R
@@ -39,7 +39,7 @@ cbe7309091955accb9d811db77ebf1ff *src/Optimisable.cpp
 3907a5dbefcff582de89c214d3f32ab4 *src/Optimisable.h
 0bca9ba63180f0e75649a57ac4b78d1a *src/PSGP.cpp
 e8aa1374b50ec4c479b2430f7e987b26 *src/PSGP.h
-89bbe4eb2ccf475062c92ba70a9c22ba *src/RInterface.cpp
+fb2e79b44e9ecbbcee238f5ac5016527 *src/RInterface.cpp
 331ddee3b19afe91f00f31442a0c60fa *src/SCGModelTrainer.cpp
 b926a944dd8160f4dff4a062c19b5ca1 *src/SCGModelTrainer.h
 be17c700fabbc5897ee5189b0a8c76b8 *src/SumCovarianceFunction.cpp
@@ -54,8 +54,8 @@ bf3c4455be25ff2616910e0a69895d1e *src/psgp_data.cpp
 9a71ffda17de7bdb9874a70789b10a85 *src/psgp_estimator.cpp
 84e8f14b8903c4e0730772c8f10b7c0e *src/psgp_estimator.h
 5b0614fd760a47dd31fbfcf5d1bbb067 *src/psgp_settings.h
-360a93896182f3e757f643ab2fe98880 *src/sensor_metadata_parser.cpp
-281af7f2b3d1b7974bba32dc82000e07 *src/sensor_metadata_parser.h
+26ccf4d1459fe00460503a6ec24cfb95 *src/sensor_metadata_parser.cpp
+089fc9b3aa0b8f41b6b004fcd00532c9 *src/sensor_metadata_parser.h
 2455f696368edbdd448b576e1cea8996 *tests/meuse_psgp.R
 43db1b36cd494d1917da1a989be6e213 *tests/meuse_psgp.Rout.save
 e5626b18288f67eacfbd121489652d64 *tests/psgp.R
