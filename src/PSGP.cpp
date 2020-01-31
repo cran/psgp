@@ -1133,7 +1133,7 @@ void PSGP::displayModelParameters() const {
 	Rprintf("  Predicion locations        : %dx%d\n", Locations.n_rows, Locations.n_cols);
 	Rprintf("  Observations               : %d\n", Observations.n_rows);
 	Rprintf("  Active set size            : %d (max %d)\n", ActiveSet.n_rows, maxActiveSet);
-	Rprintf("  Epsilon tolerance          : %f\n", epsilonTolerance);
+	Rprintf("  Epsilon tolerance          : %1.2f\n", epsilonTolerance);
 	Rprintf("  Iterations Changing/Fixed  : %d/%d\n", iterChanging, iterFixed);
 }
 

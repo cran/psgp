@@ -142,10 +142,10 @@ void PsgpData::setPsgpParams(double _range, double _sill, double _nugget,
 	rangeMat5 = range;
 	sillMat5 = sill;
 
-	Rprintf("Range: %f\n", range);
-	Rprintf("Sill: %f\n", sill);
-	Rprintf("Nugget: %f\n", nugget);
-	Rprintf("Bias: %f\n", bias);
+	Rprintf("Range: %1.2f\n", range);
+	Rprintf("Sill: %1.2f\n", sill);
+	Rprintf("Nugget: %1.2f\n", nugget);
+	Rprintf("Bias: %1.2f\n", bias);
 }
 
 //

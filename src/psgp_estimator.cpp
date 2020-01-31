@@ -134,7 +134,7 @@ void PsgpEstimator::setupPsgp(PsgpData &data, bool forPrediction) {
 	if (numModels == 0) {
 		GaussianLikelihood* defaultLikelihood;
 		Rprintf("No noise model specified\n");
-		Rprintf("Defaulting to GAUSSIAN with variance %f\n",
+		Rprintf("Defaulting to GAUSSIAN with variance %1.2f\n",
 				(data.getNugget() * LIKELIHOOD_NUGGET_RATIO));
 		defaultLikelihood = new GaussianLikelihood(
 				data.getNugget() * LIKELIHOOD_NUGGET_RATIO);

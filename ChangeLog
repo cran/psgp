@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+Version 0.3-19 (30-01-2020)
+  * Fixed bug minor issue with tests
+
 Version 0.3-18 (17-04-2018)
   * Fixed bug with sensor models
 

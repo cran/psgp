@@ -1,5 +1,5 @@
-2a42fc92a22a7efe12c8bd6fe7fbe51b *ChangeLog
-1aca279d05863469c1403b043044b73a *DESCRIPTION
+6e948632639b19038bbb3bd6fb7c51a4 *ChangeLog
+9da281719c3e4f84464efec830504938 *DESCRIPTION
 9546e107eb766504a03f27573c0ae264 *NAMESPACE
 d509d141e44c56877b301d30422bdd6c *R/buildMetadata.R
 63f3b2f71aa13552b417d9c5a30a4cc8 *R/estimateParameters.R
@@ -17,7 +17,7 @@ d95c56b90e683ffc65aaa1cc06a2b793 *man/makePrediction.rd
 6e107a93ef67890a1cd3015c4d678c93 *src/AnalyticLikelihood.h
 56a8fc53c9789bf71e4c06a2c2a27db2 *src/ConstantCF.cpp
 3c7611df8b8bfb087fe3d9091f33bd31 *src/ConstantCF.h
-21df1f22ddb6482fbf3204e02b1a3916 *src/CovarianceFunction.cpp
+7546329dd54facb17fc6eb3315dfc9e3 *src/CovarianceFunction.cpp
 4b9c2272980e8e750f77d2eff4802386 *src/CovarianceFunction.h
 a2cde0cd4ba0cff70af4b657fcaddcda *src/ExponentialCF.cpp
 95fa6ed4f04e2141db63de74e3175c7f *src/ExponentialCF.h
@@ -37,7 +37,7 @@ fe5715a4cd4c2a4b64203b33c9ceee64 *src/ModelTrainer.cpp
 3e1a1a104919bbed3c9368108819f90a *src/ModelTrainer.h
 cbe7309091955accb9d811db77ebf1ff *src/Optimisable.cpp
 3907a5dbefcff582de89c214d3f32ab4 *src/Optimisable.h
-0bca9ba63180f0e75649a57ac4b78d1a *src/PSGP.cpp
+871b47ddc257350de5b6f8be9f19dfa5 *src/PSGP.cpp
 e8aa1374b50ec4c479b2430f7e987b26 *src/PSGP.h
 fb2e79b44e9ecbbcee238f5ac5016527 *src/RInterface.cpp
 331ddee3b19afe91f00f31442a0c60fa *src/SCGModelTrainer.cpp
@@ -49,14 +49,16 @@ ff34aa02363e7c6da21c9c147019c6a1 *src/WhiteNoiseCF.cpp
 4e569fd3a2c84029ac422f5982251092 *src/init.c
 48d58f8278f94da83bce0aa078ef7222 *src/psgp_common.cpp
 9d7a48a576ff18e8c63c695b8731df97 *src/psgp_common.h
-bf3c4455be25ff2616910e0a69895d1e *src/psgp_data.cpp
+fa7628025a5d3ad174e6e5c81005bf91 *src/psgp_data.cpp
 4283f27a96b20be569d062e1931c7d40 *src/psgp_data.h
-9a71ffda17de7bdb9874a70789b10a85 *src/psgp_estimator.cpp
+8b76e98d10a4f328cc042eaf81ed54ed *src/psgp_estimator.cpp
 84e8f14b8903c4e0730772c8f10b7c0e *src/psgp_estimator.h
 5b0614fd760a47dd31fbfcf5d1bbb067 *src/psgp_settings.h
 26ccf4d1459fe00460503a6ec24cfb95 *src/sensor_metadata_parser.cpp
 089fc9b3aa0b8f41b6b004fcd00532c9 *src/sensor_metadata_parser.h
 2455f696368edbdd448b576e1cea8996 *tests/meuse_psgp.R
-43db1b36cd494d1917da1a989be6e213 *tests/meuse_psgp.Rout.save
+8eb16b29db0d3911bf6a4bcd130baab2 *tests/meuse_psgp.Rout
+8eb16b29db0d3911bf6a4bcd130baab2 *tests/meuse_psgp.Rout.save
 e5626b18288f67eacfbd121489652d64 *tests/psgp.R
-210af680f809488f28da048f26fd803d *tests/psgp.Rout.save
+3bd8e6ff2f966e50e61042da442bf201 *tests/psgp.Rout
+3bd8e6ff2f966e50e61042da442bf201 *tests/psgp.Rout.save

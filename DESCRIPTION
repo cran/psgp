@@ -1,9 +1,9 @@
 Package: psgp
-Version: 0.3-18
-Date: 2018-04-17
+Version: 0.3-19
+Date: 2020-01-30
 Title: Projected Spatial Gaussian Process Methods
-Author: Ben Ingram <ingrambr@gmail.com>, Remi Barillec <remi@igiltd.com>, Jon Olav Skoien <jon.skoien@gmail.com>
-Maintainer: Ben Ingram <ingrambr@gmail.com>
+Author: Ben Ingram <ingrambr.work@gmail.com>, Remi Barillec <remi@igiltd.com>, Jon Olav Skoien <jon.skoien@gmail.com>
+Maintainer: Ben Ingram <ingrambr.work@gmail.com>
 Depends: R (>= 3.0.2), intamap
 Imports: gstat, automap, sp, doParallel, rgdal, foreach, parallel, Rcpp
 Suggests:
@@ -12,5 +12,5 @@ Description: Implements projected sparse Gaussian process Kriging (Ingram 'et. a
 License: GPL (>= 2)
 Repository: CRAN
 NeedsCompilation: yes
-Packaged: 2018-04-17 22:45:54 UTC; bri
-Date/Publication: 2018-04-22 12:35:19 UTC
+Packaged: 2020-01-30 18:08:58 UTC; bri
+Date/Publication: 2020-01-31 22:30:07 UTC

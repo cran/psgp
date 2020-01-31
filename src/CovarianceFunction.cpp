@@ -126,7 +126,7 @@ void CovarianceFunction::displayCovarianceParameters(int nspaces) const
 	for(unsigned int i=0; i < (t.size()); i++)
 	{
 		Rprintf("%s %s  (P%d) :", space.c_str(), getParameterName(i).c_str(), i);
-		Rprintf("%f", backwardTransform(t(i)));
+		Rprintf("%1.3f", backwardTransform(t(i)));
 		Rprintf("\n");
 	}
 
