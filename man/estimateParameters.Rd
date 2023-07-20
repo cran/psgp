@@ -37,8 +37,8 @@ coordinates(meuse) = ~x+y
 meuse$value = log(meuse$zinc)
 data(meuse.grid)
 gridded(meuse.grid) = ~x+y
-proj4string(meuse) = CRS("+init=epsg:28992")
-proj4string(meuse.grid) = CRS("+init=epsg:28992")
+proj4string(meuse) = CRS("epsg:28992")
+proj4string(meuse.grid) = CRS("epsg:28992")
 
 # the following two steps are only needed if one wishes to
 # include observation errors
@@ -57,7 +57,7 @@ meuse$oevar <- abs( rnorm( max(meuse$oeid) ) )
 obj = createIntamapObject(
   observations = meuse,
   predictionLocations = meuse.grid,
-  targetCRS = "+init=epsg:3035",
+  targetCRS = "epsg:3035",
   class = "psgp"    # Use PSGP for parameter estimation/interpolation
 )
 

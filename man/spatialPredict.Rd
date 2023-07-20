@@ -34,8 +34,8 @@ coordinates(meuse) = ~x+y
 meuse$value = log(meuse$zinc)
 data(meuse.grid)
 gridded(meuse.grid) = ~x+y
-proj4string(meuse) = CRS("+init=epsg:28992")
-proj4string(meuse.grid) = CRS("+init=epsg:28992")
+proj4string(meuse) = CRS("epsg:28992")
+proj4string(meuse.grid) = CRS("epsg:28992")
 
 # Specify a different observation error model for each observation 
 nobs = length(meuse$value)      # Number of observations
@@ -48,7 +48,7 @@ meuse$oevar <- abs( rnorm( max(meuse$oeid) ) )
 obj = createIntamapObject(
   observations = meuse,
   predictionLocations = meuse.grid,
-  targetCRS = "+init=epsg:3035",
+  targetCRS = "epsg:3035",
   class = "psgp"
 )
 

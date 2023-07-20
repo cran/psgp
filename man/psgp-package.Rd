@@ -28,5 +28,5 @@ This implementation of PSGP for spatial interpolation uses a mixture of covarian
   
   Rasmussen, C. E. and Williams, C. K., Gaussian Processes for Machine Learning,  The MIT Press, Cambridge, Massachusetts, 1996.
   
-  \url{http://arma.sourceforge.net}
+  \url{https://arma.sourceforge.net}
 }

@@ -1,3 +1,4 @@
+options("rgdal_show_exportToProj4_warnings"="none")
 library(psgp)
 set.seed(100)
 # set up data:
@@ -6,8 +7,8 @@ coordinates(meuse) = ~x+y
 meuse$value = log(meuse$zinc)
 data(meuse.grid)
 gridded(meuse.grid) = ~x+y
-proj4string(meuse) = CRS("+init=epsg:28992")
-proj4string(meuse.grid) = CRS("+init=epsg:28992")
+proj4string(meuse) = CRS("EPSG:28992")
+proj4string(meuse.grid) = CRS("EPSG:28992")
 
 # set up intamap object:
 psgpObject = createIntamapObject(
