@@ -1,6 +1,6 @@
 Package: psgp
-Version: 0.3-20
-Date: 2023-07-14
+Version: 0.3-21
+Date: 2023-11-24
 Title: Projected Spatial Gaussian Process Methods
 Author: Ben Ingram <ingrambr.work@gmail.com>, Remi Barillec <remi@igiltd.com>, Jon Olav Skoien <jon.skoien@gmail.com>
 Maintainer: Ben Ingram <ingrambr.work@gmail.com>
@@ -12,5 +12,5 @@ Description: Implements projected sparse Gaussian process Kriging (Ingram 'et. a
 License: GPL (>= 2)
 Repository: CRAN
 NeedsCompilation: yes
-Packaged: 2023-07-18 09:40:20 UTC; skoiejo
-Date/Publication: 2023-07-20 18:40:02 UTC
+Packaged: 2023-11-27 00:48:36 UTC; bri
+Date/Publication: 2023-11-27 16:00:02 UTC

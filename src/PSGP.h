@@ -36,6 +36,7 @@
 #include "LikelihoodType.h"
 
 #include <vector>
+#include <iostream>
 #include "psgp_common.h"
 
 #define LAMBDA_TOLERANCE 1e-10

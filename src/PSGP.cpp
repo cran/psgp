@@ -79,7 +79,7 @@ void PSGP::computePosterior(const LikelihoodType& noiseModel) {
 		uvec randObsIndex = randperm(nObs);
 
 		for (unsigned int i = 0; i < nObs; i++) {
-			Rprintf("\rProcessing observation: %d/%d", i + 1, nObs);
+			//Rprintf("\rProcessing observation: %d/%d", i + 1, nObs);
 			processObservationEP(randObsIndex(i), noiseModel, fixActiveSet);
 		}
 	}
@@ -92,13 +92,14 @@ void PSGP::computePosterior(const LikelihoodType& noiseModel) {
  */
 void PSGP::computePosterior(const arma::ivec& modelIndex,
 		const std::vector<LikelihoodType *> noiseModel) {
-
+    //Rprintf("inside compute posterior\n");
 	bool fixActiveSet = false;
 
 	// Cycle several times through the data, first allowing the active
 	// set to change (for iterChanging iterations) and then fixing it
 	// (for iterFixed iterations)
 	for (int cycle = 1; cycle <= (iterChanging + iterFixed); cycle++) {
+    	//Rprintf("cycle: %d\n", cycle);
 		if (cycle > iterChanging)
 			fixActiveSet = true;
 
@@ -107,8 +108,6 @@ void PSGP::computePosterior(const arma::ivec& modelIndex,
 
 		for (unsigned int iObs = 0; iObs < nObs; iObs++) {
 			unsigned int iModel = modelIndex( randObsIndex(iObs) );
-
-			
 
 			processObservationEP(randObsIndex(iObs), *noiseModel[iModel],
 					fixActiveSet);
@@ -137,7 +136,9 @@ void PSGP::processObservationEP(const unsigned int iObs,
 	vec eHat; // Variance of ??
 
 	// Retrieve location and observation at index iObs
+
 	vec loc = Locations.row(iObs).t();
+
 	double obs = Observations(iObs);
 
 	// Remove previous contribution of observation iObs
@@ -175,6 +176,7 @@ void PSGP::processObservationEP(const unsigned int iObs,
 			switch (algoVersion) {
 
 			case ALGO_V1: {
+
 				// Add observation to active set
 				addActivePoint(iObs, q, r, k, sigmaLoc, gamma, eHat);
 
@@ -188,6 +190,7 @@ void PSGP::processObservationEP(const unsigned int iObs,
 				break;
 			}
 			case ALGO_V2:
+
 				// Swap observation with one existing active point if
 				// the swap results in an improved active set
 				addActivePointAugmented_v1(iObs, q, r, k, sigmaLoc, gamma,
@@ -195,6 +198,8 @@ void PSGP::processObservationEP(const unsigned int iObs,
 				break;
 
 			default: // This also covers the case ALGO_V3
+			
+
 				// Swap observation with one existing active point if
 				// the swap results in an improved active set
 				addActivePointAugmented_v2(iObs, q, r, k, sigmaLoc, gamma,
@@ -224,6 +229,7 @@ void PSGP::processObservationEP(const unsigned int iObs,
 
 	// Remove unneeded active points based on geometry
 	EP_removeCollapsedPoints();
+
 }
 
 /**
@@ -435,8 +441,11 @@ void PSGP::addActivePointAugmented_v1(unsigned int iObs, double q, double r, vec
 void PSGP::addActivePointAugmented_v2(unsigned int iObs, double q, double r, vec k,
 		double sigmaLoc, double gamma, vec eHat) {
 	
+	ActiveSet_new = Locations.row(iObs).t();
+	
 
-	ActiveSet_new = Locations.row(iObs);
+
+	
 	idxActiveSet_new = iObs;
 
 	P_new = zeros(nObs);
@@ -632,7 +641,7 @@ void PSGP::swapActivePoint_v2(unsigned int iDel) {
 		KB.row(iDel) = KB_new.t();
 
 		// Update active set
-		ActiveSet.row(iDel) = ActiveSet_new;
+		ActiveSet.row(iDel) = ActiveSet_new.t();
 		idxActiveSet(iDel) = idxActiveSet_new;
 	}
 
@@ -838,7 +847,7 @@ void PSGP::setParametersVector(const vec p) {
  * Recompute posterior parameters
  */
 void PSGP::recomputePosterior() {
-
+    
 	mat KBold = KB;
 	mat Kplus(Observations.n_elem, sizeActiveSet);
 	covFunc.computeSymmetric(KB, ActiveSet);
@@ -862,6 +871,7 @@ void PSGP::recomputePosterior() {
  * Reset posterior representation
  */
 void PSGP::resetPosterior() {
+    unsigned int szActiveSet = 0;
 	KB.resize(0, 0);
 	Q.resize(0, 0);
 	C.resize(0, 0);
@@ -869,6 +879,7 @@ void PSGP::resetPosterior() {
 	ActiveSet.resize(0, getInputDimensions());
 	idxActiveSet.resize(0);
 	sizeActiveSet = 0;
+
 	P = zeros(Observations.n_elem, 0);
 
 	KB_aug = zeros(maxActiveSet + 1, maxActiveSet + 1);
@@ -883,16 +894,30 @@ void PSGP::resetPosterior() {
 	kb_new = 0.0;
 	c_new = 0.0;
 	q_new = 0.0;
-	idxActiveSet_new = -1;
-	ActiveSet_new = zeros(getInputDimensions());
-	C_new = zeros(maxActiveSet - 1);
-	KB_new = zeros(maxActiveSet - 1);
-	Q_new = zeros(maxActiveSet - 1);
-	P_new = zeros(Observations.n_elem);
 
+	idxActiveSet_new = -1;
+
+	ActiveSet_new = zeros(getInputDimensions());
+
+    
+    if(maxActiveSet > 0) {
+        szActiveSet = maxActiveSet - 1;
+    }
+    else
+    {
+        szActiveSet = 0;
+    }
+    
+	C_new = zeros(szActiveSet);
+	KB_new = zeros(szActiveSet);
+	Q_new = zeros(szActiveSet);
+	P_new = zeros(Observations.n_elem);
 	varEP = zeros(Observations.n_elem);
+
 	meanEP = zeros(Observations.n_elem);
 	logZ = zeros(Observations.n_elem);
+
+
 
 }
 
@@ -922,7 +947,7 @@ double PSGP::objective() const {
 
 	default:
 		// RB: This really ought to throw an exception
-		Rprintf("Error in PSGP::objective: Unknown likelihood type.");
+		//Rprintf("Error in PSGP::objective: Unknown likelihood type.");
 		return 0.0;
 	}
 	return evidence;

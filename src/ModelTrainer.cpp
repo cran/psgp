@@ -40,7 +40,7 @@
 ModelTrainer::ModelTrainer(Optimisable& m) : model(m)
 {
 	// default training options
-	display = true;
+	display = false;
 	errorTolerance = 1.0e-6;
 	parameterTolerance = 1.0e-4;
 	

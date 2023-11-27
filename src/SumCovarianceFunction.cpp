@@ -49,10 +49,10 @@ double SumCovarianceFunction::computeDiagonalElement(const vec& A) const
 
 void SumCovarianceFunction::displayCovarianceParameters(int nspaces) const
 {
-    Rprintf("Covariance function : Sum\n");
+    //Rprintf("Covariance function : Sum\n");
 	for(vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
 	{
-		Rprintf("+ Component: %d\n", i+1);
+		//Rprintf("+ Component: %d\n", i+1);
 		covFunctions[i]->displayCovarianceParameters(nspaces+2);
 	}
 }
@@ -113,7 +113,6 @@ vec SumCovarianceFunction::getParameters() const
 void SumCovarianceFunction::setParameter(const unsigned int parameterNumber, const double value)
 {
 
-	Rprintf("SumCovarianceFunction::setParameter");
 /*
 	int pnum = 0;
 	for(vector<CovarianceFunction *>::size_type i = 0; i < covFunctions.size(); i++)
@@ -161,7 +160,7 @@ string SumCovarianceFunction::getParameterName(const unsigned int parameterNumbe
 		}
 		pnum = pnum + numParams;
 	}
-	Rprintf("We shouldn't reach here - getParamName");
+
 	return("Unknown");
 }
 

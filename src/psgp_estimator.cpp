@@ -40,7 +40,7 @@ void PsgpEstimator::learnParameters(PsgpData& data, vec &psgpParams) {
 	gpTrainer.setAnalyticGradients(true);
 	gpTrainer.setCheckGradient(false);
 
-	Rprintf("Finding optimal parameters");
+	//Rprintf("Finding optimal parameters");
 	for (int i = 0; i < PSGP_PARAM_ITERATIONS; i++) {
 		gpTrainer.Train(PSGP_SCG_ITERATIONS);
 		psgp->recomputePosterior();
@@ -61,13 +61,15 @@ void PsgpEstimator::makePredictions(PsgpData &data, vec psgpParams, mat Xpred, v
 	// Create PSGP without a nugget kernel
 	// This is the default setup - covariance parameters are
 	// overriden below with the provided values
+	
+	
 	setupPsgp(data, true);
 
 	// Override covariance function parameters
 	covFun->setParameters(psgpParams);
 
 	if (!USING_CHUNK_PREDICTION) {
-		Rprintf("Predicting...");
+		//Rprintf("Predicting...");
 		psgp->makePredictions(meanPred, varPred, Xpred, *covFun);
 	} else {
 		int numPred = Xpred.n_rows;
@@ -83,8 +85,7 @@ void PsgpEstimator::makePredictions(PsgpData &data, vec psgpParams, mat Xpred, v
 
 		// Predict one chunk at a time
 		while (startVal < numPred) {
-			Rprintf("  Predicting chunk [ %d:%d / %d ]\n", startVal, endVal,
-					numPred);
+			//Rprintf("  Predicting chunk [ %d:%d / %d ]\n", startVal, endVal, numPred);
 
 			mat XpredChunk = Xpred.rows(startVal, endVal);
 
@@ -92,7 +93,6 @@ void PsgpEstimator::makePredictions(PsgpData &data, vec psgpParams, mat Xpred, v
 			vec meanPredChunk(chunkSize);
 			vec varPredChunk(chunkSize);
 
-			Rprintf("Predict using PSGP\n");
 			psgp->makePredictions(meanPredChunk, varPredChunk, XpredChunk,
 					*covFun);
 
@@ -109,7 +109,7 @@ void PsgpEstimator::makePredictions(PsgpData &data, vec psgpParams, mat Xpred, v
 		} // end while loop
 	}
 
-	Rprintf("PSGP used the following parameters:");
+	//Rprintf("PSGP used the following parameters:");
 	covFun->displayCovarianceParameters();
 }
 
@@ -118,6 +118,7 @@ void PsgpEstimator::makePredictions(PsgpData &data, vec psgpParams, mat Xpred, v
  * Instantiate and initialise the PSGP object
  */
 void PsgpEstimator::setupPsgp(PsgpData &data, bool forPrediction) {
+
 
 	setupCovarianceFunction(data, forPrediction);
 
@@ -133,9 +134,8 @@ void PsgpEstimator::setupPsgp(PsgpData &data, bool forPrediction) {
 
 	if (numModels == 0) {
 		GaussianLikelihood* defaultLikelihood;
-		Rprintf("No noise model specified\n");
-		Rprintf("Defaulting to GAUSSIAN with variance %1.2f\n",
-				(data.getNugget() * LIKELIHOOD_NUGGET_RATIO));
+		//Rprintf("No noise model specified\n");
+		//Rprintf("Defaulting to GAUSSIAN with variance %1.2f\n", (data.getNugget() * LIKELIHOOD_NUGGET_RATIO));
 		defaultLikelihood = new GaussianLikelihood(
 				data.getNugget() * LIKELIHOOD_NUGGET_RATIO);
 
@@ -143,8 +143,8 @@ void PsgpEstimator::setupPsgp(PsgpData &data, bool forPrediction) {
 		psgp->computePosterior(*defaultLikelihood);
 		delete defaultLikelihood;
 	} else {
-		Rprintf("Observation error characteristics specified.\n");
-		Rprintf("Building error models from sensor metadata table.\n");
+		//Rprintf("Observation error characteristics specified.\n");
+		//Rprintf("Building error models from sensor metadata table.\n");
 
 		arma::ivec sensorIndices = data.getSensorIndices();
 		psgp->computePosterior(sensorIndices, data.getSensorModels());

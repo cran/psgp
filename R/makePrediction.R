@@ -47,6 +47,8 @@ makePrediction <- function(object, vario)
   {
     metaData <- buildMetadata(inputs);
   }
+ 
+  
 
   try(
   r <- .Call("predict", x, y, tx, vario, obsErrId,

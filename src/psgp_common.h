@@ -16,6 +16,7 @@
 
 typedef arma::mat mat;
 typedef arma::vec vec;
+typedef arma::rowvec rowvec;
 typedef arma::uvec uvec;
 
 namespace psgp_arma

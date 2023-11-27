@@ -1,6 +1,7 @@
 #include "psgp_settings.h"
 #include "psgp_data.h"
 #include "psgp_estimator.h"
+#include <Rinternals.h>
 
 #define length Rf_length
 #define allocVector Rf_allocVector
@@ -18,17 +19,22 @@
  */
 PsgpData prepareData(SEXP xData, SEXP yData, SEXP params, SEXP sensorMetadata, SEXP sensorIndices, bool paramsFromVario) {
 	PsgpData data;
+
 	data.setX(xData);
 	data.setY(yData);
 
+	
 	// If variogram parameters are passed in, use them to set PSGP parameters
 	// If none are passed in, they won't be used (they are only used for parameter
 	// estimation, not for prediction)
 	if (paramsFromVario) {
+
 		data.setPsgpParamsFromVariogram(params);
 	} else {
+
 		data.setPsgpParamsFromInference(params);
 	}
+
 	data.setSensorMetadata(sensorIndices, sensorMetadata);
 	return data;
 }
@@ -70,8 +76,6 @@ SEXP estimateParams(SEXP xData, SEXP yData, SEXP vario, SEXP sensorIndices,
 	// valid, i.e. negative...)
 	PsgpEstimator estimator;
 
-
-
 	vec params;
 
 	estimator.learnParameters(data, params);
@@ -110,27 +114,32 @@ SEXP predict(SEXP xData, SEXP yData, SEXP xPred, SEXP R_psgpParams, SEXP sensorI
 	// Convert data from R structures to vectors and matrices
 	PsgpData data = prepareData(xData, yData, R_psgpParams, sensorMetadata, sensorIndices, false);
 
+
 	vec psgpParams(REAL(R_psgpParams), length(R_psgpParams));
 
 	// Prediction inputs and outputs
 	int numPred = length(xPred)/2;
-	mat Xpred(REAL(xPred), numPred, 2);
 
+	mat Xpred(REAL(xPred), numPred, 2);
+ 
 	vec meanPred(numPred);
 	vec varPred(numPred);
 
 	// Make predictions using PSGP
 	PsgpEstimator estimator;
-	Rprintf("Make prediction\n");
+	
 	estimator.makePredictions(data, psgpParams, Xpred, meanPred, varPred);
+
+	
 
 	// Copy results to R structures
 	PROTECT(meanResult = allocVector(REALSXP, numPred));
 	PROTECT(varResult = allocVector(REALSXP, numPred));
 	PROTECT(ans = allocVector(VECSXP, 2));
-
+ 
 	double* ptr_meanResult = REAL(meanResult);
 	double* ptr_varResult = REAL(varResult);
+	
 	for(int i=0; i < numPred; i++)
 	{
 		ptr_meanResult[i] = meanPred(i);
@@ -141,6 +150,9 @@ SEXP predict(SEXP xData, SEXP yData, SEXP xPred, SEXP R_psgpParams, SEXP sensorI
 	SET_VECTOR_ELT(ans, 1, varResult);
 
 	UNPROTECT(3);
+	
+
+	
 	return ans;
 }
 } // END OF EXTERN C

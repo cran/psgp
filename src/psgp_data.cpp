@@ -54,13 +54,28 @@ void PsgpData::setX(const mat X) {
  * Sets the 3rd column of the data matrix using the output data
  * from the provided pointer.
  */
-void PsgpData::setY(const SEXP yPtr) {
+//void PsgpData::setY(const SEXP yPtr) {
 	// Reshape data as a 2-column matrix (coordinate points)
-	double* yData = REAL(yPtr);
-	int nobs = length(yPtr);
-	vec Y(yData, nobs);
-	setY(Y);
-}
+//	if(yPtr != NULL) {
+//	    double* yData = REAL(yPtr);
+//	    int nobs = length(yPtr);
+//	    vec Y(yData, nobs);
+//	    setY(Y);
+//	}
+//}
+
+void PsgpData::setY(const SEXP yPtr) {
+        // Check if yPtr is not NULL and is a numeric vector
+        if (yPtr != R_NilValue && Rf_isNumeric(yPtr)) {
+            int nobs = Rf_length(yPtr); // Number of observations
+            if (nobs > 0) {
+                double* yData = REAL(yPtr);
+                vec Y(yData, nobs);
+                setY(Y); // Assuming setY(vec) is defined elsewhere
+            }
+        }
+        // Else handle the case where yPtr is not as expected
+    }
 
 
 void PsgpData::setY(const vec Y) {
