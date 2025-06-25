@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+Version 0.3-22 (18-06-2025)
+  * Fixed minor bug with tests
+
 Version 0.3-21 (24-11-2020)
   * Fixed bug with vector transpose in active set update
 

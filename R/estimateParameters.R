@@ -1,14 +1,14 @@
-estimateParameters.psgp = function(object, ...) {
+estimateParameters.psgp <- function(object, ...) {
 
-  origObs = object$observations
+  origObs <- object$observations
   
-  rotated = FALSE
+  rotated <- FALSE
   if (object$params$doAnisotropy) {
-      object = estimateAnisotropy(object) 
+      object <- estimateAnisotropy(object) 
       #rotate Data
     if (object$anisPar$doRotation && all(as.character(object$formulaString[[3]])=="1"))
       object$observations=rotateAnisotropicData(object$observations,object$anisPar)
-    rotated = TRUE
+    rotated <- TRUE
   }  
 
   
@@ -17,10 +17,10 @@ estimateParameters.psgp = function(object, ...) {
   # object$observations$oevar = origObs$oevar
   
   # Estimate parameters using PSGP
-  object = learnParameters(object)
+  object <- learnParameters(object)
 
   # Restore original observations
   if (rotated) 
-    object$observations = origObs
+    object$observations <- origObs
   object
 }

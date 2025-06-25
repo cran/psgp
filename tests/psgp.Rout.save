@@ -1,11 +1,13 @@
 
-R version 4.1.2 (2021-11-01) -- "Bird Hippie"
-Copyright (C) 2021 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
+R version 4.5.0 (2025-04-11) -- "How About a Twenty-Six"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
 
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
@@ -15,18 +17,24 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
+> rm(list = ls(all.names = TRUE))
+> 
+> options(warn = -1)  # Temporarily suppress warnings
+> old_omp_thread_limit <- Sys.getenv("OMP_THREAD_LIMIT")
+> Sys.setenv(OMP_THREAD_LIMIT = "2")
+> 
 > library(automap)
 > library(psgp)
 Loading required package: intamap
 Loading required package: sp
 > 
 > data(meuse)
-> observations = data.frame(x = meuse$x,y = meuse$y,value = log(meuse$zinc))
+> observations <- data.frame(x = meuse$x,y = meuse$y,value = log(meuse$zinc))
 > coordinates(observations) = ~x+y
 > set.seed(13531)
-> predictionLocations = spsample(observations, 50, "regular")
+> predictionLocations <- spsample(observations, 50, "regular")
 > 
-> krigingObject = createIntamapObject(
+> krigingObject <- createIntamapObject(
 + 	observations = observations,
 + 	predictionLocations = predictionLocations,
 +   formulaString = as.formula(value~1),
@@ -34,12 +42,12 @@ Loading required package: sp
 +   outputWhat = list(mean=TRUE, variance=TRUE, excprob = 5.9, cumdistr = 5.9, 
 + 		quantile = .1)
 + )
-> class(krigingObject) = c("psgp")
+> class(krigingObject) <- c("psgp")
 > 
 > checkSetup(krigingObject)
 Checking object ... OK
-> krigingObject = preProcess(krigingObject)
-> krigingObject = estimateParameters(krigingObject)
+> krigingObject <- preProcess(krigingObject)
+> krigingObject <- estimateParameters(krigingObject)
 Range: 716.69
 Sill: 0.77
 Nugget: 0.01
@@ -54,7 +62,7 @@ Bias: 0.17
    Amplitude  (P0) :0.170
    Covariance function : White noise
    Variance  (P0) :0.007
-> krigingObject = spatialPredict(krigingObject)
+> krigingObject <- spatialPredict(krigingObject)
    Covariance function : Isotropic Exponential
    Range  (P0) :853.589
    Variance  (P1) :1.070
@@ -63,7 +71,7 @@ Bias: 0.17
    Variance  (P1) :0.881
    Covariance function : Constant
    Amplitude  (P0) :0.024
-> krigingObject = postProcess(krigingObject)
+> krigingObject <- postProcess(krigingObject)
 > 
 > # Send predictions back to Java. 
 > summary(krigingObject$outputTable)
@@ -121,6 +129,10 @@ Data attributes:
 1   Nug 0.04848089   0.0000
 2   Sph 0.58754741 889.9084
 > 
+> # Restore original settings at the end
+> Sys.setenv(OMP_THREAD_LIMIT = old_omp_thread_limit)
+> options(warn = 0)  # Restore warning level
+> 
 > proc.time()
    user  system elapsed 
- 14.594  14.208   3.064 
+  3.952   8.246   1.931 

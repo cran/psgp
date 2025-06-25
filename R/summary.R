@@ -1,11 +1,11 @@
 
 
-summary.psgp = function(object, ...) {
+summary.psgp <- function(object, ...) {
   summaryIntamap(object, ...)
 }
 
 
 
-plot.psgp = function(x, ...) {
+plot.psgp <- function(x, ...) {
   plotIntamap(x,  ...)
 }

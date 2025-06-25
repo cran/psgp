@@ -1,19 +1,19 @@
 makePrediction <- function(object, vario)
 {
-  inputs = object$observations
-  pred = object$predictionLocations
+  inputs <- object$observations
+  pred <- object$predictionLocations
   
   # put data into an easy parseable format for the backend C++ code
-  x = coordinates(inputs)
-  y = as.vector(inputs$value)
+  x <- coordinates(inputs)
+  y <- as.vector(inputs$value)
   
   ### error variance vector
-  e = as.vector(inputs$var)
+  e <- as.vector(inputs$var)
   
-  tx = coordinates(pred)
+  tx <- coordinates(pred)
   
   ### error variance vector
-  e = as.vector(inputs$value)
+  e <- as.vector(inputs$value)
   
   #-------------------------------------
   # Extract observation error components
@@ -35,11 +35,11 @@ makePrediction <- function(object, vario)
   #   - the biases of the error models (oebias) - same as above for the bias
   #     The variance and bias terms are only taken into account if no metadata
   #     is provided, and are converted to a valid metadata table.
-  obsErrId = as.integer(inputs$oeid)
-  sensorId = as.integer(inputs$sensor)
+  obsErrId <- as.integer(inputs$oeid)
+  sensorId <- as.integer(inputs$sensor)
   
   # If a metadata has been provided, pass it to PSGP directly
-  metaData = object$obsChar
+  metaData <- object$obsChar
   
   # Otherwise, check if observation error information has been 
   # provided instead

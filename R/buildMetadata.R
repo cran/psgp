@@ -1,25 +1,25 @@
 buildMetadata <- function(observations) 
 {
   # Retrieve variance for each error model
-  obsErrVar  = as.double(observations$oevar)
+  obsErrVar  <- as.double(observations$oevar)
   
   # If no variances provided, then there is no observation error
   # Otherwise, check for bias
   if (!is.null(obsErrVar)) 
   {
     # Retrieve bias for each error model - this can be omitted by the user
-    obsErrBias = as.double(observations$oebias)
+    obsErrBias <- as.double(observations$oebias)
     
     # If no bias provided, use zero bias for each error model
     if (is.null(obsErrBias) || length(obsErrBias) == 0) {
-      obsErrBias = rep(0.0, length(obsErrVar))
+      obsErrBias <- rep(0.0, length(obsErrVar))
     }
     
     # Check that we have enough variances and biases, i.e.
     # we need at least max(observations$oeid) error models where oeid
     # is a vector of indexes giving the error model used for each
     # observation
-    nErrorModels = max(observations$oeid,0)
+    nErrorModels <- max(observations$oeid,0)
     if ( length(obsErrVar) < nErrorModels || length(obsErrBias) < nErrorModels )
     {
       print("Observation error index exceeds number of error models")
@@ -31,7 +31,7 @@ buildMetadata <- function(observations)
     else 
     {
       # Build list of (Gaussian) model descriptors 
-      metaData = mapply(FUN = function(...) paste("GAUSSIAN",...,sep=","), 
+      metaData <- mapply(FUN <- function(...) paste("GAUSSIAN",...,sep=","), 
                         obsErrBias,obsErrVar)
       
       # Append sensor model.
@@ -40,11 +40,11 @@ buildMetadata <- function(observations)
       # expects). In the future, when we add support for sensor models,
       # this will allow MathML expressions (if I understand correctly)
       # to be passed in.
-      sensorModel = length(obsErrVar) + 1
-      metaData[sensorModel] = ""
+      sensorModel <- length(obsErrVar) + 1
+      metaData[sensorModel] <- ""
       
       # Convert vector to list
-      metaData = as.list(metaData);
+      metaData <- as.list(metaData);
     }
   }
   metaData
