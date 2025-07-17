@@ -1,11 +1,18 @@
 rm(list = ls(all.names = TRUE))
 
-options(warn = -1)  # Temporarily suppress warnings
-old_omp_thread_limit <- Sys.getenv("OMP_THREAD_LIMIT")
-Sys.setenv(OMP_THREAD_LIMIT = "2")
+# Suppress warnings and OpenMP messages
+options(warn = -1)
+options(save = "no")
+options(digits=8)
+Sys.unsetenv("KMP_DEVICE_THREAD_LIMIT")
+Sys.unsetenv("KMP_ALL_THREADS")
+Sys.unsetenv("KMP_TEAMS_THREAD_LIMIT")
+Sys.unsetenv("OMP_THREAD_LIMIT")
 
 library(psgp)
+
 set.seed(100)
+
 # set up data:
 data(meuse)
 coordinates(meuse) <- ~x+y
@@ -37,5 +44,4 @@ psgpObject <- spatialPredict(psgpObject)
 # plotIntamap(meuse, pch=1, cex=sqrt(meuse$value)/20, add=TRUE)
 
 # Restore original settings at the end
-Sys.setenv(OMP_THREAD_LIMIT = old_omp_thread_limit)
 options(warn = 0)  # Restore warning level

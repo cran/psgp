@@ -7,8 +7,6 @@ R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
 
-  Natural language support but running in an English locale
-
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
 'citation()' on how to cite R or R packages in publications.
@@ -19,14 +17,21 @@ Type 'q()' to quit R.
 
 > rm(list = ls(all.names = TRUE))
 > 
-> options(warn = -1)  # Temporarily suppress warnings
-> old_omp_thread_limit <- Sys.getenv("OMP_THREAD_LIMIT")
-> Sys.setenv(OMP_THREAD_LIMIT = "2")
+> # Suppress warnings and OpenMP messages
+> options(warn = -1)
+> options(save = "no")
+> options(digits=8)
+> Sys.unsetenv("KMP_DEVICE_THREAD_LIMIT")
+> Sys.unsetenv("KMP_ALL_THREADS")
+> Sys.unsetenv("KMP_TEAMS_THREAD_LIMIT")
+> Sys.unsetenv("OMP_THREAD_LIMIT")
 > 
 > library(psgp)
 Loading required package: intamap
 Loading required package: sp
+> 
 > set.seed(100)
+> 
 > # set up data:
 > data(meuse)
 > coordinates(meuse) <- ~x+y
@@ -82,9 +87,8 @@ Bias: 0.17
 > # plotIntamap(meuse, pch=1, cex=sqrt(meuse$value)/20, add=TRUE)
 > 
 > # Restore original settings at the end
-> Sys.setenv(OMP_THREAD_LIMIT = old_omp_thread_limit)
 > options(warn = 0)  # Restore warning level
 > 
 > proc.time()
    user  system elapsed 
-  3.972   8.209   1.925 
+  1.597   0.103   1.691 

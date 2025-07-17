@@ -1,5 +1,5 @@
-54a0633f7f6c5610be5cf171bb07323c *ChangeLog
-6a6b9afe66e61f2546cca17135a25552 *DESCRIPTION
+b80270b93baca606a4ee1ca471d708ea *ChangeLog
+e1e44a53caa2eacd557a848aff0ce158 *DESCRIPTION
 16161eb908bec02b06ebbe405496deac *NAMESPACE
 f28c8ed3b23f7a7d0920e5ecc13bfcfc *R/buildMetadata.R
 f4368efceed01dea5738727eb499294b *R/estimateParameters.R
@@ -56,7 +56,7 @@ ff34aa02363e7c6da21c9c147019c6a1 *src/WhiteNoiseCF.cpp
 5b0614fd760a47dd31fbfcf5d1bbb067 *src/psgp_settings.h
 26ccf4d1459fe00460503a6ec24cfb95 *src/sensor_metadata_parser.cpp
 089fc9b3aa0b8f41b6b004fcd00532c9 *src/sensor_metadata_parser.h
-680f86021f7ed6de98f6efbef4f71a69 *tests/meuse_psgp.R
-b572ef417916dff54ebdbb10f48a6f5e *tests/meuse_psgp.Rout.save
-1300cf1aaa97cbde280d92890ccbb316 *tests/psgp.R
-dab99f375dc2281a84b0697579639442 *tests/psgp.Rout.save
+a9b2cb84c36ae96553fca1194ef79520 *tests/meuse_psgp.R
+17d05133d62d467f850b6c1798ac9ab0 *tests/meuse_psgp.Rout.save
+9443d7011d50c6ed8e678156fcb04fa6 *tests/psgp.R
+0cbc449e5f0fb91f11af22edc5645b66 *tests/psgp.Rout.save

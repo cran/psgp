@@ -1,16 +1,23 @@
 rm(list = ls(all.names = TRUE))
 
-options(warn = -1)  # Temporarily suppress warnings
-old_omp_thread_limit <- Sys.getenv("OMP_THREAD_LIMIT")
-Sys.setenv(OMP_THREAD_LIMIT = "2")
+# Suppress warnings and OpenMP messages
+options(warn = -1)
+options(save = "no")
+options(digits=8)
+Sys.unsetenv("KMP_DEVICE_THREAD_LIMIT")
+Sys.unsetenv("KMP_ALL_THREADS")
+Sys.unsetenv("KMP_TEAMS_THREAD_LIMIT")
+Sys.unsetenv("OMP_THREAD_LIMIT")
 
 library(automap)
 library(psgp)
 
+set.seed(13531)
+
 data(meuse)
 observations <- data.frame(x = meuse$x,y = meuse$y,value = log(meuse$zinc))
 coordinates(observations) = ~x+y
-set.seed(13531)
+
 predictionLocations <- spsample(observations, 50, "regular")
 
 krigingObject <- createIntamapObject(
@@ -36,5 +43,4 @@ summary(autoKrige(value~1,krigingObject$observations,predictionLocations)$krige_
 autofitVariogram(value~1,krigingObject$observations)$var_model
 
 # Restore original settings at the end
-Sys.setenv(OMP_THREAD_LIMIT = old_omp_thread_limit)
 options(warn = 0)  # Restore warning level

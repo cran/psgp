@@ -7,8 +7,6 @@ R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
 
-  Natural language support but running in an English locale
-
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
 'citation()' on how to cite R or R packages in publications.
@@ -19,19 +17,26 @@ Type 'q()' to quit R.
 
 > rm(list = ls(all.names = TRUE))
 > 
-> options(warn = -1)  # Temporarily suppress warnings
-> old_omp_thread_limit <- Sys.getenv("OMP_THREAD_LIMIT")
-> Sys.setenv(OMP_THREAD_LIMIT = "2")
+> # Suppress warnings and OpenMP messages
+> options(warn = -1)
+> options(save = "no")
+> options(digits=8)
+> Sys.unsetenv("KMP_DEVICE_THREAD_LIMIT")
+> Sys.unsetenv("KMP_ALL_THREADS")
+> Sys.unsetenv("KMP_TEAMS_THREAD_LIMIT")
+> Sys.unsetenv("OMP_THREAD_LIMIT")
 > 
 > library(automap)
 > library(psgp)
 Loading required package: intamap
 Loading required package: sp
 > 
+> set.seed(13531)
+> 
 > data(meuse)
 > observations <- data.frame(x = meuse$x,y = meuse$y,value = log(meuse$zinc))
 > coordinates(observations) = ~x+y
-> set.seed(13531)
+> 
 > predictionLocations <- spsample(observations, 50, "regular")
 > 
 > krigingObject <- createIntamapObject(
@@ -75,20 +80,20 @@ Bias: 0.17
 > 
 > # Send predictions back to Java. 
 > summary(krigingObject$outputTable)
-       x                y               mean          variance      
- Min.   :179019   Min.   :330013   Min.   :4.764   Min.   :0.03598  
- 1st Qu.:179485   1st Qu.:330829   1st Qu.:5.308   1st Qu.:0.07071  
- Median :180183   Median :331644   Median :5.847   Median :0.25432  
- Mean   :180183   Mean   :331644   Mean   :6.257   Mean   :0.48075  
- 3rd Qu.:180882   3rd Qu.:332459   3rd Qu.:7.478   3rd Qu.:0.69737  
- Max.   :181348   Max.   :333275   Max.   :8.178   Max.   :1.91163  
-   excprob5.9         cumdistr5.9       quantile0.1   
- Min.   :0.0000083   Min.   :0.00000   Min.   :3.999  
- 1st Qu.:0.0549899   1st Qu.:0.01972   1st Qu.:4.638  
- Median :0.4629025   Median :0.53710   Median :5.227  
- Mean   :0.5165062   Mean   :0.48349   Mean   :5.491  
- 3rd Qu.:0.9802802   3rd Qu.:0.94501   3rd Qu.:6.480  
- Max.   :1.0000000   Max.   :0.99999   Max.   :7.298  
+       x                y               mean           variance       
+ Min.   :179019   Min.   :330013   Min.   :4.7636   Min.   :0.035979  
+ 1st Qu.:179485   1st Qu.:330829   1st Qu.:5.3083   1st Qu.:0.070713  
+ Median :180183   Median :331644   Median :5.8473   Median :0.254319  
+ Mean   :180183   Mean   :331644   Mean   :6.2568   Mean   :0.480755  
+ 3rd Qu.:180882   3rd Qu.:332459   3rd Qu.:7.4779   3rd Qu.:0.697373  
+ Max.   :181348   Max.   :333275   Max.   :8.1775   Max.   :1.911630  
+   excprob5.9          cumdistr5.9          quantile0.1    
+ Min.   :8.3030e-06   Min.   :1.0000e-09   Min.   :3.9991  
+ 1st Qu.:5.4990e-02   1st Qu.:1.9720e-02   1st Qu.:4.6377  
+ Median :4.6290e-01   Median :5.3710e-01   Median :5.2271  
+ Mean   :5.1651e-01   Mean   :4.8349e-01   Mean   :5.4913  
+ 3rd Qu.:9.8028e-01   3rd Qu.:9.4501e-01   3rd Qu.:6.4796  
+ Max.   :1.0000e+00   Max.   :9.9999e-01   Max.   :7.2978  
 > summary(krigingObject$observations)
 Object of class SpatialPointsDataFrame
 Coordinates:
@@ -99,40 +104,39 @@ Is projected: NA
 proj4string : [NA]
 Number of points: 155
 Data attributes:
-     value      
- Min.   :4.727  
- 1st Qu.:5.288  
- Median :5.787  
- Mean   :5.886  
- 3rd Qu.:6.514  
- Max.   :7.517  
+     value       
+ Min.   :4.7274  
+ 1st Qu.:5.2883  
+ Median :5.7869  
+ Mean   :5.8858  
+ 3rd Qu.:6.5140  
+ Max.   :7.5170  
 > summary(autoKrige(value~1,krigingObject$observations,predictionLocations)$krige_output)
 [using ordinary kriging]
 Object of class SpatialPointsDataFrame
 Coordinates:
-        min      max
-x1 179018.6 181348.1
-x2 330013.4 333274.7
+         min       max
+x1 179018.64 181348.14
+x2 330013.38 333274.69
 Is projected: NA 
 proj4string : [NA]
 Number of points: 48
 Data attributes:
-   var1.pred        var1.var        var1.stdev    
- Min.   :4.929   Min.   :0.1153   Min.   :0.3395  
- 1st Qu.:5.518   1st Qu.:0.1615   1st Qu.:0.4018  
- Median :6.047   Median :0.3582   Median :0.5963  
- Mean   :5.978   Mean   :0.3827   Mean   :0.5909  
- 3rd Qu.:6.337   3rd Qu.:0.6026   3rd Qu.:0.7762  
- Max.   :7.472   Max.   :0.6752   Max.   :0.8217  
+   var1.pred         var1.var         var1.stdev     
+ Min.   :4.9294   Min.   :0.11529   Min.   :0.33955  
+ 1st Qu.:5.5178   1st Qu.:0.16147   1st Qu.:0.40183  
+ Median :6.0472   Median :0.35825   Median :0.59628  
+ Mean   :5.9782   Mean   :0.38267   Mean   :0.59094  
+ 3rd Qu.:6.3371   3rd Qu.:0.60263   3rd Qu.:0.77617  
+ Max.   :7.4723   Max.   :0.67518   Max.   :0.82169  
 > autofitVariogram(value~1,krigingObject$observations)$var_model
-  model      psill    range
-1   Nug 0.04848089   0.0000
-2   Sph 0.58754741 889.9084
+  model       psill     range
+1   Nug 0.048480886   0.00000
+2   Sph 0.587547410 889.90843
 > 
 > # Restore original settings at the end
-> Sys.setenv(OMP_THREAD_LIMIT = old_omp_thread_limit)
 > options(warn = 0)  # Restore warning level
 > 
 > proc.time()
    user  system elapsed 
-  3.952   8.246   1.931 
+  1.681   0.122   1.832 
