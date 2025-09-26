@@ -184,8 +184,7 @@ void PSGP::processObservationEP(const unsigned int iObs,
 				vec scores = scoreActivePoints(FullKL);
 
 				// Remove active point with lowest score, and update alpha, C, Q and P
-				unsigned int swapCandidate;
-				scores.min(swapCandidate);
+				unsigned int swapCandidate = scores.index_min();
 				deleteActivePoint(swapCandidate);
 				break;
 			}
@@ -420,8 +419,7 @@ void PSGP::addActivePointAugmented_v1(unsigned int iObs, double q, double r, vec
 	vec scores = scoreActivePoints(FullKL);
 
 	// Remove active point with lowest score, and update alpha, C, Q and P
-	unsigned int swapCandidate;
-	scores.min(swapCandidate);
+	unsigned int swapCandidate = scores.index_min();
 	swapActivePoint_v1(swapCandidate);
 }
 
@@ -477,8 +475,7 @@ void PSGP::addActivePointAugmented_v2(unsigned int iObs, double q, double r, vec
 
 	// Remove active point with lowest score, and update alpha, C, Q and P
 	// int swapCandidate = min_index(scores);
-	unsigned int swapCandidate;
-	scores.min(swapCandidate);
+	unsigned int swapCandidate = scores.index_min();
 	swapActivePoint_v2(swapCandidate);
 }
 
@@ -660,8 +657,7 @@ void PSGP::swapActivePoint_v2(unsigned int iDel) {
 void PSGP::EP_removeCollapsedPoints() {
 	while (sizeActiveSet > 0) {
 		vec scores = scoreActivePoints(Geometric);
-		unsigned int removalCandidate;
-		scores.min(removalCandidate);
+		unsigned int removalCandidate = scores.index_min();
 
 		if (scores(removalCandidate) >= (gammaTolerance / 1000.0)) {
 			break;
