@@ -122,9 +122,16 @@ void PsgpEstimator::setupPsgp(PsgpData &data, bool forPrediction) {
 
 	setupCovarianceFunction(data, forPrediction);
 
-	// Create PSGP instance
-	psgp = new PSGP(data.getX(), data.getY(), *covFun, activePoints,
-			updateSweeps, fixedSweeps);
+	// Create PSGP instance with exception safety
+	PSGP* temp_psgp = NULL;
+	try {
+		temp_psgp = new PSGP(data.getX(), data.getY(), *covFun, activePoints,
+				updateSweeps, fixedSweeps);
+		psgp = temp_psgp; // Only assign on success
+	} catch (...) {
+		delete temp_psgp; // Clean up on failure
+		throw; // Re-throw the exception
+	}
 
 	// Set up the likelihood - Gaussian by default, unless
 	// sensor models have been provided
@@ -160,19 +167,44 @@ void PsgpEstimator::setupPsgp(PsgpData &data, bool forPrediction) {
  * Set up the covariance function
  */
 void PsgpEstimator::setupCovarianceFunction(const PsgpData &data, bool forPrediction) {
-	// Covariance function components
-	expKernel = new ExponentialCF(data.getRangeExp(), data.getSillExp());
-	mat5Kernel = new Matern5CF(data.getRangeMat5(), data.getSillMat5());
-	constKernel = new ConstantCF(data.getBias());
-	nuggetKernel = new WhiteNoiseCF(data.getNugget());
+	// Initialize all pointers to NULL for safe cleanup
+	ExponentialCF* temp_expKernel = NULL;
+	Matern5CF* temp_mat5Kernel = NULL;
+	ConstantCF* temp_constKernel = NULL;
+	WhiteNoiseCF* temp_nuggetKernel = NULL;
+	SumCovarianceFunction* temp_covFun = NULL;
 
-	// Final covariance function is kernel + bias + white noise
-	covFun = new SumCovarianceFunction(*expKernel);
-	((SumCovarianceFunction*) covFun)->addCovarianceFunction(*mat5Kernel);
-	((SumCovarianceFunction*) covFun)->addCovarianceFunction(*constKernel);
+	try {
+		// Covariance function components
+		temp_expKernel = new ExponentialCF(data.getRangeExp(), data.getSillExp());
+		temp_mat5Kernel = new Matern5CF(data.getRangeMat5(), data.getSillMat5());
+		temp_constKernel = new ConstantCF(data.getBias());
+		temp_nuggetKernel = new WhiteNoiseCF(data.getNugget());
 
-	if (!forPrediction) {
-		((SumCovarianceFunction*) covFun)->addCovarianceFunction(*nuggetKernel);
+		// Final covariance function is kernel + bias + white noise
+		temp_covFun = new SumCovarianceFunction(*temp_expKernel);
+
+		// Only assign to member variables after all allocations succeed
+		expKernel = temp_expKernel;
+		mat5Kernel = temp_mat5Kernel;
+		constKernel = temp_constKernel;
+		nuggetKernel = temp_nuggetKernel;
+		covFun = temp_covFun;
+
+		((SumCovarianceFunction*) covFun)->addCovarianceFunction(*mat5Kernel);
+		((SumCovarianceFunction*) covFun)->addCovarianceFunction(*constKernel);
+
+		if (!forPrediction) {
+			((SumCovarianceFunction*) covFun)->addCovarianceFunction(*nuggetKernel);
+		}
+	} catch (...) {
+		// Clean up any allocated memory on failure
+		delete temp_expKernel;
+		delete temp_mat5Kernel;
+		delete temp_constKernel;
+		delete temp_nuggetKernel;
+		delete temp_covFun;
+		throw; // Re-throw the exception
 	}
 }
 

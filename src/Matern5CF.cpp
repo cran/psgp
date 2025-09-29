@@ -123,6 +123,7 @@ inline double Matern5CF::computeElement(const vec& A, const vec& B) const
  */
 inline double Matern5CF::computeDiagonalElement(const vec& A) const
 {
+    (void)A; // Suppress unused parameter warning
     return variance;
 }
 

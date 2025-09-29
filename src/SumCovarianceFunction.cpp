@@ -112,6 +112,7 @@ vec SumCovarianceFunction::getParameters() const
 
 void SumCovarianceFunction::setParameter(const unsigned int parameterNumber, const double value)
 {
+	(void)value; // Suppress unused parameter warning
 
 /*
 	int pnum = 0;
@@ -126,7 +127,7 @@ void SumCovarianceFunction::setParameter(const unsigned int parameterNumber, con
 		pnum = pnum + numParams;
 	}
 	*/
-	Rprintf("We shouldn't reach here - setParam : %d", parameterNumber);
+	Rprintf("We shouldn't reach here - setParam : %u", parameterNumber);
 }
 
 double SumCovarianceFunction::getParameter(const unsigned int parameterNumber) const

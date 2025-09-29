@@ -18,6 +18,17 @@
  * Populate a PsgpData object with the data from R structures
  */
 PsgpData prepareData(SEXP xData, SEXP yData, SEXP params, SEXP sensorMetadata, SEXP sensorIndices, bool paramsFromVario) {
+	// Input validation
+	if (xData == R_NilValue || yData == R_NilValue) {
+		Rf_error("xData and yData cannot be NULL");
+	}
+	if (length(xData) != length(yData) * 2) {
+		Rf_error("xData length must be twice yData length (x,y coordinates for each observation)");
+	}
+	if (length(yData) <= 0) {
+		Rf_error("yData must contain at least one observation");
+	}
+
 	PsgpData data;
 
 	data.setX(xData);
@@ -48,6 +59,7 @@ extern "C" {
 SEXP estimateParams(SEXP xData, SEXP yData, SEXP vario, SEXP sensorIndices,
 		SEXP unusedIndices, SEXP sensorMetadata) {
 
+	(void)unusedIndices; // Suppress unused parameter warning
 	double *varioPtr = REAL(vario);   // Pointer to variogram parameters
 
 	// PSGP parameters in R format
@@ -107,6 +119,7 @@ SEXP estimateParams(SEXP xData, SEXP yData, SEXP vario, SEXP sensorIndices,
 SEXP predict(SEXP xData, SEXP yData, SEXP xPred, SEXP R_psgpParams, SEXP sensorIndices,
 		SEXP unusedIndices,  SEXP sensorMetadata) {
 
+	(void)unusedIndices; // Suppress unused parameter warning
 	SEXP meanResult;
 	SEXP varResult;
 	SEXP ans;
@@ -117,9 +130,19 @@ SEXP predict(SEXP xData, SEXP yData, SEXP xPred, SEXP R_psgpParams, SEXP sensorI
 
 	vec psgpParams(REAL(R_psgpParams), length(R_psgpParams));
 
-	// Prediction inputs and outputs
-	int numPred = length(xPred)/2;
+	// Prediction inputs and outputs - with input validation
+	if (xPred == R_NilValue || REAL(xPred) == NULL) {
+		Rf_error("xPred cannot be NULL");
+	}
+	int xPredLen = length(xPred);
+	if (xPredLen % 2 != 0) {
+		Rf_error("xPred length must be even (x,y coordinate pairs)");
+	}
+	if (xPredLen <= 0) {
+		Rf_error("xPred must contain at least one coordinate pair");
+	}
 
+	int numPred = xPredLen / 2;
 	mat Xpred(REAL(xPred), numPred, 2);
  
 	vec meanPred(numPred);

@@ -2,5 +2,9 @@
 ##
 ## This assume that we can call Rscript to ask Rcpp about its locations
 ## Use the R_HOME indirection to support installations of multiple R version
-PKG_LIBS = $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
+## Compiler flags for enhanced error detection and optimization
+PKG_CPPFLAGS = -DARMA_64BIT_WORD=1
+PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS) -Wall -Wextra -pedantic -O2 -g
+
+PKG_LIBS = $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS) $(SHLIB_OPENMP_CXXFLAGS)
 

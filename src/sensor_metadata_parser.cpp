@@ -32,8 +32,11 @@ vector<LikelihoodType*> SensorMetadataParser::parseMetadata(SEXP R_indices, SEXP
 
 	// Shift indexes (starting from 1 in data, from 0 in Armadillo)
 	int* indexPtr = INTEGER(R_indices);
-	indices = arma::ivec(indexPtr, length(R_indices));
-	indices -= 1;
+	int n_indices = length(R_indices);
+	indices.set_size(n_indices);
+	for(int i = 0; i < n_indices; i++) {
+		indices[i] = indexPtr[i] - 1;
+	}
 
 	// The metadata table, if provided, is terminated by an empty line
 	// Need to remove it from the size.

@@ -23,11 +23,14 @@ inline double WhiteNoiseCF::computeElement(const vec& A, const vec& B) const
 //	if (A==B) 
 //	    return variance;
 //	else
-		return 0.0;
+		(void)A; // Suppress unused parameter warning
+	(void)B; // Suppress unused parameter warning
+	return 0.0;
 }
 
 inline double WhiteNoiseCF::computeDiagonalElement(const vec& A) const
 {
+	(void)A; // Suppress unused parameter warning
 	return variance;
 }
 

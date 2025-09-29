@@ -36,13 +36,13 @@ void GaussianProcess::makePredictions(vec& Mean, vec& Variance,
 	covFunc.computeSymmetric(Sigma, Locations); // K = K(X,X)
 
 	// vec alpha = ls_solve(Sigma, Observations);                       // a = K^{-1} * y
-	vec alpha = arma::solve(inv(Sigma), Observations);
+	vec alpha = arma::solve(Sigma, Observations);
 	Mean = Cpred.t() * alpha; // mu* = k' * K^{-1} * y
 
 	vec variancePred(Xpred.n_rows);
 	cf.computeDiagonal(variancePred, Xpred); // k* = K(x*,x*)
 	// mat v = ls_solve(computeCholesky(Sigma).transpose(), Cpred);     // v = K^{-1} * k
-	mat v = solve(inv(computeCholesky(Sigma).t()), Cpred);
+	mat v = solve(computeCholesky(Sigma).t(), Cpred);
 	Variance = variancePred - sum(v % v); // diag( k* - k'*K^{-1}*k )
 }
 
@@ -71,7 +71,7 @@ void GaussianProcess::makePredictions(vec& Mean, vec& Variance,
 	cholSigma = computeCholesky(Sigma);
 
 	// vec alpha = ls_solve_chol(cholSigma, Observations);
-	vec alpha = solve(inv(Sigma), Observations);
+	vec alpha = solve(Sigma, Observations);
 
 	Mean = Cpred.t() * alpha;
 
@@ -133,7 +133,7 @@ double GaussianProcess::objective() const {
 
  vec alpha = ls_solve(Sigma, Observations);
  //	mat W = ls_solve(cholSigma, ls_solve(cholSigma.transpose(), eye(Observations.size()))) - outer_product(alpha, alpha, false);
- mat W = (inv(Sigma) - outer_product(alpha, alpha, false));
+ mat W = (solve(Sigma, eye(Observations.size(), Observations.size())) - outer_product(alpha, alpha, false));
 
  mat partialDeriv(Observations.size(), Observations.size());
 

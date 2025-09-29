@@ -229,10 +229,10 @@ void ModelTrainer::Summary() const
 	Rprintf("================================================\n");
 	Rprintf("Training summary     : %s\n", algorithmName.c_str());
 	Rprintf("------------------------------------------------\n");
-	Rprintf("Error tolerance      : %f", errorTolerance );
-	Rprintf("Parameter tolerance  : %f", parameterTolerance );
-	Rprintf("Function evaluations : %d", functionEvaluations );
-	Rprintf("Gradient evaluations : %d", gradientEvaluations );
+	Rprintf("Error tolerance      : %f\n", errorTolerance );
+	Rprintf("Parameter tolerance  : %f\n", parameterTolerance );
+	Rprintf("Function evaluations : %d\n", functionEvaluations );
+	Rprintf("Gradient evaluations : %d\n", gradientEvaluations );
 	Rprintf("Function value       : %f\n", functionValue);
 	Rprintf("================================================\n");;
 }

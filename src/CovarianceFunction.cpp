@@ -59,7 +59,6 @@ void CovarianceFunction::computeSymmetric(mat& C, const mat& X) const
 
 void CovarianceFunction::computeSymmetricGrad(vec& V, const mat& X) const
 {
-
 }
 
 

@@ -1,9 +1,7 @@
 #ifndef ITPPEXT_H_
 #define ITPPEXT_H_
 
-// Use BLAS and LAPACK
-#define ARMA_USE_BLAS
-#define ARMA_USE_LAPACK
+// BLAS and LAPACK configuration handled by RcppArmadillo
 
 /**
  * Various generic functions required by PSGP
@@ -18,6 +16,11 @@ typedef arma::mat mat;
 typedef arma::vec vec;
 typedef arma::rowvec rowvec;
 typedef arma::uvec uvec;
+
+// Mathematical constants
+const double NUMERICAL_TOLERANCE = 1e-12;
+const double MATRIX_CONDITION_THRESHOLD = 1e-12;
+const double LOG_2PI = 1.8378770664093454835606594728112;
 
 namespace psgp_arma
 {

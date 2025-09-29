@@ -197,7 +197,7 @@ void PSGP::processObservationEP(const unsigned int iObs,
 				break;
 
 			default: // This also covers the case ALGO_V3
-			
+
 
 				// Swap observation with one existing active point if
 				// the swap results in an improved active set
@@ -243,7 +243,11 @@ void PSGP::EP_removePreviousContribution(unsigned int iObs) {
 
 		// Update alpha and C
 		vec h = C * Kp + p;
-		double nu = varEP(iObs) / (1.0 - varEP(iObs) * dot(Kp, h));
+		double denominator = 1.0 - varEP(iObs) * dot(Kp, h);
+		if (std::abs(denominator) < NUMERICAL_TOLERANCE) {
+			Rf_error("Division by zero detected in EP_removePreviousContribution");
+		}
+		double nu = varEP(iObs) / denominator;
 		alpha += h * nu * (dot(alpha, Kp) - meanEP(iObs));
 		// C += nu * outer_product(h,h);
 		C += nu * (h * h.t());
@@ -286,11 +290,25 @@ void PSGP::EP_updateIntermediateComputations(double &cavityMean,
  */
 void PSGP::EP_updateEPParameters(unsigned int iObs, double q, double r,
 		double cavityMean, double cavityVar, double logEvidence) {
+	if (std::abs(r) < NUMERICAL_TOLERANCE) {
+		Rf_error("Division by zero detected in EP_updateEPParameters: r is too small");
+	}
 	double ratio = q / r;
+
+	double abs_r = abs(r);
+	if (abs_r <= 0) {
+		Rf_error("Invalid r value for logarithm in EP_updateEPParameters");
+	}
+
 	logZ(iObs) = logEvidence
-			+ (log(2.0 * arma::datum::pi) - log(abs(r)) - (q * ratio)) / 2.0;
+			+ (LOG_2PI - log(abs_r) - (q * ratio)) / 2.0;
 	meanEP(iObs) = cavityMean - ratio;
-	varEP(iObs) = -r / (1.0 + (r * cavityVar));
+
+	double denominator = 1.0 + (r * cavityVar);
+	if (std::abs(denominator) < NUMERICAL_TOLERANCE) {
+		Rf_error("Division by zero detected in EP_updateEPParameters: denominator is too small");
+	}
+	varEP(iObs) = -r / denominator;
 }
 
 /**
@@ -1020,7 +1038,6 @@ double PSGP::compEvidence() const {
  * Approximate evidence for current covariance function
  */
 double PSGP::compEvidenceApproximate() const {
-	mat cholSigma(sizeActiveSet, sizeActiveSet);
 	mat Sigma(sizeActiveSet, sizeActiveSet);
 
 	covFunc.computeSymmetric(Sigma, ActiveSet);
@@ -1030,7 +1047,12 @@ double PSGP::compEvidenceApproximate() const {
 
 	vec alpha = invSigma * obsActiveSet;
 
-	double like1 = arma::accu(arma::log(arma::diagvec(arma::chol(Sigma))));
+	mat cholSigma;
+	bool chol_success = arma::chol(cholSigma, Sigma);
+	if (!chol_success) {
+		Rf_error("Cholesky decomposition of Sigma failed - matrix may not be positive definite");
+	}
+	double like1 = arma::accu(arma::log(arma::diagvec(cholSigma)));
 	double like2 = 0.5 * dot(obsActiveSet, alpha);
 
 	return like1 + like2 + 0.5 * sizeActiveSet * log(2 * arma::datum::pi);
@@ -1044,12 +1066,17 @@ double PSGP::compEvidenceUpperBound() const {
 	covFunc.computeSymmetric(KB_new, ActiveSet);
 
 	mat U(KB_new.n_rows, KB_new.n_cols);
+	bool chol_success = false;
 	try {
-		U = arma::chol(KB_new);
+		chol_success = arma::chol(U, KB_new);
+		if (!chol_success) {
+			Rf_error("Cholesky decomposition of KB_new failed - matrix may not be positive definite");
+		}
 	} catch (std::runtime_error &e) {
-		Rprintf("** Error: Cholesky decomposition of KB_new failed.");
+		Rprintf("** Error: Cholesky decomposition of KB_new failed: %s\n", e.what());
 		Rprintf("Current covariance function parameters:\n");
 		covFunc.displayCovarianceParameters();
+		Rf_error("Matrix decomposition failed");
 	}
 
 	double like1 = 2.0 * arma::accu(arma::log(arma::diagvec(U)));
@@ -1142,18 +1169,18 @@ void PSGP::setLikelihoodType(LikelihoodCalculation lc) {
  */
 void PSGP::displayModelParameters() const {
 	Rprintf("Summary Sequential Gaussian Process\n");
-	Rprintf("  Kernel Matrix size         : %dx%d\n", KB.n_rows, KB.n_cols);
-	Rprintf("  Inverse Kernel Matrix size : %dx%d\n", Q.n_rows, Q.n_cols);
-	Rprintf("  alpha size                 : %d\n", alpha.n_rows);
-	Rprintf("  C size                     : %dx%d\n", C.n_rows, C.n_cols);
-	Rprintf("  Projection matrix size     : %dx%d\n", P.n_rows, P.n_cols);
-	Rprintf("  Lambda                     : %d\n", varEP.n_rows);
-	Rprintf("  projection alpha           : %d\n", meanEP.n_rows);
-	Rprintf("  log evidence vector        : %d\n", logZ.n_rows);
+	Rprintf("  Kernel Matrix size         : %lux%lu\n", (unsigned long)KB.n_rows, (unsigned long)KB.n_cols);
+	Rprintf("  Inverse Kernel Matrix size : %lux%lu\n", (unsigned long)Q.n_rows, (unsigned long)Q.n_cols);
+	Rprintf("  alpha size                 : %lu\n", (unsigned long)alpha.n_rows);
+	Rprintf("  C size                     : %lux%lu\n", (unsigned long)C.n_rows, (unsigned long)C.n_cols);
+	Rprintf("  Projection matrix size     : %lux%lu\n", (unsigned long)P.n_rows, (unsigned long)P.n_cols);
+	Rprintf("  Lambda                     : %lu\n", (unsigned long)varEP.n_rows);
+	Rprintf("  projection alpha           : %lu\n", (unsigned long)meanEP.n_rows);
+	Rprintf("  log evidence vector        : %lu\n", (unsigned long)logZ.n_rows);
 	Rprintf("  ----------------------------\n");
-	Rprintf("  Predicion locations        : %dx%d\n", Locations.n_rows, Locations.n_cols);
-	Rprintf("  Observations               : %d\n", Observations.n_rows);
-	Rprintf("  Active set size            : %d (max %d)\n", ActiveSet.n_rows, maxActiveSet);
+	Rprintf("  Predicion locations        : %lux%lu\n", (unsigned long)Locations.n_rows, (unsigned long)Locations.n_cols);
+	Rprintf("  Observations               : %lu\n", (unsigned long)Observations.n_rows);
+	Rprintf("  Active set size            : %lu (max %d)\n", (unsigned long)ActiveSet.n_rows, maxActiveSet);
 	Rprintf("  Epsilon tolerance          : %1.2f\n", epsilonTolerance);
 	Rprintf("  Iterations Changing/Fixed  : %d/%d\n", iterChanging, iterFixed);
 }

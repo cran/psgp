@@ -19,6 +19,7 @@
 #include "ConstantCF.h"
 #include "WhiteNoiseCF.h"
 #include "SCGModelTrainer.h"
+#include <memory>
 
 class PsgpEstimator {
 public:
