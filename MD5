@@ -1,5 +1,5 @@
-6ca8609cc79d39beb33e37dd1b588eaf *ChangeLog
-8192b1ec2992b8dcf05f216a04bead8a *DESCRIPTION
+aac0e57dbeab6962ad8f0e3aef474dd3 *ChangeLog
+b08dd9868ebf4d81e94316e711666a54 *DESCRIPTION
 16161eb908bec02b06ebbe405496deac *NAMESPACE
 f28c8ed3b23f7a7d0920e5ecc13bfcfc *R/buildMetadata.R
 f4368efceed01dea5738727eb499294b *R/estimateParameters.R
@@ -37,9 +37,9 @@ d42b3de58a822188e85718f63f69c1e7 *src/Matern5CF.h
 3e1a1a104919bbed3c9368108819f90a *src/ModelTrainer.h
 cbe7309091955accb9d811db77ebf1ff *src/Optimisable.cpp
 3907a5dbefcff582de89c214d3f32ab4 *src/Optimisable.h
-3baa51608d91dbe8b8ece1e0a66050d8 *src/PSGP.cpp
+002a33279c14fc0c38d83b5183ea6503 *src/PSGP.cpp
 085e37a2dda12e51efc89108116b8fda *src/PSGP.h
-7a6b32cb10b9468dbc1884278485080b *src/RInterface.cpp
+52c95d7dd8188c11ad4ebfb51a086202 *src/RInterface.cpp
 331ddee3b19afe91f00f31442a0c60fa *src/SCGModelTrainer.cpp
 b926a944dd8160f4dff4a062c19b5ca1 *src/SCGModelTrainer.h
 dd0e5a98eb0ab6cc136022c44b23eaca *src/SumCovarianceFunction.cpp

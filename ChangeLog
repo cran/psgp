@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+Version 0.3-26 (28-02-2026)
+  * Fixed minor issue with external dependency
+
 Version 0.3-24 (26-09-2025)
   * Fixed minor issue with external dependency
 

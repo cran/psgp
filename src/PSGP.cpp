@@ -245,7 +245,7 @@ void PSGP::EP_removePreviousContribution(unsigned int iObs) {
 		vec h = C * Kp + p;
 		double denominator = 1.0 - varEP(iObs) * dot(Kp, h);
 		if (std::abs(denominator) < NUMERICAL_TOLERANCE) {
-			Rf_error("Division by zero detected in EP_removePreviousContribution");
+			Rcpp::stop("Division by zero detected in EP_removePreviousContribution");
 		}
 		double nu = varEP(iObs) / denominator;
 		alpha += h * nu * (dot(alpha, Kp) - meanEP(iObs));
@@ -291,13 +291,13 @@ void PSGP::EP_updateIntermediateComputations(double &cavityMean,
 void PSGP::EP_updateEPParameters(unsigned int iObs, double q, double r,
 		double cavityMean, double cavityVar, double logEvidence) {
 	if (std::abs(r) < NUMERICAL_TOLERANCE) {
-		Rf_error("Division by zero detected in EP_updateEPParameters: r is too small");
+		Rcpp::stop("Division by zero detected in EP_updateEPParameters: r is too small");
 	}
 	double ratio = q / r;
 
 	double abs_r = abs(r);
 	if (abs_r <= 0) {
-		Rf_error("Invalid r value for logarithm in EP_updateEPParameters");
+		Rcpp::stop("Invalid r value for logarithm in EP_updateEPParameters");
 	}
 
 	logZ(iObs) = logEvidence
@@ -306,7 +306,7 @@ void PSGP::EP_updateEPParameters(unsigned int iObs, double q, double r,
 
 	double denominator = 1.0 + (r * cavityVar);
 	if (std::abs(denominator) < NUMERICAL_TOLERANCE) {
-		Rf_error("Division by zero detected in EP_updateEPParameters: denominator is too small");
+		Rcpp::stop("Division by zero detected in EP_updateEPParameters: denominator is too small");
 	}
 	varEP(iObs) = -r / denominator;
 }
@@ -1050,7 +1050,7 @@ double PSGP::compEvidenceApproximate() const {
 	mat cholSigma;
 	bool chol_success = arma::chol(cholSigma, Sigma);
 	if (!chol_success) {
-		Rf_error("Cholesky decomposition of Sigma failed - matrix may not be positive definite");
+		Rcpp::stop("Cholesky decomposition of Sigma failed - matrix may not be positive definite");
 	}
 	double like1 = arma::accu(arma::log(arma::diagvec(cholSigma)));
 	double like2 = 0.5 * dot(obsActiveSet, alpha);
@@ -1070,13 +1070,13 @@ double PSGP::compEvidenceUpperBound() const {
 	try {
 		chol_success = arma::chol(U, KB_new);
 		if (!chol_success) {
-			Rf_error("Cholesky decomposition of KB_new failed - matrix may not be positive definite");
+			Rcpp::stop("Cholesky decomposition of KB_new failed - matrix may not be positive definite");
 		}
 	} catch (std::runtime_error &e) {
 		Rprintf("** Error: Cholesky decomposition of KB_new failed: %s\n", e.what());
 		Rprintf("Current covariance function parameters:\n");
 		covFunc.displayCovarianceParameters();
-		Rf_error("Matrix decomposition failed");
+		Rcpp::stop("Matrix decomposition failed");
 	}
 
 	double like1 = 2.0 * arma::accu(arma::log(arma::diagvec(U)));
